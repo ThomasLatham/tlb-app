@@ -22,7 +22,7 @@ const getNestedHeadings = (headingElements: HTMLElement[]): HeadingWithNestedHea
 };
 
 const useHeadingsData = () => {
-  const [nestedHeadings, setNestedHeadings] = useState([]);
+  const [nestedHeadings, setNestedHeadings] = useState<HeadingWithNestedHeadings[]>([]);
 
   useEffect(() => {
     const headingElements: HTMLElement[] = Array.from(document.querySelectorAll("h1, h2"));
