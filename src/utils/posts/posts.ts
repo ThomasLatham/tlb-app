@@ -1,6 +1,6 @@
 import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
-import * as fs from "fs";
+import * as fs from "node:fs";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import readingTime from "reading-time";
 import matter from "gray-matter";
@@ -92,9 +92,8 @@ const getAllPostFrontmatters = (): {
   frontmatter: Frontmatter;
 }[] => {
   const frontmatterArray: { id: string; frontmatter: any }[] = [];
-
   fs.readdirSync(POSTS_PATH).map((mdxFilename) => {
-    const fileString = fs.readFileSync(POSTS_PATH + mdxFilename, "utf-8");
+    const fileString = fs.readFileSync(POSTS_PATH + "\\" + mdxFilename);
     frontmatterArray.push({
       id: mdxFilename.split(".mdx")[0],
       frontmatter: matter(fileString).data,
