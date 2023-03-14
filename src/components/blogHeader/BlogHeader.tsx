@@ -1,28 +1,19 @@
 import React from "react";
 import { DateTime } from "luxon";
+import { formatDateString } from "@/utils/format";
 
 interface Props {
   title: string;
-  datePublished: Date;
-  lastUpdated?: Date;
+  datePublished: string;
+  lastUpdated?: string;
   author: string;
   tags: string[];
 }
 
 const BlogHeader: React.FC<Props> = ({ title, datePublished, lastUpdated, author, tags }) => {
-  const publishedString = `Published ${DateTime.fromJSDate(datePublished).toLocaleString({
-    ...DateTime.DATE_MED,
-    month: "long",
-    timeZone: "utc",
-  })}`;
+  const publishedString = `Published ${formatDateString(datePublished)}`;
 
-  const updatedString = lastUpdated
-    ? `Last updated ${DateTime.fromJSDate(lastUpdated).toLocaleString({
-        ...DateTime.DATE_MED,
-        month: "long",
-        timeZone: "utc",
-      })}`
-    : "";
+  const updatedString = lastUpdated ? `Last updated ${formatDateString(lastUpdated)}` : "";
 
   return (
     <div className="flex flex-col">

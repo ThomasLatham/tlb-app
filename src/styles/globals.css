@@ -8,5 +8,10 @@ body * {
 @layer base {
   html {
     @apply scroll-smooth;
+    @apply h-full;
+  }
+  body {
+    @apply h-full;
+    @apply dark:bg-back-dark bg-back-light;
   }
 }

@@ -9,8 +9,8 @@ interface HeadingWithNestedHeadings extends Heading {
 
 interface Frontmatter {
   title: string;
-  datePublished: Date;
-  lastUpdated?: Date;
+  datePublished: string;
+  lastUpdated?: string;
   author: string;
   description: string;
   tags: string[];

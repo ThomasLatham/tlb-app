@@ -14,7 +14,7 @@ const colors = tailwindConfig.theme.colors;
 interface Props {
   code: string;
   frontmatter: {
-    [key: string]: string | Date | string[];
+    [key: string]: string | string[];
   };
 }
 
@@ -39,8 +39,8 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
           <header>
             <BlogHeader
               title={frontmatter.title as string}
-              datePublished={frontmatter.datePublished as Date}
-              lastUpdated={frontmatter?.lastUpdated as Date}
+              datePublished={frontmatter.datePublished as string}
+              lastUpdated={frontmatter?.lastUpdated as string}
               author={frontmatter.author as string}
               tags={frontmatter.tags as string[]}
             />

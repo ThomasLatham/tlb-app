@@ -14,7 +14,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   const useDarkMode = useAppSelector(userPreferences.selectors.getUseDarkMode);
   useThemePreference(useDarkMode);
   return (
-    <div className="overflow-visible dark:bg-back-dark bg-back-light">
+    <div className="overflow-visible">
       <Head>
         <meta name="Tom Latham Blog" content="Whatever I feel like, gosh!" />
       </Head>
@@ -22,7 +22,9 @@ const Layout: React.FC<Props> = ({ children }) => {
         <NavBar />
       </header>
       <main>{children}</main>
-      <footer></footer>
+      <footer>
+        <p>{"temp footer"}</p>
+      </footer>
     </div>
   );
 };

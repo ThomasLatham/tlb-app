@@ -12,10 +12,10 @@ interface Props {
 const BlogSearchPage: React.FC<Props> = ({ frontmatterArray }) => {
   return (
     <Layout>
-      <div className="flex flex-col items-center h-screen w-screen">
+      <div className="flex flex-col items-center w-screen">
         {frontmatterArray?.map((postFM) => {
           return (
-            <div className="text-primary-light" key={postFM.id}>
+            <div className="w-8/12 sm:w-7/12 md:w-6/12" key={postFM.id}>
               <PostSearchListEntry postFM={postFM.frontmatter} />
             </div>
           );
