@@ -1,4 +1,4 @@
-import BlogSearchPage, { getStaticProps } from "./BlogSearchPage";
+import BlogSearchPage, { getServerSideProps } from "./BlogSearchPage";
 
+export { getServerSideProps };
 export default BlogSearchPage;
-export { getStaticProps };

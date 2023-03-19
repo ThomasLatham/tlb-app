@@ -1,18 +1,15 @@
+import * as fs from "fs";
 import { bundleMDX } from "mdx-bundler";
 import rehypeSlug from "rehype-slug";
-import * as fs from "node:fs";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import readingTime from "reading-time";
-import matter from "gray-matter";
 import rehypePrism from "rehype-prism-plus";
 import rehypeRewrite from "rehype-rewrite";
 import rehypeCodeTitles from "rehype-code-titles";
 
-import { Frontmatter } from "../../interfaces";
+import { POSTS_PATH } from "./constants";
 
-const POSTS_PATH = process.cwd() + "\\src\\content\\posts";
-
-const mdxResult = async (mdxFilepath: string) => {
+const fullPostResult = async (mdxFilepath: string) => {
   const { code, frontmatter } = await bundleMDX({
     file: mdxFilepath,
     mdxOptions(options) {
@@ -76,7 +73,7 @@ const getAllPosts = async () => {
   const postsArr = [];
 
   for (const mdxFilename of fs.readdirSync(POSTS_PATH)) {
-    const { code, frontmatter } = await mdxResult(`${POSTS_PATH}/${mdxFilename}`);
+    const { code, frontmatter } = await fullPostResult(`${POSTS_PATH}/${mdxFilename}`);
 
     postsArr.push({
       id: mdxFilename.split(".mdx")[0],
@@ -87,20 +84,8 @@ const getAllPosts = async () => {
   return postsArr;
 };
 
-const getAllPostFrontmatters = (): {
-  id: string;
-  frontmatter: Frontmatter;
-}[] => {
-  const frontmatterArray: { id: string; frontmatter: any }[] = [];
-  fs.readdirSync(POSTS_PATH).map((mdxFilename) => {
-    const fileString = fs.readFileSync(POSTS_PATH + "\\" + mdxFilename);
-    frontmatterArray.push({
-      id: mdxFilename.split(".mdx")[0],
-      frontmatter: matter(fileString).data,
-    });
-  });
-
-  return frontmatterArray;
+const getPostById = async (postId: string) => {
+  return await fullPostResult(`${POSTS_PATH}\\${postId}.mdx`);
 };
 
 const getAllPostIds = () => {
@@ -113,8 +98,4 @@ const getAllPostIds = () => {
   });
 };
 
-const getPostById = async (postId: string) => {
-  return await mdxResult(`${POSTS_PATH}\\${postId}.mdx`);
-};
-
-export { getAllPosts, getAllPostFrontmatters, getAllPostIds, getPostById };
+export { getAllPosts, getPostById, getAllPostIds };

@@ -1,7 +1,7 @@
 import React from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 
-import { getPostById, getAllPostIds } from "../../../utils/posts";
+import { getPostById, getAllPostIds } from "../../../utils/contentRetrieval";
 import Layout from "../../../components/layout";
 import BlogHeader from "../../../components/blogHeader";
 import BlogTOC from "../../../components/blogTOC";

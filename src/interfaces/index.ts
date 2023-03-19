@@ -16,4 +16,9 @@ interface Frontmatter {
   tags: string[];
 }
 
-export type { Heading, HeadingWithNestedHeadings, Frontmatter };
+interface PostSearchFilter {
+  searchText: string;
+  tags: string[];
+}
+
+export type { Heading, HeadingWithNestedHeadings, Frontmatter, PostSearchFilter };
