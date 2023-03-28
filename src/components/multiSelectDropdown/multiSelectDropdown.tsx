@@ -1,18 +1,17 @@
 import React, { useRef, useState } from "react";
 
 import { useOutsideClickAwareness } from "@/utils/hooks";
+import tailwindConfig from "../../../tailwind.config";
 
-interface MultiSelectProps {
+interface Props {
   options: string[];
   selectedValues: string[];
   setSelectedValues: (selectedValues: string[]) => void;
 }
 
-const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
-  options,
-  selectedValues,
-  setSelectedValues,
-}) => {
+const colors = tailwindConfig.theme.colors;
+
+const MultiSelectDropdown: React.FC<Props> = ({ options, selectedValues, setSelectedValues }) => {
   const [showOptions, setShowOptions] = useState(false);
   const optionsRef = useRef(null);
 
@@ -35,56 +34,67 @@ const MultiSelectDropdown: React.FC<MultiSelectProps> = ({
   }
 
   return (
-    <div className="flex items-center justify-center p-4" ref={optionsRef}>
-      <button
-        className="
-            dark:text-trim-dark 
-            dark:bg-side-dark 
-            dark:hover:bg-primary- 
-            focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2.5 text-center inline-flex items-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-        type="button"
-        onClick={toggleOptions}
-      >
-        Filter by tag
-        <svg
-          className="w-4 h-4 ml-2"
-          aria-hidden="true"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
+    <div className="flex-col flex items-center px-4 pt-2 dark:text-trim-dark" ref={optionsRef}>
+      <div className="flex flex-row items-center">
+        <div className="grow"></div>
+        <button
+          className={`
+            items-start flex
+            dark:bg-primary-dark 
+            font-medium rounded-lg text-sm 
+            px-4 py-2.5 
+            border-[1.5px] ${
+              showOptions ? "dark:border-secondary-dark" : "dark:border-side-dark"
+            } dark:hover:border-secondary-dark `}
+          type="button"
+          onClick={toggleOptions}
         >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          ></path>
-        </svg>
-      </button>
+          Filter by tag
+          <svg
+            className="w-4 h-4 ml-2"
+            aria-hidden="true"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 9l-7 7-7-7"
+            ></path>
+          </svg>
+        </button>
+        <div className="grow"></div>
+      </div>
 
       {/* Dropdown menu */}
-      <div
-        id="dropdown"
-        className={`z-10 w-56 p-3 bg-white rounded-lg shadow ${showOptions ? "block" : "hidden"}`}
-      >
-        <h6 className="mb-3 text-sm font-medium text-gray-900 dark:text-white">Tag</h6>
-        <ul className="space-y-2 text-sm" aria-labelledby="dropdownDefault">
-          {options.map((option, index) => (
-            <li key={index} onClick={() => handleOptionClick(option)} className="flex items-center">
-              <input
-                type="checkbox"
-                checked={selectedValues.includes(option)}
-                readOnly
-                className="w-4 h-4 bg-gray-100 border-gray-300 rounded text-primary-600 focus:ring-primary-500 dark:focus:ring-primary-600 dark:ring-offset-gray-700 focus:ring-2 dark:bg-gray-600 dark:border-gray-500"
-              />
+      <div className="flex flex-row items-center">
+        <div
+          className={`z-10 mt-2 dark:border-side-dark dark:border-2 rounded-lg ${
+            showOptions ? "visible" : "invisible"
+          }`}
+        >
+          <ul className="space-y-2 text-sm py-1" aria-labelledby="dropdownDefault">
+            {options.map((option, index) => (
+              <li
+                key={index}
+                onClick={() => handleOptionClick(option)}
+                className="flex items-center"
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedValues.includes(option)}
+                  readOnly
+                  className="w-4 h-4 rounded text-primary-600 dark:accent-side-dark ml-2"
+                />
 
-              <label className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-100">
-                {option}
-              </label>
-            </li>
-          ))}
-        </ul>
+                <label className="mx-2 text-sm font-medium">{option}</label>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );

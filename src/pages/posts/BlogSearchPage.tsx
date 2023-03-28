@@ -1,13 +1,16 @@
-import React, { useState } from "react";
+import React, { ChangeEventHandler, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
-import Link from "next/link";
 import { useRouter } from "next/router";
+import Link from "next/link";
+import _, { divide } from "lodash";
 
 import Layout from "@/components/layout";
 import PostSearchListEntry from "@/components/postSearchListEntry";
 import MultiSelectDropdown from "@/components/multiSelectDropdown";
 import { Frontmatter } from "@/interfaces";
 import { getFilteredPostFrontmatters, getAllTags } from "@/utils/contentRetrieval";
+import ButtonBasic from "@/components/buttonBasic";
+import ButtonTogglable from "@/components/buttonTogglable";
 
 interface Props {
   frontmatterArray: { id: string; frontmatter: Frontmatter }[];
@@ -23,21 +26,45 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
     router.replace(`/posts?searchText=${searchText}&selectedTags=${selectedTags}`);
   };
 
+  const toggleTag = (tag: string) => {
+    if (selectedTags.includes(tag)) {
+      setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+    } else {
+      setSelectedTags([...selectedTags, tag]);
+    }
+  };
+
+  useEffect(() => {
+    getFilteredPosts();
+  }, [selectedTags]);
+
   return (
     <Layout>
       <div className="flex flex-col items-center w-screen">
-        <div>
-          <div>
-            <input type="text" />
-            <button onClick={getFilteredPosts}>{"search"}</button>
+        <div className="flex mt-2 mb-2">
+          <div className="pt-2 mx-2">
+            <input
+              type="text"
+              className="
+                dark:bg-primary-dark dark:border-side-dark dark:text-trim-dark
+                hover:dark:border-secondary-dark
+                text-sm rounded-lg block w-full p-2.5 border-[1.5px]"
+              placeholder="Search by post title..."
+              onChange={(e) => setSearchText(e.target.value)}
+            ></input>
           </div>
           <div>
-            <MultiSelectDropdown
-              options={allTags}
-              selectedValues={selectedTags}
-              setSelectedValues={setSelectedTags}
-            ></MultiSelectDropdown>
+            <ButtonBasic onClick={getFilteredPosts} text={"Search"} />
           </div>
+        </div>
+        <div className="flex mt-2 mb-4">
+          {allTags.map((tag, idx) => {
+            return (
+              <div className="mx-2">
+                <ButtonTogglable key={idx} onClick={() => toggleTag(tag)} text={`#${tag}`} />
+              </div>
+            );
+          })}
         </div>
         {frontmatterArray?.map((postFM) => {
           return (
@@ -59,7 +86,6 @@ const getServerSideProps: GetServerSideProps = async (context) => {
     context.query.selectedTags === "" || context.query.selectedTags === undefined
       ? await getAllTags()
       : [...(context.query.selectedTags as string).split(",")];
-  console.log(selectedTags);
   return {
     props: {
       frontmatterArray: await getFilteredPostFrontmatters({

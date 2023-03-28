@@ -5,6 +5,7 @@
 body * {
   @apply transition-colors duration-200;
 }
+
 @layer base {
   html {
     @apply scroll-smooth;
