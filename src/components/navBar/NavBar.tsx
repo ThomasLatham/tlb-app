@@ -6,14 +6,8 @@ import { useAppSelector } from "../../redux/hooks";
 import { userPreferences } from "../../ducks";
 import { useOutsideClickAwareness } from "../../utils/hooks";
 import Logo from "../../../public/images/logo.svg";
+import { NAV_OPTIONS } from "@/constants";
 import tailwindConfig from "../../../tailwind.config";
-
-const navOptions = [
-  ["Home", "/"],
-  ["Blog", "/posts"],
-  ["Portfolio", "/portfolio"],
-  ["About", "/about"],
-];
 
 const colors = tailwindConfig.theme.colors;
 
@@ -70,7 +64,7 @@ const NavBar: React.FC = () => {
             </svg>
           </div>
           <ul className="NAVIGATION-MOBILE-OPEN flex flex-col items-center">
-            {navOptions.map((option, idx) => {
+            {NAV_OPTIONS.map((option, idx) => {
               return (
                 <li
                   key={idx}
@@ -88,7 +82,7 @@ const NavBar: React.FC = () => {
       </section>
       <div className="hidden md:flex md:items-center md:justify-self-end">
         <div className="text-sm md:flex-shrink">
-          {navOptions.map((option, idx) => {
+          {NAV_OPTIONS.map((option, idx) => {
             return (
               <Link
                 key={idx}

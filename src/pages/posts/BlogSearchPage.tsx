@@ -1,12 +1,10 @@
-import React, { ChangeEventHandler, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import _, { divide } from "lodash";
 
 import Layout from "@/components/layout";
 import PostSearchListEntry from "@/components/postSearchListEntry";
-import MultiSelectDropdown from "@/components/multiSelectDropdown";
 import { Frontmatter } from "@/interfaces";
 import { getFilteredPostFrontmatters, getAllTags } from "@/utils/contentRetrieval";
 import ButtonBasic from "@/components/buttonBasic";
@@ -47,7 +45,9 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
               type="text"
               className="
                 dark:bg-primary-dark dark:border-side-dark dark:text-trim-dark
-                hover:dark:border-secondary-dark
+                hover:dark:border-secondary-dark hover:dark:placeholder-[#9CA3AF]
+                bg-back-light
+                hover:bg-primary-light hover:placeholder-back-light
                 text-sm rounded-lg block w-full p-2.5 border-[1.5px]"
               placeholder="Search by post title..."
               onChange={(e) => setSearchText(e.target.value)}

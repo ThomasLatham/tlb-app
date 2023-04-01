@@ -2,7 +2,8 @@ import React from "react";
 import Head from "next/head";
 
 import { useAppSelector } from "../../redux/hooks";
-import NavBar from "../navBar/NavBar";
+import NavBar from "../navBar";
+import Footer from "../footer";
 import { userPreferences } from "../../ducks";
 import { useThemePreference } from "../../utils/hooks";
 
@@ -22,9 +23,7 @@ const Layout: React.FC<Props> = ({ children }) => {
         <NavBar />
       </header>
       <main>{children}</main>
-      <footer>
-        <p>{"temp footer"}</p>
-      </footer>
+      <Footer />
     </div>
   );
 };

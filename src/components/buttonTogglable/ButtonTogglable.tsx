@@ -18,8 +18,13 @@ const ButtonTogglable: React.FC<Props> = ({ text, onClick }) => {
       onClick={onClickInternal}
       className={`
         transition-colors duration-200
-        ${isToggled ? "dark:outline-secondary-dark" : "dark:outline-side-dark"}
+        ${
+          isToggled
+            ? "dark:outline-secondary-dark dark:bg-primary-dark bg-primary-light"
+            : "dark:outline-side-dark dark:bg-primary-dark bg-back-light"
+        }
         dark:text-trim-dark dark:bg-primary-dark hover:dark:outline-secondary-dark
+        hover:dark:bg-primary-dark hover:bg-primary-light
         active:outline-2
         outline font-medium outline-[1.5px] mt-2 rounded-lg w-full sm:w-auto px-5 py-2.5 text-sm text-center`}
     >
