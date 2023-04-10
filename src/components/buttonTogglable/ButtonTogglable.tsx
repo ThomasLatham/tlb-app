@@ -3,10 +3,11 @@ import React, { useState } from "react";
 interface Props {
   text: string;
   onClick: () => void;
+  isToggledInitially: boolean;
 }
 
-const ButtonTogglable: React.FC<Props> = ({ text, onClick }) => {
-  const [isToggled, setIsToggled] = useState<boolean>(false);
+const ButtonTogglable: React.FC<Props> = ({ text, onClick, isToggledInitially }) => {
+  const [isToggled, setIsToggled] = useState<boolean>(isToggledInitially);
 
   const onClickInternal = () => {
     onClick();

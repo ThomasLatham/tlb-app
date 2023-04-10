@@ -1,5 +1,8 @@
 /* eslint-disable no-undef */
 module.exports = {
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {

@@ -18,6 +18,8 @@ const Layout: React.FC<Props> = ({ children }) => {
     <div className="overflow-visible">
       <Head>
         <meta name="Tom Latham Blog" content="Whatever I feel like, gosh!" />
+        {/*The below tag makes the site actually fill the screen on mobile*/}
+        <meta name="viewport" content="initial-scale=1.0, width=device-width"></meta>
       </Head>
       <header className="sticky top-0 z-50" tabIndex={-1}>
         <NavBar />

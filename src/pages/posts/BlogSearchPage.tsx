@@ -16,9 +16,12 @@ interface Props {
 }
 
 const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
-  const [searchText, setSearchText] = useState<string>("");
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const router = useRouter();
+
+  const [searchText, setSearchText] = useState<string>("");
+  const [selectedTags, setSelectedTags] = useState<string[]>(
+    router.query.selectedTags ? router.query.selectedTags.toString().split(",") : []
+  );
 
   const getFilteredPosts = () => {
     router.replace(`/posts?searchText=${searchText}&selectedTags=${selectedTags}`);
@@ -57,11 +60,16 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
             <ButtonBasic onClick={getFilteredPosts} text={"Search"} />
           </div>
         </div>
-        <div className="flex mt-2 mb-4">
+        <div className="flex flex-wrap mt-2 mb-4">
           {allTags.map((tag, idx) => {
             return (
               <div className="mx-2">
-                <ButtonTogglable key={idx} onClick={() => toggleTag(tag)} text={`#${tag}`} />
+                <ButtonTogglable
+                  key={idx}
+                  onClick={() => toggleTag(tag)}
+                  text={`#${tag}`}
+                  isToggledInitially={selectedTags.includes(tag)}
+                />
               </div>
             );
           })}

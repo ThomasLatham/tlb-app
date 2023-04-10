@@ -1,0 +1,68 @@
+---
+title: Estimating Pi with a Random Number Generator
+datePublished: "YYYY-MM-DD"
+author: Tom Latham
+description: How to estimate the value of pi using a random number generator.
+tags: ["math", "programming"]
+---
+
+# The Problem
+
+Imagine that you are given a utility that generates random numbers, and you are tasked with Estimating
+the value of pi. At first this problem might not seem very solvable, but by applying some facts about
+probability and geometry, it all comes together.
+
+# What We Know
+
+Let's lay down some facts on which we'll rely as we go about estimating pi:
+
+1. For all x₁, x₂ ∈ [0, 1], if n is a random number to be generated in the same interval, then the probablity that n will equal x₁ is
+   equal to the probability that n will equal x₂.
+
+2. The area of a circle is given by A = πr², and the area of square is given by A = l², where l is the side length.
+
+3. For a point (x, y) in the Cartesian plane, its Euclidean distance from the origin (0, 0) is given by
+   d = √(x² + y²).
+
+# The Solution
+
+Let's take the unit circle and inscribe it within a square, giving a circle with radius 1 and a square with side
+length 2 (the diameter of the circle), both centered about the origin.
+
+Now, let's use our random number generator to generate two values, x and y ∈ [0, 1], which together will represent
+a random point (x, y) in the first quadrant. Repeat this process until we have several random points, and place
+them on the Cartesian plane with our circle and square.
+
+Now, we know these points have equal probabilities of landing anywhere in the first quadrant. It follows that
+for any subset S ⊆ [0, 1] x [0, 1], the probability that a random number will land in S is equal to the area
+of S divided by the area of [0, 1] x [0, 1] (which comes out to A(S)/1² = A(S)). Thus, when we have multiple
+random points generated, we expect ratio of the number of points landing within S to the number of points
+landing within [0, 1] x [0, 1] to equal the ratio of the areas of those two spaces (which we have just found
+to equal the area of S).
+
+So for the subset of the first quadrant bounded by the unit circle, we expect
+
+(the number of points landing in the circle)/(the number of points landing in [0, 1] x [0, 1])
+
+to equal
+
+(the area of unit circle within the first quadrant)/(the area of [0, 1] x [0, 1])
+
+which equals
+
+(πr²/4) / (1²) = πr²/4 = π(1)²/4 = π/4.
+
+We therefore have that (|points within the circle| / |total points|) \* 4 = π. At least that's true as the
+number of random points tends toward infinity. Otherwise it's just an estimate.
+
+Now, how do we determine whether a point lands within the circle? Well, it's the _unit_ circle we're talking about
+here, so the Euclidean distance to the origin of any point within it will be less than or equal to 1. That is,
+for all points (x, y) within the unit circle, √(x² + y²) ≤ 1.
+
+So, there we have it. To estimate pi using a random number generator:
+
+1. Generate a bunch of random points in [0, 1] x [0, 1].
+2. Determine the number of those points which satisfy √(x² + y²) ≤ 1.
+3. Divide the value from step 2 by the total number of points, then multiply that value by 4.
+
+# Improving the Estimate
