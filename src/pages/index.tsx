@@ -114,15 +114,18 @@ const Home: React.FC = () => {
       </div>
       <style>{`
         svg g polygon {
-          stroke: ${colors[useDarkMode ? "secondary-dark" : "back-light"]};
+          stroke: ${colors[useDarkMode ? "secondary-dark" : "secondary-light"]};
           stroke-width: 0.4;
         }
         svg g {
-          fill: ${colors[useDarkMode ? "back-dark" : "secondary-light"]};
+          fill: ${colors[useDarkMode ? "back-dark" : "back-light"]};
         }
         a g g:hover polygon {
-          stroke: ${colors[useDarkMode ? "trim-dark" : "back-light"]};
+          stroke: ${colors[useDarkMode ? "trim-dark" : "secondary-light"]};
           stroke-width: 0.4;
+        }
+        a g g:hover {
+          fill: ${colors[useDarkMode ? "back-dark" : "primary-light"]};
         }
         svg g text {
           font-size: 3px;
