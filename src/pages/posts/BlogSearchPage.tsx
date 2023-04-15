@@ -24,7 +24,7 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
   );
 
   const getFilteredPosts = () => {
-    router.replace(`/posts?searchText=${searchText}&selectedTags=${selectedTags}`);
+    router.replace(`/posts?searchText=${searchText}&selectedTags=${selectedTags}`, "/posts");
   };
 
   const toggleTag = (tag: string) => {

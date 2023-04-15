@@ -12,6 +12,7 @@ import { useAppSelector } from "../redux/hooks";
 import { userPreferences } from "../ducks";
 import Layout from "../components/layout";
 import tailwindConfig from "../../tailwind.config";
+import { getRandomPostId } from "@/utils/contentRetrieval";
 
 const colors = tailwindConfig.theme.colors;
 
@@ -23,12 +24,16 @@ interface HexLinkData {
   text: string;
 }
 
-const Home: React.FC = () => {
+interface Props {
+  randomPostId: string;
+}
+
+const Home: React.FC<Props> = ({ randomPostId }) => {
   const useDarkMode = useAppSelector(userPreferences.selectors.getUseDarkMode);
 
   const [hexLinkDataArr, setHexLinkDataArr] = useState<HexLinkData[]>([
     {
-      href: "/posts",
+      href: `/posts/${randomPostId}`,
       q: 0,
       r: 0,
       s: 0,
@@ -118,14 +123,14 @@ const Home: React.FC = () => {
           stroke-width: 0.4;
         }
         svg g {
-          fill: ${colors[useDarkMode ? "back-dark" : "back-light"]};
+          fill: ${colors[useDarkMode ? "back-dark" : "primary-light"]};
         }
         a g g:hover polygon {
           stroke: ${colors[useDarkMode ? "trim-dark" : "secondary-light"]};
           stroke-width: 0.4;
         }
         a g g:hover {
-          fill: ${colors[useDarkMode ? "back-dark" : "primary-light"]};
+          fill: ${colors[useDarkMode ? "back-dark" : "side-light"]};
         }
         svg g text {
           font-size: 3px;
@@ -141,4 +146,15 @@ const Home: React.FC = () => {
   );
 };
 
+const getServerSideProps = () => {
+  const randomPostId = getRandomPostId();
+  console.log(randomPostId);
+  return {
+    props: {
+      randomPostId: randomPostId,
+    },
+  };
+};
+
+export { getServerSideProps };
 export default Home;

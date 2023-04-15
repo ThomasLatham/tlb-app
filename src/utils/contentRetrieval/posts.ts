@@ -98,4 +98,9 @@ const getAllPostIds = () => {
   });
 };
 
-export { getAllPosts, getPostById, getAllPostIds };
+const getRandomPostId = () => {
+  const postFileNameArr = fs.readdirSync(POSTS_PATH);
+  return postFileNameArr[Math.floor(Math.random() * postFileNameArr.length)].split(".mdx")[0];
+};
+
+export { getAllPosts, getPostById, getAllPostIds, getRandomPostId };
