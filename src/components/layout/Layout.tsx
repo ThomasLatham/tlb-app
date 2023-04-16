@@ -24,8 +24,10 @@ const Layout: React.FC<Props> = ({ children }) => {
       <header className="sticky top-0 z-50" tabIndex={-1}>
         <NavBar />
       </header>
-      <main>{children}</main>
-      <Footer />
+      <main className="min-h-[calc(100vh-126px)]">{children}</main>
+      <div>
+        <Footer />
+      </div>
     </div>
   );
 };

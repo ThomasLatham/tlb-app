@@ -3,6 +3,7 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import _ from "lodash";
+import $ from "jquery";
 const HexGrid = dynamic(() => import("react-hexgrid").then((a) => a.HexGrid), { ssr: false });
 const HexLayout = dynamic(() => import("react-hexgrid").then((a) => a.Layout), { ssr: false });
 const Hexagon = dynamic(() => import("react-hexgrid").then((a) => a.Hexagon), { ssr: false });
@@ -13,6 +14,7 @@ import { userPreferences } from "../ducks";
 import Layout from "../components/layout";
 import tailwindConfig from "../../tailwind.config";
 import { getRandomPostId } from "@/utils/contentRetrieval";
+import { isMobile } from "react-device-detect";
 
 const colors = tailwindConfig.theme.colors;
 
@@ -96,14 +98,19 @@ const Home: React.FC<Props> = ({ randomPostId }) => {
                       key={idx}
                       href={data.href}
                       onMouseEnter={() => {
-                        // because z-index doesn't apply to SVGs (it's just whichever <g> is rendered last
-                        // is the one that's "on top"), if we want the hexagons to all be touching, and we
-                        // we also want the border of the currently-hovered hexagon to not be covered by another
-                        // hexagon, we have to move the currently-hovered hexagon to the last place in the render
-                        // order
-                        const hexLinkDataArrCopy = _.cloneDeep(hexLinkDataArr);
-                        hexLinkDataArrCopy.push(hexLinkDataArrCopy.splice(idx, 1)[0]);
-                        setHexLinkDataArr(hexLinkDataArrCopy);
+                        if (isMobile) {
+                          $("text").css("text-decoration", "none");
+                          $(`text:contains(${data.text})`).css("text-decoration", "underline");
+                        } else {
+                          // because z-index doesn't apply to SVGs (it's just whichever <g> is rendered last
+                          // is the one that's "on top"), if we want the hexagons to all be touching, and we
+                          // we also want the border of the currently-hovered hexagon to not be covered by another
+                          // hexagon, we have to move the currently-hovered hexagon to the last place in the render
+                          // order
+                          const hexLinkDataArrCopy = _.cloneDeep(hexLinkDataArr);
+                          hexLinkDataArrCopy.push(hexLinkDataArrCopy.splice(idx, 1)[0]);
+                          setHexLinkDataArr(hexLinkDataArrCopy);
+                        }
                       }}
                     >
                       <Hexagon q={data.q} r={data.r} s={data.s}>
@@ -125,12 +132,14 @@ const Home: React.FC<Props> = ({ randomPostId }) => {
         svg g {
           fill: ${colors[useDarkMode ? "back-dark" : "primary-light"]};
         }
-        a g g:hover polygon {
-          stroke: ${colors[useDarkMode ? "trim-dark" : "secondary-light"]};
-          stroke-width: 0.4;
-        }
-        a g g:hover {
-          fill: ${colors[useDarkMode ? "back-dark" : "side-light"]};
+        @media(hover: hover) {
+          a g g:hover polygon {
+            stroke: ${colors[useDarkMode ? "trim-dark" : "secondary-light"]};
+            stroke-width: 0.4;
+          }
+          a g g:hover {
+            fill: ${colors[useDarkMode ? "back-dark" : "side-light"]};
+          }
         }
         svg g text {
           font-size: 3px;
@@ -148,7 +157,6 @@ const Home: React.FC<Props> = ({ randomPostId }) => {
 
 const getServerSideProps = () => {
   const randomPostId = getRandomPostId();
-  console.log(randomPostId);
   return {
     props: {
       randomPostId: randomPostId,
