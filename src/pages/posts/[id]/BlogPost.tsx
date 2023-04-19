@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 
 import { getPostById, getAllPostIds } from "../../../utils/contentRetrieval";
@@ -62,6 +62,11 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
         }
         .blog-link:hover {
           color: ${useDarkMode ? colors["secondary-dark"] : colors["primary-light"]};
+        }
+        .js-plotly-plot,
+        .plot-container {
+          height: 225px;
+          width: 225px;
         }
       `}</style>
     </Layout>
