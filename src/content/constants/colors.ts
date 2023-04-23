@@ -12,4 +12,4 @@ const colors = {
   "back-dark": "#0f172a",
 };
 
-export { colors };
+export default colors;

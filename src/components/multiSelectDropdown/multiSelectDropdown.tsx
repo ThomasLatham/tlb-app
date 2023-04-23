@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 
 import { useOutsideClickAwareness } from "@/utils/hooks";
+
 import tailwindConfig from "../../../tailwind.config";
 
 interface Props {

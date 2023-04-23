@@ -63,9 +63,8 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
         <div className="flex flex-wrap mt-2 mb-4">
           {allTags.map((tag, idx) => {
             return (
-              <div className="mx-2">
+              <div className="mx-2" key={idx}>
                 <ButtonTogglable
-                  key={idx}
                   onClick={() => toggleTag(tag)}
                   text={`#${tag}`}
                   isToggledInitially={selectedTags.includes(tag)}

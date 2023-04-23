@@ -13,7 +13,9 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
+    "next",
     "prettier",
+    "plugin:mdx/recommended",
   ],
   globals: {
     Atomics: "readonly",
@@ -50,11 +52,7 @@ module.exports = {
     "import/order": [
       "error",
       {
-        groups: [
-          ["external", "builtin"],
-          "internal",
-          ["parent", "sibling", "index"],
-        ],
+        groups: [["external", "builtin"], "internal", ["parent", "sibling", "index"]],
         "newlines-between": "always",
       },
     ],

@@ -24,11 +24,11 @@ const AboutPage: React.FC = () => {
             dark:border-trim-dark border-secondary-light"
           />
           <p className="sm:pl-5 sm:mt-0 mt-2 text-justify">
-            I'm a software developer who's been based out of Hartford, Connecticut for the last year
+            {`I'm a software developer who's been based out of Hartford, Connecticut for the last year
             or so. For work I'm currently developing an enterprise application for my company's
             (Infosys Limited) client, writing mostly frontend code in Angular, but also helping out
             in our Spring Boot API as needed. Before that I held an ETL QA role for the same client,
-            where I got the opportunity to automate my team's workflow with Python.
+            where I got the opportunity to automate my team's workflow with Python.`}
             <br />
             <br />
             Before getting into IT, I spent a year lifeguarding on the beach in Florida, and before
@@ -42,10 +42,11 @@ const AboutPage: React.FC = () => {
           </p>
         </div>
         <p className="mt-8 text-[30px] underline">About The Blog</p>
-        <p className="text-justify px-4 lg:px-44">
+        <p className="text-justify px-4 lg:px-44 sm:mt-4">
+          {`
           I started this website as a way to practice (and demonstrate) my programming skills, and
           that'll probably remain the primary reason for its existence. I built it with React,
-          utilizing the Next.js framework in conjunction with{" "}
+          utilizing the Next.js framework in conjunction with`}{" "}
           <a
             className="dark:text-secondary-dark text-side-light hover:underline"
             href="https://mdxjs.com/"
@@ -60,9 +61,10 @@ const AboutPage: React.FC = () => {
             mdx-bundler
           </a>{" "}
           for creating interactive blog posts. <br />
-          <br />I chose the honeycomb symbol for the logo and theme bee-cause I think the animals
+          <br />
+          {`I chose the honeycomb symbol for the logo and theme bee-cause I think the animals
           that make them are cool, and hexagons are math-y. And when I was creating the logo I found
-          a public-domain honeycomb SVG that didn't require any attribution for usage (but thanks{" "}
+          a public-domain honeycomb SVG that didn't require any attribution for usage (but thanks`}{" "}
           <a
             className="dark:text-secondary-dark text-side-light hover:underline"
             href="https://uxwing.com/honeycomb-icon/"
@@ -71,8 +73,8 @@ const AboutPage: React.FC = () => {
           </a>{" "}
           for the image).
           <br /> <br />
-          If you find a post here that educates or entertains you in some way, I'd be stoked to hear
-          about that. Feel free to email me at{" "}
+          {`If you find a post here that educates or entertains you in some way, I'd be stoked to hear
+          about that. Feel free to email me at`}{" "}
           <a
             className="dark:text-secondary-dark text-side-light hover:underline"
             href="mailto:tom.latham.blog@gmail.com"

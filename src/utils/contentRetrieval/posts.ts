@@ -1,11 +1,13 @@
 import * as fs from "fs";
 import { bundleMDX } from "mdx-bundler";
+import remarkMath from "remark-math";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import readingTime from "reading-time";
 import rehypePrism from "rehype-prism-plus";
 import rehypeRewrite from "rehype-rewrite";
 import rehypeCodeTitles from "rehype-code-titles";
+import rehypeKatex from "rehype-katex";
 
 import { POSTS_PATH } from "./constants";
 
@@ -13,9 +15,10 @@ const fullPostResult = async (mdxFilepath: string) => {
   const { code, frontmatter } = await bundleMDX({
     file: mdxFilepath,
     mdxOptions(options) {
-      options.remarkPlugins = [...(options.remarkPlugins ?? [])];
+      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkMath];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
+        rehypeKatex,
         rehypeSlug,
         rehypeCodeTitles,
         rehypePrism,

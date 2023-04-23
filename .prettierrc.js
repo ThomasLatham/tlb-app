@@ -4,5 +4,6 @@ module.exports = {
   singleQuote: false,
   printWidth: 100,
   tabWidth: 2,
-  endOfLine: "auto"
+  endOfLine: "auto",
+  proseWrap: "always",
 };

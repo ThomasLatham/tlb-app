@@ -17,6 +17,12 @@ const Layout: React.FC<Props> = ({ children }) => {
   return (
     <div className="overflow-visible">
       <Head>
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css"
+          integrity="sha384-Um5gpz1odJg5Z4HAmzPtgZKdTBHZdw8S29IecapCSB31ligYPhHQZMIlWLYQGVoc"
+          crossOrigin="anonymous"
+        />
         <meta name="Tom Latham Blog" content="Whatever I feel like, gosh!" />
         {/*The below tag makes the site actually fill the screen on mobile*/}
         <meta name="viewport" content="initial-scale=1.0, width=device-width"></meta>

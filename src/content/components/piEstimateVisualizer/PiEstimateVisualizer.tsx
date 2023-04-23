@@ -1,37 +1,49 @@
 import React, { useState } from "react";
 import Plotly from "plotly.js-basic-dist-min";
 import createPlotlyComponent from "react-plotly.js/factory";
-import { colors } from "@/content/constants";
+import Slider from "rc-slider";
+
+import colors from "@/content/constants/colors";
+
+import KaTeXComponent from "../kaTexComponent";
 
 const Plot = createPlotlyComponent(Plotly);
 
-const maxPoints: number = 10000;
+interface Props {
+  minPoints: number;
+  maxPoints: number;
+  initialPoints: number;
+}
 
-const xPoints = new Array<number>(maxPoints).fill(1).map(() => {
-  return Math.random();
-});
+const PiEstimateVisualizer: React.FC<Props> = ({ minPoints, maxPoints, initialPoints }) => {
+  // const root = document.documentElement;
+  const useDarkMode = true; //root.classList.contains("dark"); // would be nice to figure this out at some point
 
-const yPoints = new Array<number>(maxPoints).fill(1).map(() => {
-  return Math.random();
-});
+  const [numPoints, setNumPoints] = useState(initialPoints);
 
-const PiEstimateVisualizer: React.FC = () => {
-  const root = document.documentElement;
-  const useDarkMode = true;
+  const [xPoints] = useState(
+    new Array<number>(maxPoints).fill(1).map(() => {
+      return Math.random();
+    })
+  );
 
-  const [numPoints, setNumPoints] = useState(10);
+  const [yPoints] = useState(
+    new Array<number>(maxPoints).fill(1).map(() => {
+      return Math.random();
+    })
+  );
 
-  const piEstimate =
-    (xPoints.slice(0, numPoints).filter((xVal, idx) => {
-      const yVal = yPoints[idx];
-      return Math.sqrt(Math.pow(xVal, 2) + Math.pow(yVal, 2)) <= 1;
-    }).length /
-      numPoints) *
-    4;
+  const pointsInCircle = xPoints.slice(0, numPoints).filter((xVal, idx) => {
+    const yVal = yPoints[idx];
+    return Math.sqrt(Math.pow(xVal, 2) + Math.pow(yVal, 2)) <= 1;
+  }).length;
+
+  const piEstimate = (pointsInCircle / numPoints) * 4;
 
   return (
-    <div className="flex flex-col items-center ">
+    <div className="flex flex-col items-center">
       <Plot
+        config={{ displayModeBar: false }}
         data={[
           {
             x: xPoints.slice(0, numPoints),
@@ -106,17 +118,40 @@ const PiEstimateVisualizer: React.FC = () => {
         useResizeHandler={true}
         className=""
       />
-      <label htmlFor="inputGuy">Enter number of points to use in estimate:</label>
-      <input
-        type="number"
-        id="inputGuy"
-        className="bg-side-dark text-trim-dark mt-2"
-        onChange={(event) => {
-          setNumPoints(Number.parseInt(event.target.value));
-        }}
-        value={numPoints}
+      <div className="w-[225px] mt-2">
+        <Slider
+          min={minPoints}
+          max={maxPoints}
+          defaultValue={initialPoints}
+          value={numPoints}
+          onChange={(value) => setNumPoints(value as number)}
+          trackStyle={{ background: colors["primary-light"] }}
+          railStyle={{ background: colors["side-dark"] }}
+          handleStyle={{
+            background: colors["primary-light"],
+          }}
+        />
+      </div>
+      <KaTeXComponent
+        texExpression={`
+          \\pi \\approx 
+          4 \\lparen \\frac {points~in~circle} {total~points} \\rparen = 
+          4 \\lparen \\frac {${pointsInCircle}} {${numPoints}} \\rparen = 
+          ${piEstimate.toPrecision(3)}
+      `}
       />
-      <p className="mt-2">π ≈ {piEstimate.toPrecision(3)}</p>
+      <style>{`
+        .top{
+          border-bottom:solid black 1px; 
+          display:inline-block; 
+          float:left;
+        }
+        .bottom{ 
+          display:inline-block; 
+          clear:left; 
+          float:left;
+        }
+      `}</style>
     </div>
   );
 };

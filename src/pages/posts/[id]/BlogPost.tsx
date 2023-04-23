@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
+// needed for rc-slider as used in the content-component PiEstimateVisualizer
+import "rc-slider/assets/index.css";
 
 import { getPostById, getAllPostIds } from "../../../utils/contentRetrieval";
 import Layout from "../../../components/layout";

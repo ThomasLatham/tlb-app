@@ -1,12 +1,13 @@
 import React, { useState, useRef } from "react";
 import Link from "next/link";
 
+import { NAV_OPTIONS } from "@/constants";
+
 import ThemeSwitch from "../themeSwitch";
 import { useAppSelector } from "../../redux/hooks";
 import { userPreferences } from "../../ducks";
 import { useOutsideClickAwareness } from "../../utils/hooks";
 import Logo from "../../../public/images/logo.svg";
-import { NAV_OPTIONS } from "@/constants";
 import tailwindConfig from "../../../tailwind.config";
 
 const colors = tailwindConfig.theme.colors;

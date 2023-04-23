@@ -10,11 +10,12 @@ const HexLayout = dynamic(() => import("react-hexgrid").then((a) => a.Layout), {
 const Hexagon = dynamic(() => import("react-hexgrid").then((a) => a.Hexagon), { ssr: false });
 const Text = dynamic(() => import("react-hexgrid").then((a) => a.Text), { ssr: false });
 
+import { getRandomPostId } from "@/utils/contentRetrieval";
+
 import { useAppSelector } from "../redux/hooks";
 import { userPreferences } from "../ducks";
 import Layout from "../components/layout";
 import tailwindConfig from "../../tailwind.config";
-import { getRandomPostId } from "@/utils/contentRetrieval";
 
 const colors = tailwindConfig.theme.colors;
 
@@ -88,7 +89,7 @@ const Home: React.FC<Props> = ({ randomPostId }) => {
           <HexGrid viewBox="-50 -60 100 120" className="mb-[18px] sm:mb-[-80px] sm:mt-[-30px]">
             <HexLayout size={{ x: 18, y: 18 }} flat={true} spacing={1}>
               <Hexagon q={0} r={-1} s={1} className="">
-                <Text y={-10}>Hi, I'm Tom.</Text>
+                <Text y={-10}>{"Hi, I'm Tom."}</Text>
                 <Text>Welcome to my blog.</Text>
               </Hexagon>
               <React.Fragment>
