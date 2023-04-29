@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { getMDXComponent } from "mdx-bundler/client";
+import dynamic from "next/dynamic";
+import { GetStaticPropsContext } from "next";
 // needed for rc-slider as used in the content-component PiEstimateVisualizer
 import "rc-slider/assets/index.css";
 
@@ -10,6 +12,9 @@ import BlogTOC from "../../../components/blogTOC";
 import { userPreferences } from "../../../ducks";
 import { useAppSelector } from "../../../redux/hooks";
 import tailwindConfig from "../../../../tailwind.config";
+const BlogPlot = dynamic(() => import("../../../components/blogPlot"), {
+  ssr: false,
+});
 
 const colors = tailwindConfig.theme.colors;
 
@@ -22,8 +27,17 @@ interface Props {
 
 const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
   const useDarkMode = useAppSelector(userPreferences.selectors.getUseDarkMode);
+  //const Plot = createPlotlyComponent(Plotly);
 
-  const PostComponent = React.useMemo(() => getMDXComponent(code), [code]);
+  const PostComponent = React.useMemo(
+    () =>
+      getMDXComponent(code, {
+        myUseDarkMode: useDarkMode,
+        myColors: colors,
+        myBlogPlot: BlogPlot,
+      }),
+    [code, useDarkMode]
+  );
   return (
     <Layout>
       <div className="flex">
@@ -83,7 +97,7 @@ const getStaticPaths = async () => {
   };
 };
 
-const getStaticProps = async ({ params }) => {
+const getStaticProps = async ({ params }: GetStaticPropsContext) => {
   const post = await getPostById(params?.id as string);
   return {
     props: {

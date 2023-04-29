@@ -1,20 +1,34 @@
 import React from "react";
-import Plotly from "plotly.js-basic-dist-min";
-import createPlotlyComponent from "react-plotly.js/factory";
-
-import colors from "@/content/constants/colors";
-
-const Plot = createPlotlyComponent(Plotly);
+import { PlotParams } from "react-plotly.js";
 
 interface Props {
   withSquare: boolean;
   withBigSquare: boolean;
   data: Plotly.Data[];
+  useDarkMode: boolean;
+  colors: {
+    "primary-light": string;
+    "secondary-light": string;
+    "trim-light": string;
+    "side-light": string;
+    "back-light": string;
+    "primary-dark": string;
+    "secondary-dark": string;
+    "trim-dark": string;
+    "side-dark": string;
+    "back-dark": string;
+  };
+  Plot: React.ComponentType<PlotParams>;
 }
 
-const UnitCircle: React.FC<Props> = ({ withSquare = false, withBigSquare = false, data = [] }) => {
-  const useDarkMode = true;
-
+const UnitCircle: React.FC<Props> = ({
+  withSquare = false,
+  withBigSquare = false,
+  data = [],
+  useDarkMode,
+  colors,
+  Plot,
+}) => {
   return (
     <div className="flex flex-col items-center">
       <Plot

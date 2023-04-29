@@ -1,25 +1,15 @@
 import * as fs from "node:fs";
-import { bundleMDX } from "mdx-bundler";
+import matter from "gray-matter";
 
 import { Frontmatter, PostSearchFilter } from "../../interfaces";
 import { intersection } from "../general";
 import { POSTS_PATH } from "./constants";
 
-const frontmatterResult = async (mdxFilepath: string) => {
-  const { frontmatter } = await bundleMDX({
-    file: mdxFilepath,
-    mdxOptions(options) {
-      options.remarkPlugins = [...(options.remarkPlugins ?? [])];
-      options.rehypePlugins = [...(options.rehypePlugins ?? [])];
-
-      return options;
-    },
-    cwd: POSTS_PATH,
-  });
-
+const frontmatterResult = (mdxFilepath: string) => {
+  const mdxFile = fs.readFileSync(mdxFilepath, "utf8");
   return {
     frontmatter: {
-      ...frontmatter,
+      ...matter(mdxFile).data,
     },
   };
 };

@@ -54,10 +54,14 @@ const fullPostResult = async (mdxFilepath: string) => {
           },
         ],
       ];
-
       return options;
     },
     cwd: POSTS_PATH,
+    globals: {
+      useDarkMode: "myUseDarkMode",
+      colors: "myColors",
+      BlogPlot: "myBlogPlot",
+    },
   });
 
   const sourceText = fs.readFileSync(mdxFilepath, "utf8");

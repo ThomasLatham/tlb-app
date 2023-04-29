@@ -1,24 +1,37 @@
 import React, { useState } from "react";
-import Plotly from "plotly.js-basic-dist-min";
-import createPlotlyComponent from "react-plotly.js/factory";
 import Slider from "rc-slider";
-
-import colors from "@/content/constants/colors";
+import { PlotParams } from "react-plotly.js";
 
 import KaTeXComponent from "../kaTexComponent";
-
-const Plot = createPlotlyComponent(Plotly);
 
 interface Props {
   minPoints: number;
   maxPoints: number;
   initialPoints: number;
+  useDarkMode: boolean;
+  colors: {
+    "primary-light": string;
+    "secondary-light": string;
+    "trim-light": string;
+    "side-light": string;
+    "back-light": string;
+    "primary-dark": string;
+    "secondary-dark": string;
+    "trim-dark": string;
+    "side-dark": string;
+    "back-dark": string;
+  };
+  Plot: React.ComponentType<PlotParams>;
 }
 
-const PiEstimateVisualizer: React.FC<Props> = ({ minPoints, maxPoints, initialPoints }) => {
-  // const root = document.documentElement;
-  const useDarkMode = true; //root.classList.contains("dark"); // would be nice to figure this out at some point
-
+const PiEstimateVisualizer: React.FC<Props> = ({
+  minPoints,
+  maxPoints,
+  initialPoints,
+  useDarkMode,
+  colors,
+  Plot,
+}) => {
   const [numPoints, setNumPoints] = useState(initialPoints);
 
   const [xPoints] = useState(
@@ -39,6 +52,8 @@ const PiEstimateVisualizer: React.FC<Props> = ({ minPoints, maxPoints, initialPo
   }).length;
 
   const piEstimate = (pointsInCircle / numPoints) * 4;
+
+  const error = Math.abs(Math.PI - piEstimate) / Math.PI;
 
   return (
     <div className="flex flex-col items-center">
@@ -139,6 +154,12 @@ const PiEstimateVisualizer: React.FC<Props> = ({ minPoints, maxPoints, initialPo
           4 \\lparen \\frac {${pointsInCircle}} {${numPoints}} \\rparen = 
           ${piEstimate.toPrecision(3)}
       `}
+      />
+      <KaTeXComponent
+        className="mt-3"
+        texExpression={`
+            error = \\frac {|\\pi - (estimated~value)|} {\\pi} = ${error.toPrecision(3)}
+          `}
       />
       <style>{`
         .top{
