@@ -51,7 +51,7 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
             </div>
           </div>
         </div>
-        <article className="prose prose-slate dark:prose-invert text-left pt-10 px-20 max-w-none grow-[12]">
+        <article className="prose dark:prose-invert text-left pt-10 px-20 max-w-none grow-[12]">
           <header>
             <BlogHeader
               title={frontmatter.title as string}
@@ -78,11 +78,6 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
         }
         .blog-link:hover {
           color: ${useDarkMode ? colors["secondary-dark"] : colors["primary-light"]};
-        }
-        .js-plotly-plot,
-        .plot-container {
-          height: 225px;
-          width: 225px;
         }
       `}</style>
     </Layout>

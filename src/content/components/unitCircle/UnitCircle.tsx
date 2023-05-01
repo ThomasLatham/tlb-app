@@ -35,8 +35,8 @@ const UnitCircle: React.FC<Props> = ({
         config={{ displayModeBar: false }}
         data={data}
         layout={{
-          paper_bgcolor: colors["side-dark"],
-          plot_bgcolor: colors["side-dark"],
+          paper_bgcolor: useDarkMode ? colors["side-dark"] : colors["primary-light"],
+          plot_bgcolor: useDarkMode ? colors["side-dark"] : colors["primary-light"],
           showlegend: false,
           xaxis: {
             range: [-1.2, 1.2],
@@ -76,10 +76,10 @@ const UnitCircle: React.FC<Props> = ({
               y0: -1,
               x1: 1,
               y1: 1,
-              fillcolor: colors["secondary-dark"],
+              fillcolor: useDarkMode ? colors["secondary-dark"] : colors["secondary-light"],
               opacity: 0.25,
               line: {
-                color: colors["secondary-dark"],
+                color: useDarkMode ? colors["secondary-dark"] : colors["secondary-light"],
               },
             },
             {
@@ -92,7 +92,7 @@ const UnitCircle: React.FC<Props> = ({
               x1: 1,
               y1: 1,
               line: {
-                color: colors["trim-dark"],
+                color: useDarkMode ? colors["trim-dark"] : colors["secondary-light"],
               },
             },
           ],
@@ -100,6 +100,16 @@ const UnitCircle: React.FC<Props> = ({
         useResizeHandler={true}
         className=""
       />
+      <style>{`
+        .main-svg {
+          border: 2px solid ${useDarkMode ? colors["trim-dark"] : colors["secondary-light"]}
+        }
+        .js-plotly-plot,
+        .plot-container {
+          height: 225px;
+          width: 225px;
+        }
+      `}</style>
     </div>
   );
 };

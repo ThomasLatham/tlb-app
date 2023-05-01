@@ -65,12 +65,15 @@ const PiEstimateVisualizer: React.FC<Props> = ({
             y: yPoints.slice(0, numPoints),
             type: "scatter",
             mode: "markers",
-            marker: { color: colors["trim-dark"], size: 4 },
+            marker: {
+              color: useDarkMode ? colors["trim-dark"] : colors["secondary-light"],
+              size: 4,
+            },
           },
         ]}
         layout={{
-          paper_bgcolor: colors["side-dark"],
-          plot_bgcolor: colors["side-dark"],
+          paper_bgcolor: useDarkMode ? colors["side-dark"] : colors["primary-light"],
+          plot_bgcolor: useDarkMode ? colors["side-dark"] : colors["primary-light"],
           showlegend: false,
           xaxis: {
             range: [0, 1],
@@ -110,10 +113,10 @@ const PiEstimateVisualizer: React.FC<Props> = ({
               y0: -1,
               x1: 1,
               y1: 1,
-              fillcolor: colors["secondary-dark"],
+              fillcolor: useDarkMode ? colors["secondary-dark"] : colors["secondary-light"],
               opacity: 0.25,
               line: {
-                color: colors["secondary-dark"],
+                color: useDarkMode ? colors["secondary-dark"] : colors["secondary-light"],
               },
             },
             {
@@ -125,7 +128,7 @@ const PiEstimateVisualizer: React.FC<Props> = ({
               x1: 1,
               y1: 1,
               line: {
-                color: colors["trim-dark"],
+                color: useDarkMode ? colors["trim-dark"] : colors["secondary-light"],
               },
             },
           ],
@@ -141,7 +144,7 @@ const PiEstimateVisualizer: React.FC<Props> = ({
           value={numPoints}
           onChange={(value) => setNumPoints(value as number)}
           trackStyle={{ background: colors["primary-light"] }}
-          railStyle={{ background: colors["side-dark"] }}
+          railStyle={{ background: useDarkMode ? colors["side-dark"] : colors["secondary-light"] }}
           handleStyle={{
             background: colors["primary-light"],
           }}
@@ -171,6 +174,14 @@ const PiEstimateVisualizer: React.FC<Props> = ({
           display:inline-block; 
           clear:left; 
           float:left;
+        }
+        .main-svg {
+          border: 2px solid ${useDarkMode ? colors["trim-dark"] : colors["secondary-light"]}
+        }
+        .js-plotly-plot,
+        .plot-container {
+          height: 225px;
+          width: 225px;
         }
       `}</style>
     </div>

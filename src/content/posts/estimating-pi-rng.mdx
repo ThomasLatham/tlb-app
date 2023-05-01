@@ -94,7 +94,7 @@ yet, having an RNG do it for you).
       y: [-0.577, -0.361, 0.168, -0.722, 0.815, 0.769, 0.867, 0.329, 0.925, -0.115],
       type: "scatter",
       mode: "markers",
-      marker: { color: colors["trim-dark"], size: 4 },
+      marker: { color: useDarkMode ? colors["trim-dark"] : colors["secondary-light"], size: 4 },
     },
   ]}
   useDarkMode={useDarkMode}
