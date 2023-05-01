@@ -1,5 +1,7 @@
 import * as fs from "fs";
 import { bundleMDX } from "mdx-bundler";
+import { Root, Element, RootContent } from "hast";
+import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import rehypeSlug from "rehype-slug";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
@@ -15,7 +17,7 @@ const fullPostResult = async (mdxFilepath: string) => {
   const { code, frontmatter } = await bundleMDX({
     file: mdxFilepath,
     mdxOptions(options) {
-      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkMath];
+      options.remarkPlugins = [...(options.remarkPlugins ?? []), remarkMath, remarkGfm];
       options.rehypePlugins = [
         ...(options.rehypePlugins ?? []),
         rehypeKatex,
@@ -35,18 +37,30 @@ const fullPostResult = async (mdxFilepath: string) => {
         [
           rehypeRewrite,
           {
-            rewrite: (node: { type: string; tagName: string; properties: any }) => {
+            rewrite: (node: Root | RootContent) => {
               if (
                 node.type === "element" &&
                 ["h1", "h2", "h3", "h4", "h5", "h6"].includes(node.tagName)
               ) {
-                node.properties = {
-                  ...node.properties,
+                (node as Element).properties = {
+                  ...(node as Element).properties,
                   style: "scroll-margin-top: 80px;",
                 };
               } else if (node.type === "element" && node.tagName === "a") {
                 node.properties = {
                   ...node.properties,
+                  className: "blog-link",
+                };
+              }
+
+              if (node.type === "element" && node.properties?.id === "footnote-label") {
+                node.tagName = "h1";
+              }
+
+              if (((node as Element).properties?.id as string)?.includes("fnref")) {
+                (node as Element).properties = {
+                  ...(node as Element).properties,
+                  style: "scroll-margin-top: 80px;",
                   className: "blog-link",
                 };
               }

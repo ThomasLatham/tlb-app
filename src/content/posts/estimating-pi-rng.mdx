@@ -106,17 +106,17 @@ That looks pretty neat, huh? Yeah, I think so. But importantly, this could be th
 our RNG to an estimate of pi. Let's ponder a question for a moment: If we select a point at random
 from within the bounds of the square, what is the probability that it is _also_ within the circle?
 Well, if we assume that our randomly-selected point has an equal chance of falling _anywhere_ within
-the square, then the probability that it will fall inside the circle is equal to the fraction of the
-square's area that the circle takes up. That is, a randomly-selected point has a
+the square[^uni-distro], then the probability that it will fall inside the circle is equal to the
+fraction of the square's area that the circle takes up. That is, a randomly-selected point has a
 $\frac {A_{circle}} {A_{square}}$ chance of falling inside the circle.
 
 Now, we know that the probability a coin toss will result in heads is $\frac 1 2$, so we know that
 if we were to flip a coin 100 times, about 50 of those tosses will probably come up heads. In fact,
 the more we flip the coin, the closer $\frac {heads} {total~tosses}$ stably approaches $\frac 1 2$.
 
-Applying the same principle to our random points, we know that each single point has probability
-$\frac {A_{circle}} {A_{square}}$ of falling inside the circle, so the more points we generate, the
-closer $\frac {points~inside~circle} {total~points}$ stably approaches
+Applying the same principle[^big-nums] to our random points, we know that each single point has
+probability $\frac {A_{circle}} {A_{square}}$ of falling inside the circle, so the more points we
+generate, the closer $\frac {points~inside~circle} {total~points}$ stably approaches
 $\frac {A_{circle}} {A_{square}}$.
 
 So now we have the missing link in our pi estimation: a way to estimate
@@ -191,10 +191,5 @@ Go ahead and play around with the number of random points using the slider. If y
 a new set of random points, refresh the page. You should be able to see that as you increase the
 number of points, our estimate gets closer to the actual value, and the error reduces!
 
-# A Stronger Explanation
-
-If you just read through this post and thought to yourself, "Hmm, that seems kind of hand-wavy,"
-then I'd have to agree with you. We demonstrated how the estimate works in a way that "makes sense,"
-but we only assumed our random randomly-selected point came from a uniform distribution, and the
-coin-toss comparison wasn't very rigorous. Below I'll attempt to explain a bit better why this
-estimation method works.
+[^uni-distro]: This is a footnote!
+[^big-nums]: This is the second footnote!

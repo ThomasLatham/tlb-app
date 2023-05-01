@@ -33,6 +33,12 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
     } else {
       setSelectedTags([...selectedTags, tag]);
     }
+    // this can be removed once all the categories listed on the homepage have at least one post
+    setSelectedTags(
+      selectedTags.filter((selectedTag) => {
+        return allTags.includes(selectedTag);
+      })
+    );
   };
 
   useEffect(() => {
@@ -54,6 +60,11 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
                 text-sm rounded-lg block w-full p-2.5 border-[1.5px]"
               placeholder="Search by post title..."
               onChange={(e) => setSearchText(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  getFilteredPosts();
+                }
+              }}
             ></input>
           </div>
           <div>
@@ -73,15 +84,31 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
             );
           })}
         </div>
-        {frontmatterArray?.map((postFM) => {
-          return (
-            <div className="w-8/12 sm:w-7/12 md:w-6/12" key={postFM.id}>
-              <Link href={`/posts/${postFM.id}`}>
-                <PostSearchListEntry postFM={postFM.frontmatter} />
-              </Link>
-            </div>
-          );
-        })}
+        {frontmatterArray?.length ? (
+          frontmatterArray?.map((postFM) => {
+            return (
+              <div className="w-8/12 sm:w-7/12 md:w-6/12" key={postFM.id}>
+                <Link href={`/posts/${postFM.id}`}>
+                  <PostSearchListEntry postFM={postFM.frontmatter} />
+                </Link>
+              </div>
+            );
+          })
+        ) : (
+          <div className="mt-5">
+            <p className="dark:text-trim-dark text-secondary-light text-lg">
+              {/* the first condition can be removed once all the categories listed on 
+              the homepage have at least one post */}
+              {selectedTags.filter((selectedTag) => !allTags.includes(selectedTag)).length
+                ? // eslint-disable-next-line quotes
+                  'No posts yet exist for the "' +
+                  selectedTags.filter((selectedTag) => !allTags.includes(selectedTag))[0] +
+                  // eslint-disable-next-line quotes
+                  '" tag.'
+                : "No posts found."}
+            </p>
+          </div>
+        )}
       </div>
     </Layout>
   );
