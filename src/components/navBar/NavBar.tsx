@@ -7,7 +7,7 @@ import ThemeSwitch from "../themeSwitch";
 import { useAppSelector } from "../../redux/hooks";
 import { userPreferences } from "../../ducks";
 import { useOutsideClickAwareness } from "../../utils/hooks";
-import Logo from "../../../public/images/logo.svg";
+import Logo from "../../../public/myImages/logo.svg";
 import tailwindConfig from "../../../tailwind.config";
 
 const colors = tailwindConfig.theme.colors;

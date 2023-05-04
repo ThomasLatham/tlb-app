@@ -86,7 +86,7 @@ const Home: React.FC<Props> = ({ randomPostId }) => {
       </Head>
       <div className="flex flex-row items-center content-center justify-center">
         <div>
-          <HexGrid viewBox="-50 -60 100 120" className="mb-[18px] sm:mb-[-80px] sm:mt-[-30px]">
+          <HexGrid viewBox="-50 -60 100 120" className="mb-[18px] sm:mb-[-85px] sm:mt-[-30px]">
             <HexLayout size={{ x: 18, y: 18 }} flat={true} spacing={1}>
               <Hexagon q={0} r={-1} s={1} className="">
                 <Text y={-10}>{"Hi, I'm Tom."}</Text>

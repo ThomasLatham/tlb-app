@@ -19,7 +19,7 @@ const AboutPage: React.FC = () => {
         <p className="mt-6 text-[30px] underline">About Me</p>
         <div className="flex flex-col sm:flex-row items-center px-4 lg:px-44 sm:mt-4">
           <Image
-            src={"/images/tom_pic.jpg"}
+            src={"/myImages/tom_pic.jpg"}
             alt="tom_pic"
             width={210}
             height={250}
@@ -64,7 +64,17 @@ const AboutPage: React.FC = () => {
           >
             mdx-bundler
           </a>{" "}
-          for creating interactive blog posts. <br />
+          {`
+          for creating interactive blog posts. If you're interested in the source code, 
+          you can check it out at the blog's`}{" "}
+          <a
+            className="dark:text-secondary-dark text-side-light hover:underline"
+            href="https://github.com/ThomasLatham/tlb-app"
+          >
+            GitHub repository
+          </a>
+          {"."}
+          <br />
           <br />
           {`I chose the honeycomb symbol for the logo and theme bee-cause I think the animals
           that make them are cool, and hexagons are math-y. And when I was creating the logo I found
