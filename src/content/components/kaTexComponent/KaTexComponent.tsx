@@ -15,7 +15,26 @@ const KaTeXComponent: React.FC<Props> = ({ texExpression, options, className }) 
     [texExpression, options]
   );
 
-  return <div className={className} ref={containerRef} />;
+  return (
+    <div>
+      <div className={className} ref={containerRef} />
+      <style>{`
+        .katex-display > .katex {
+          display: inline-block;
+          white-space: nowrap;
+          max-width: 100%;
+          overflow-x: scroll;
+          text-align: initial;
+        }
+        .katex {
+          font: normal 1.21em KaTeX_Main, Times New Roman, serif;
+          line-height: 1.2;
+          white-space: normal;
+          text-indent: 0;
+        }
+      `}</style>
+    </div>
+  );
 };
 
 export default KaTeXComponent;

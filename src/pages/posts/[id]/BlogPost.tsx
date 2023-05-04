@@ -54,7 +54,7 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
             </div>
           </div>
         </div>
-        <article className="prose dark:prose-invert text-left pt-10 px-20 max-w-none grow-[12]">
+        <article className="prose dark:prose-invert text-left pt-10 md:px-20 px-2 max-w-none grow-[12]">
           <header>
             <BlogHeader
               title={frontmatter.title as string}
@@ -81,6 +81,11 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
         }
         .blog-link:hover {
           color: ${useDarkMode ? colors["secondary-dark"] : colors["primary-light"]};
+        }
+        /*this next block keeps the website from being yuck on mobile*/
+        article {
+          width: 100%;
+          max-width: 100%;
         }
       `}</style>
     </Layout>
