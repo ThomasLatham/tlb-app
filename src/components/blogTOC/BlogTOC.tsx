@@ -3,7 +3,11 @@ import React from "react";
 import { Heading, HeadingWithNestedHeadings } from "../../interfaces";
 import { useHeadingsData } from "../../utils/hooks";
 
-const Headings = ({ headings }) => (
+interface HeadingsProps {
+  headings: HeadingWithNestedHeadings[];
+}
+
+const Headings: React.FC<HeadingsProps> = ({ headings }) => (
   <ul className="pl-2 border-l-2 dark:border-trim-dark border-secondary-light">
     {headings.map((heading: HeadingWithNestedHeadings) => (
       <li className="mb-4" key={heading.id}>
