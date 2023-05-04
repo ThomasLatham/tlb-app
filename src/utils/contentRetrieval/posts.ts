@@ -106,7 +106,7 @@ const getAllPosts = async () => {
 };
 
 const getPostById = async (postId: string) => {
-  return await fullPostResult(`${POSTS_PATH}\\${postId}.mdx`);
+  return await fullPostResult(`${POSTS_PATH}/${postId}.mdx`);
 };
 
 const getAllPostIds = () => {
