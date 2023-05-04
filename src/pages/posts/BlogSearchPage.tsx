@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Head from "next/head";
 
 import Layout from "@/components/layout";
 import PostSearchListEntry from "@/components/postSearchListEntry";
@@ -47,6 +48,9 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
 
   return (
     <Layout>
+      <Head>
+        <title>Post Search</title>
+      </Head>
       <div className="flex flex-col items-center w-screen">
         <div className="flex mt-2 mb-2">
           <div className="pt-2 mx-2">

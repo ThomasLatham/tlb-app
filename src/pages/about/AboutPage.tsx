@@ -1,11 +1,15 @@
 import React from "react";
 import Image from "next/image";
+import Head from "next/head";
 
 import Layout from "../../components/layout";
 
 const AboutPage: React.FC = () => {
   return (
     <Layout>
+      <Head>
+        <title>{"About Tom's Blog"}</title>
+      </Head>
       <div
         className="
         flex flex-col items-center content-center justify-center 

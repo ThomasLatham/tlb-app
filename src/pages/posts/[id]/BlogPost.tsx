@@ -2,8 +2,8 @@ import React from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 import dynamic from "next/dynamic";
 import { GetStaticPropsContext } from "next";
-// needed for rc-slider as used in the content-component PiEstimateVisualizer
-import "rc-slider/assets/index.css";
+import Head from "next/head";
+import "rc-slider/assets/index.css"; // needed for rc-slider as used in the content-component PiEstimateVisualizer
 
 import { getPostById, getAllPostIds } from "../../../utils/contentRetrieval";
 import Layout from "../../../components/layout";
@@ -40,6 +40,9 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
   );
   return (
     <Layout>
+      <Head>
+        <title>{frontmatter.title}</title>
+      </Head>
       <div className="flex">
         <div className="hidden md:block md:grow-[1] md:m">
           <div className="self-start sticky top-32 flex-col pl-2 md:ml-8">
