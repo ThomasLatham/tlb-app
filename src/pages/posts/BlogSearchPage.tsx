@@ -44,11 +44,12 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
 
   useEffect(() => {
     getFilteredPosts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedTags]);
 
   return (
     <Layout>
-      <Head>
+      <Head key="search">
         <title>Post Search</title>
       </Head>
       <div className="flex flex-col items-center w-screen">

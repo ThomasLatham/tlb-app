@@ -40,7 +40,7 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
   );
   return (
     <Layout>
-      <Head>
+      <Head key={frontmatter.title as string}>
         <title>{frontmatter.title}</title>
       </Head>
       <div className="flex">

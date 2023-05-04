@@ -81,7 +81,7 @@ const Home: React.FC<Props> = ({ randomPostId }) => {
 
   return (
     <Layout>
-      <Head>
+      <Head key="home">
         <title>{"Tom's Blog"}</title>
       </Head>
       <div className="flex flex-row items-center content-center justify-center">

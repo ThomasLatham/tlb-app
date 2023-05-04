@@ -7,7 +7,7 @@ import Layout from "../../components/layout";
 const AboutPage: React.FC = () => {
   return (
     <Layout>
-      <Head>
+      <Head key="about">
         <title>{"About Tom's Blog"}</title>
       </Head>
       <div

@@ -11,7 +11,7 @@ const App = ({ Component, pageProps }: AppProps) => {
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <Head>
+        <Head key="app">
           <link rel="shortcut icon" href="/images/favicon/favicon.ico" />
           <link
             rel="apple-touch-icon"
