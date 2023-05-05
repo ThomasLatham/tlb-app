@@ -6,7 +6,22 @@ module.exports = {
   content: ["./src/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class",
   theme: {
-    extend: {},
+    extend: {
+      typography: {
+        DEFAULT: {
+          css: {
+            "code::before": {
+              // eslint-disable-next-line quotes
+              content: '""',
+            },
+            "code::after": {
+              // eslint-disable-next-line quotes
+              content: '""',
+            },
+          },
+        },
+      },
+    },
     colors: {
       "primary-light": "#FEAA00",
       "secondary-light": "#000000",
