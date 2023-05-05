@@ -9,9 +9,9 @@ All the files inside the `src/content/posts` directory are licensed under
 when:
 
 1. The canonical link is directed towards the original article, e.g.
-   `<link rel="canonical" href="https://www.tomlathamblog.com/posts/some-post" />`
+   `<link rel="canonical" href="https://www.tomlatham.blog/posts/some-post" />`
 2. The following message is displayed above and below the article:
-   `This article has been originally published on <a href="https://www.tomlathamblog.com/">Tom Latham's blog</a>.`
+   `This article has been originally published on <a href="https://www.tomlatham.blog/">Tom Latham's blog</a>.`
 
 # Other Files
 

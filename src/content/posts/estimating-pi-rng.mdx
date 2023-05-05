@@ -1,6 +1,6 @@
 ---
 title: Estimating Pi with a Random Number Generator
-datePublished: "1996-01-03"
+datePublished: "2023-05-05"
 author: Tom Latham
 description: How to estimate the value of pi using a random number generator.
 tags: ["math", "programming"]
@@ -191,5 +191,16 @@ Go ahead and play around with the number of random points using the slider. If y
 a new set of random points, refresh the page. You should be able to see that as you increase the
 number of points, our estimate gets closer to the actual value, and the error reduces!
 
-[^uni-distro]: This is a footnote!
-[^big-nums]: This is the second footnote!
+[^uni-distro]:
+    We don't actually have to assume our random variable is uniformly distributed, at least not with
+    the RNG used in this post. JavaScript's `Math.random()` has an "approximately uniform
+    distribution" (according to the
+    [official documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)),
+    Further, the distribution of our X-variable is independent from that of our Y-variable, so their
+    [joint distribution](https://en.wikipedia.org/wiki/Joint_probability_distribution#Joint_distribution_for_independent_variables)
+    is their product. Knowing that both distributions lie on the same interval, we can conclude that
+    their joint distribution is also uniform on the area (square) defined by the Cartesian product
+    of their respective intervals.
+
+[^big-nums]:
+    This is known as the [law of large numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers).
