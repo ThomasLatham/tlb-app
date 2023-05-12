@@ -19,6 +19,7 @@ const KaTeXComponent: React.FC<Props> = ({ texExpression, options, className }) 
     <div>
       <div className={className} ref={containerRef} />
       <style>{`
+      @media (pointer:none), (pointer:coarse) {
         .katex-display > .katex {
           display: inline-block;
           white-space: nowrap;
@@ -32,6 +33,7 @@ const KaTeXComponent: React.FC<Props> = ({ texExpression, options, className }) 
           white-space: normal;
           text-indent: 0;
         }
+      }
       `}</style>
     </div>
   );
