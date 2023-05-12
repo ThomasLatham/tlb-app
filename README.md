@@ -7,7 +7,7 @@ making interactive blog posts.
 
 ## Project Status
 
-This project is currently in development (but almost released!).
+Released!
 
 ## Installation and Setup Instructions
 
