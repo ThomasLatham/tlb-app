@@ -1,0 +1,86 @@
+---
+title: Testing Angular Service Methods that Return throwError() from a catchError()'s Callback
+datePublished: "2023-05-12"
+author: Tom Latham
+description:
+  Sometimes it's hard to reach and handle error cases when testing Angular services that employ
+  RxJS. This post covers one such case I encountered at work that took me a while to figure out.
+tags: ["programming"]
+---
+
+[//]: # "server imports"
+
+# The Problem
+
+Let's say you have an Angular service class with a method that gets data from an API, as follows:
+
+```typescript showLineNumbers
+/* some-entity.service.ts */
+
+import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable, catchError, throwError } from "rxjs";
+
+@Injectable({
+  providedIn: "root",
+})
+export class SomeEntityService {
+  private apiUrl: string = "https://some-api.com/";
+
+  constructor(private _http: HttpClient) {}
+
+  getAllEntities(): Observable<SomeEntity[]> {
+    return this._http
+      .get<SomeEntity[]>(this.apiUrl + "entity", {
+        headers: new HttpHeaders({ "Content-Type": "application/json" }),
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          // maybe do some stuff with the error here
+          return throwError(() => new Error(error.error.someCustomErrorMessageFromApi));
+        })
+      );
+  }
+}
+```
+
+```typescript
+import { HttpTestingController, HttpClientTestingModule } from "@angular/common/http/testing";
+import { fakeAsync, TestBed, tick } from "@angular/core/testing";
+import { SomeEntityService } from "./some-entity.service";
+
+describe("SomeEntityService", () => {
+  let service: SomeEntityService;
+  let controller: HttpTestingController;
+  let apiUrl: string;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [SomeEntityService],
+    });
+
+    service = TestBed.inject(SomeEntityService);
+    controller = TestBed.inject(HttpTestingController);
+    apiUrl = "https://some-api.com/";
+  });
+
+  it("handles errors when fetching entities", fakeAsync(() => {
+    const expectedUrl = apiUrl + "entity";
+
+    const error = {
+      someCustomErrorMessageFromApi: "This is a custom error message from the API!",
+    };
+
+    service.getAllEntities().subscribe(() => {});
+
+    const mockRequest = controller.expectOne(expectedUrl);
+
+    mockRequest.flush(error, { status: 500, statusText: "Internal Server Error" });
+
+    expect(() => {
+      tick();
+    }).toThrowError();
+  }));
+});
+```
