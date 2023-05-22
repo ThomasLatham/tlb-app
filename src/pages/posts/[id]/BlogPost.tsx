@@ -86,6 +86,7 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
         article {
           width: 100%;
           max-width: 100%;
+          overflow: auto;
         }
       `}</style>
     </Layout>
