@@ -6,10 +6,9 @@
  */
 
 /* Code block styles */
-pre code {
-  display: inline-block;
-  max-width: calc(100% - 16px);
+pre {
   overflow-x: auto;
+  max-width: calc(100% -32px);
 }
 
 /**
@@ -24,11 +23,10 @@ pre code {
 
 .code-line {
   display: block;
-  max-width: calc(100% - 16px);
   padding-left: 16px;
-  padding-right: 16px;
+  /* padding-right: 16px; */
   margin-left: -16px;
-  margin-right: -16px;
+  /* margin-right: -16px; */
   border-left: 4px solid rgba(0, 0, 0, 0); /* Set placeholder for highlight accent border color to transparent */
 }
 
