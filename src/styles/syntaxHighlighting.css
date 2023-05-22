@@ -5,6 +5,10 @@
  * https://github.com/PrismJS/prism-themes
  */
 
+code {
+  max-width: 100%;
+}
+
 /* Code block styles */
 pre {
   overflow-x: auto;
