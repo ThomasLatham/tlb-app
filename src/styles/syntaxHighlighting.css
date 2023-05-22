@@ -5,14 +5,9 @@
  * https://github.com/PrismJS/prism-themes
  */
 
-code {
-  max-width: 100%;
-}
-
 /* Code block styles */
 pre {
   overflow-x: auto;
-  max-width: 100%;
 }
 
 /**
@@ -32,6 +27,7 @@ pre {
   margin-left: -16px;
   margin-right: -16px;
   border-left: 4px solid rgba(0, 0, 0, 0); /* Set placeholder for highlight accent border color to transparent */
+  max-width: 100%;
 }
 
 .line-number::before {
