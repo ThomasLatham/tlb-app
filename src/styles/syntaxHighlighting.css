@@ -8,6 +8,7 @@
 /* Code block styles */
 pre {
   overflow-x: auto;
+  max-width: 100%;
 }
 
 /**
