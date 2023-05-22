@@ -6,7 +6,9 @@
  */
 
 /* Code block styles */
-pre {
+pre code {
+  display: inline-block;
+  max-width: 100%;
   overflow-x: auto;
 }
 
