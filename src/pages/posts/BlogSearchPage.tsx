@@ -3,6 +3,7 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import Head from "next/head";
+import _ from "lodash";
 
 import Layout from "@/components/layout";
 import PostSearchListEntry from "@/components/postSearchListEntry";
@@ -29,17 +30,19 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
   };
 
   const toggleTag = (tag: string) => {
+    let selectedTagsClone = _.cloneDeep(selectedTags);
     if (selectedTags.includes(tag)) {
-      setSelectedTags(selectedTags.filter((selectedTag) => selectedTag !== tag));
+      selectedTagsClone = selectedTagsClone.filter((selectedTag) => selectedTag !== tag);
     } else {
-      setSelectedTags([...selectedTags, tag]);
+      selectedTagsClone = [...selectedTags, tag];
     }
+
     // this can be removed once all the categories listed on the homepage have at least one post
-    setSelectedTags(
-      selectedTags.filter((selectedTag) => {
-        return allTags.includes(selectedTag);
-      })
-    );
+    selectedTagsClone = selectedTagsClone.filter((selectedTag) => {
+      return allTags.includes(selectedTag);
+    });
+
+    setSelectedTags(selectedTagsClone);
   };
 
   useEffect(() => {
