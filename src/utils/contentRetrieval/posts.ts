@@ -22,7 +22,12 @@ const fullPostResult = async (mdxFilepath: string) => {
         ...(options.rehypePlugins ?? []),
         rehypeKatex,
         rehypeSlug,
-        rehypeCodeTitles,
+        [
+          rehypeCodeTitles,
+          {
+            titleSeparator: "_",
+          },
+        ],
         rehypePrism,
         [
           rehypeAutolinkHeadings,

@@ -6,6 +6,7 @@ import { PersistGate } from "redux-persist/integration/react";
 
 import store, { persistor } from "../redux/store";
 import "../styles/globals.css";
+import "../styles/syntaxHighlighting.css";
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
