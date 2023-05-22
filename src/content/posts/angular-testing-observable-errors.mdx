@@ -3,18 +3,19 @@ title: Testing Angular Service Methods that Return throwError() from a catchErro
 datePublished: "2023-05-12"
 author: Tom Latham
 description:
-  Sometimes it's hard to reach and handle error cases when testing Angular services that employ
-  RxJS. This post covers one such case I encountered at work that took me a while to figure out.
+  Sometimes it's hard to reach and handle error cases when testing (with Jasmine) Angular services
+  that employ RxJS. This post covers one such case I encountered at work that took me a while to
+  figure out.
 tags: ["programming"]
 ---
 
 [//]: # "server imports"
 
-# The Problem
+# The Code to Be Tested
 
 Let's say you have an Angular service class with a method that gets data from an API, as follows:
 
-```typescript showLineNumbers
+```typescript {15-26} showLineNumbers
 /* some-entity.service.ts */
 
 import { HttpClient, HttpErrorResponse, HttpHeaders } from "@angular/common/http";
@@ -44,7 +45,31 @@ export class SomeEntityService {
 }
 ```
 
-```typescript
+We can see that the `getAllEntities()` method uses Angular's `HttpClient` `get()` method to return
+an observable of some-entity arrays, and to handle any errors that might arise while fetching the
+data from the API, that observable is "piped" through the RxJS `catchError` operator. The
+`catchError` operator then passes the error to the error-handling function (written here as an arrow
+function). For more details on this process see the
+[official Angular tutorial](https://angular.io/tutorial/tour-of-heroes/toh-pt6).
+
+Now, instead of just logging the error and returning an (observable of an) empty array, as in the
+case of the Angular tutorial, our method above uses the RxJS `throwError` creation function to
+return an observable that "will create an error and error every time it is subscribed to," (from the
+[RxJS documentation](https://rxjs.dev/api/index/function/throwError)).
+
+Let's say further that in the case of failure, our API returns an error message in the response
+object, and we want to pass that message into the error that `throwError` will eventually create,
+hence the `() => new Error(error.error.someCustomErrorMessageFromApi)` callback given to
+`throwError`.
+
+# The Test Itself
+
+So, let's take a look at how one can go about reaching and handling this path, using Jasmine as our
+unit-testing framework.
+
+```typescript {23-39} showLineNumbers
+/* some-entity.service.spec.ts */
+
 import { HttpTestingController, HttpClientTestingModule } from "@angular/common/http/testing";
 import { fakeAsync, TestBed, tick } from "@angular/core/testing";
 import { SomeEntityService } from "./some-entity.service";
@@ -84,3 +109,35 @@ describe("SomeEntityService", () => {
   }));
 });
 ```
+
+To set up the test, we import `HttpClientTestingModule` into the test bed, and we provide the bed
+with the service we're testing. We then inject our service and our instance of
+`HttpTestingController` into the bed.
+
+Looking at the actual spec for the method we're testing, we can first note that we're wrapping the
+callback in `fakeAsync()`, which allows us to manually simulate the asynchronous passage of time.
+We'll need this ability for accessing in a controlled way the error we're expecting the returned
+observable to throw.
+
+We place our custom error message in an object to mock the format of the expected response from the
+API, and then we subscribe to the method we're testing. This is similar to how we would use the
+method when actually calling the API, but we're not doing anything with the response because we're
+just testing the negative case here, hence the empty callback.
+
+We then retrieve our mock using `HttpTestingController`'s `expectOne()`, and we
+[flush](https://angular.io/api/common/http/testing/TestRequest#flush) the request with an
+unsuccessful response. **It's important that the second argument of `flush()`, the headers argument,
+includes a `status` property to let Angular know that our mocked response is an error.** This is
+what gets us "into" the `catchError()` in the method we're testing.
+
+Finally, we have our assertion. Now that we're in the `catchError()`, we're going to want to look
+inside the observable returned by `throwError()`, and remembering that doing so will immediately
+throw an error, we want to expect that error to be thrown. So that's exactly what we do, using the
+`tick()` method (enabled by wrapping our spec in `fakeAsync()`) to consume the observable, and
+expecting its very consumption to throw an error.
+
+# Conclusion
+
+We've now seen how to handle this somewhat niche unit-testing case in Angular. A lot of the tools
+covered here, however, aren't only applicable to this case, and they can be used for different
+testing situations as needed.
