@@ -111,8 +111,7 @@ describe("SomeEntityService", () => {
 ```
 
 To set up the test, we import `HttpClientTestingModule` into the test bed, and we provide the bed
-with the service we're testing. We then inject our service and our instance of
-`HttpTestingController` into the bed.
+with the service we're testing. We then inject our service and `HttpTestingController` into the bed.
 
 Looking at the actual spec for the method we're testing, we can first note that we're wrapping the
 callback in `fakeAsync()`, which allows us to manually simulate the asynchronous passage of time.
