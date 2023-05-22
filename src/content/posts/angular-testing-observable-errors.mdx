@@ -59,8 +59,13 @@ return an observable that "will create an error and error every time it is subsc
 
 Let's say further that in the case of failure, our API returns an error message in the response
 object, and we want to pass that message into the error that `throwError` will eventually create,
-hence the `() => new Error(error.error.someCustomErrorMessageFromApi)` callback given to
-`throwError`.
+hence the
+
+```typescript
+() => new Error(error.error.someCustomErrorMessageFromApi);
+```
+
+callback given to `throwError`.
 
 # The Test Itself
 
