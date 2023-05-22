@@ -27,7 +27,6 @@ pre {
   margin-left: -16px;
   margin-right: -16px;
   border-left: 4px solid rgba(0, 0, 0, 0); /* Set placeholder for highlight accent border color to transparent */
-  max-width: 100%;
 }
 
 .line-number::before {
@@ -82,10 +81,7 @@ code[class*="language-"] {
   font-family: Menlo, Monaco, Consolas, "Andale Mono", "Ubuntu Mono", "Courier New", monospace;
   direction: ltr;
   text-align: left;
-  /*white-space: pre;*/
-  white-space: nowrap;
-  max-width: 100%;
-  overflow-x: scroll;
+  white-space: pre;
   word-spacing: normal;
   word-break: normal;
   line-height: 1.5;
