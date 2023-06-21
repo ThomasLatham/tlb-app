@@ -5,6 +5,7 @@ export const THEME_TYPES = {
 
 export const NAV_OPTIONS = [
   ["Home", "/"],
+  ["Portfolio", "/portfolio"],
   ["Blog", "/posts"],
   ["About", "/about"],
 ];
