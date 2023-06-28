@@ -19,8 +19,8 @@ const AboutPage: React.FC = () => {
         <p className="mt-6 text-[30px] underline">About Me</p>
         <div className="flex flex-col sm:flex-row items-center px-4 lg:px-44 sm:mt-4">
           <Image
-            src={"/myImages/tom_pic.jpg"}
-            alt="tom_pic"
+            src={"tom-pic.jpg"}
+            alt="tom-pic"
             width={210}
             height={250}
             className="border-2 

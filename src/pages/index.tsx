@@ -10,7 +10,7 @@ const HexLayout = dynamic(() => import("react-hexgrid").then((a) => a.Layout), {
 const Hexagon = dynamic(() => import("react-hexgrid").then((a) => a.Hexagon), { ssr: false });
 const Text = dynamic(() => import("react-hexgrid").then((a) => a.Text), { ssr: false });
 
-import { getRandomPostId } from "@/utils/contentRetrieval";
+import { getRandomPostId } from "@/contentRetrieval/posts";
 
 import { useAppSelector } from "../redux/hooks";
 import { userPreferences } from "../ducks";

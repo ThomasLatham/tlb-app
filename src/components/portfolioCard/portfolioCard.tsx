@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import Image from "next/image";
+import matter from "gray-matter";
 
-const PortfolioCard: React.FC<{ image: string; description: string }> = ({
-  image,
-  description,
-}) => {
+interface Props {
+  markdownContent: string;
+}
+
+const PortfolioCard: React.FC<Props> = ({ markdownContent }) => {
+  const [frontmatter, setFrontmatter] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = () => {
@@ -15,6 +19,18 @@ const PortfolioCard: React.FC<{ image: string; description: string }> = ({
     setIsModalOpen(false);
   };
 
+  useEffect(() => {
+    try {
+      const content = await import(markdownContent);
+      const { data }: matter.GrayMatterFile<string> = matter(content);
+      setFrontmatter(data);
+    } catch (error) {
+      console.error("Error reading Markdown file:", error);
+    }
+  });
+
+  const { title, description, image } = frontmatter;
+
   return (
     <>
       <div className="w-full md:w-1/2 lg:w-1/3 xl:w-1/4 p-4">
@@ -24,8 +40,8 @@ const PortfolioCard: React.FC<{ image: string; description: string }> = ({
         >
           <Image src={image} alt="Project" className="w-full h-48 object-cover" />
           <div className="p-4">
-            <p className="text-lg font-medium mb-2">{description}</p>
-            <p className="text-gray-500">Click for more details</p>
+            <p className="text-lg font-medium mb-2">{title}</p>
+            <p className="text-gray-500">{description}</p>
           </div>
         </div>
       </div>
@@ -36,8 +52,8 @@ const PortfolioCard: React.FC<{ image: string; description: string }> = ({
           onClick={closeModal}
         >
           <div className="bg-white p-8 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">{description}</h2>
-            <p>Additional information about the project goes here...</p>
+            <h2 className="text-2xl font-bold mb-4">{title}</h2>
+            <ReactMarkdown>{markdownContent}</ReactMarkdown>
           </div>
         </div>
       )}

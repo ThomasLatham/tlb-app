@@ -2,10 +2,10 @@ import React from "react";
 
 import { formatDateString } from "@/utils/format";
 
-import { Frontmatter } from "../../interfaces";
+import { PostFrontmatter } from "../../interfaces";
 
 interface Props {
-  postFM: Frontmatter;
+  postFM: PostFrontmatter;
 }
 
 const PostSearchListEntry: React.FC<Props> = ({ postFM }) => {

@@ -7,7 +7,7 @@ interface HeadingWithNestedHeadings extends Heading {
   items: Heading[];
 }
 
-interface Frontmatter {
+interface PostFrontmatter {
   title: string;
   datePublished: string;
   lastUpdated?: string;
@@ -21,4 +21,4 @@ interface PostSearchFilter {
   tags: string[];
 }
 
-export type { Heading, HeadingWithNestedHeadings, Frontmatter, PostSearchFilter };
+export type { Heading, HeadingWithNestedHeadings, PostFrontmatter, PostSearchFilter };
