@@ -1,6 +1,7 @@
 import path from "path";
 
 const POSTS_PATH = path.join(process.cwd(), "src/content/posts");
+
 const PORTFOLIO_ITEMS_PATH = path.join(process.cwd(), "src/content/portfolioItems");
 
 const THEME_TYPES = {
