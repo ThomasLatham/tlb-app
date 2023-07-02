@@ -1,3 +1,4 @@
-import PortfolioPage from "./PortfolioPage";
+import PortfolioPage, { getServerSideProps } from "./PortfolioPage";
 
 export default PortfolioPage;
+export { getServerSideProps };

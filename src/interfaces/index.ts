@@ -16,9 +16,28 @@ interface PostFrontmatter {
   tags: string[];
 }
 
+interface PortfolioItemFrontmatter {
+  title: string;
+  description: string;
+  cardImage: string;
+}
+
+interface PortfolioCardProps {
+  markdownContent: string;
+  frontmatter: PortfolioItemFrontmatter;
+  cardImageBlob: string;
+}
+
 interface PostSearchFilter {
   searchText: string;
   tags: string[];
 }
 
-export type { Heading, HeadingWithNestedHeadings, PostFrontmatter, PostSearchFilter };
+export type {
+  Heading,
+  HeadingWithNestedHeadings,
+  PostFrontmatter,
+  PortfolioItemFrontmatter,
+  PortfolioCardProps,
+  PostSearchFilter,
+};
