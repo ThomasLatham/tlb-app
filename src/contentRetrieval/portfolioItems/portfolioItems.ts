@@ -19,7 +19,7 @@ const getAllPortfolioItems = (): PortfolioCardProps[] => {
 
         const frontmatter = matter(markdownContent).data as PortfolioItemFrontmatter;
 
-        const cardImageBlob = Buffer.from(
+        const cardImageBase64 = Buffer.from(
           fs.readFileSync(
             path.resolve(PORTFOLIO_ITEMS_PATH, portfolioItemFolder, frontmatter.cardImage)
           )
@@ -28,7 +28,7 @@ const getAllPortfolioItems = (): PortfolioCardProps[] => {
         portfolioItemsArray.push({
           markdownContent: markdownContent,
           frontmatter: frontmatter,
-          cardImageBlob: cardImageBlob,
+          cardImageBase64: cardImageBase64,
         });
       }
     }

@@ -2,17 +2,13 @@ import Head from "next/head";
 import { GetServerSideProps } from "next";
 
 import { getAllPortfolioItems } from "@/contentRetrieval/portfolioItems/portfolioItems";
-import { PortfolioItemFrontmatter } from "@/interfaces";
+import { PortfolioCardProps, PortfolioItemFrontmatter } from "@/interfaces";
 
 import Layout from "../../components/layout";
 import PortfolioCard from "../../components/portfolioCard";
 
 interface Props {
-  portfolioItemsArray: {
-    markdownContent: string;
-    frontmatter: PortfolioItemFrontmatter;
-    cardImageBlob: Buffer;
-  }[];
+  portfolioItemsArray: PortfolioCardProps[];
 }
 
 const PortfolioPage: React.FC<Props> = ({ portfolioItemsArray }) => {
@@ -21,13 +17,13 @@ const PortfolioPage: React.FC<Props> = ({ portfolioItemsArray }) => {
       <Head key="portfolio">
         <title>{"Tom's Projects"}</title>
       </Head>
-      <div className="flex flex-wrap -mx-4">
+      <div className="flex flex-wrap mt-5 mx-16">
         {portfolioItemsArray.map((portfolioItem, index) => (
           <PortfolioCard
             key={index}
             markdownContent={portfolioItem.markdownContent}
             frontmatter={portfolioItem.frontmatter}
-            cardImageBlob={portfolioItem.cardImageBlob}
+            cardImageBase64={portfolioItem.cardImageBase64}
           />
         ))}
       </div>

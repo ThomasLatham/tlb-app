@@ -25,7 +25,7 @@ interface PortfolioItemFrontmatter {
 interface PortfolioCardProps {
   markdownContent: string;
   frontmatter: PortfolioItemFrontmatter;
-  cardImageBlob: string;
+  cardImageBase64: string;
 }
 
 interface PostSearchFilter {
