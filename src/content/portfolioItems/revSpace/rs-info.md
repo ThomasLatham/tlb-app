@@ -1,5 +1,5 @@
 ---
-title: "RevSpace Social Media Application"
+title: "RevSpace Social Media Application | Team Lead"
 description: ""
 cardImage: "rs-image.png"
 ---

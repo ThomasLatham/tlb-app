@@ -3,6 +3,7 @@ import Image from "next/image";
 import Head from "next/head";
 
 import Layout from "../../components/layout";
+import tomPic from "./tom-pic.jpg";
 
 const AboutPage: React.FC = () => {
   return (
@@ -19,7 +20,7 @@ const AboutPage: React.FC = () => {
         <p className="mt-6 text-[30px] underline">About Me</p>
         <div className="flex flex-col sm:flex-row items-center px-4 lg:px-44 sm:mt-4">
           <Image
-            src={"tom-pic.jpg"}
+            src={tomPic}
             alt="tom-pic"
             width={210}
             height={250}

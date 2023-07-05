@@ -1,5 +1,5 @@
 ---
-title: "Coffee Shop Application"
+title: "Coffee Shop Application | Team Lead"
 description: ""
 cardImage: "csa-image.png"
 ---

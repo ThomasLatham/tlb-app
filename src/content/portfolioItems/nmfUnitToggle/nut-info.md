@@ -1,5 +1,5 @@
 ---
-title: "Open Source Contribution | nmf.Earth Units Toggle"
+title: "NMF.earth | Contributor"
 description: ""
 cardImage: "nut-image.png"
 ---

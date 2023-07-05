@@ -2,8 +2,32 @@ import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import Image from "next/image";
 import { X } from "react-feather";
+import rehypeRewrite from "rehype-rewrite";
+import { Root, RootContent } from "hast";
 
 import { PortfolioCardProps } from "@/interfaces";
+import { useAppSelector } from "@/redux/hooks";
+import { userPreferences } from "@/ducks";
+
+import tailwindConfig from "../../../tailwind.config";
+
+const colors = tailwindConfig.theme.colors;
+
+const reactMarkdownRehypePlugins = [
+  [
+    rehypeRewrite,
+    {
+      rewrite: (node: Root | RootContent) => {
+        if (node.type === "element" && node.tagName === "a") {
+          node.properties = {
+            ...node.properties,
+            className: "modal-link",
+          };
+        }
+      },
+    },
+  ],
+];
 
 const PortfolioCard: React.FC<PortfolioCardProps> = ({
   markdownContent,
@@ -11,6 +35,7 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({
   cardImageBase64,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const useDarkMode = useAppSelector(userPreferences.selectors.getUseDarkMode);
 
   const handleCardClick = () => {
     setIsModalOpen(true);
@@ -29,11 +54,14 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({
 
   return (
     <>
-      <div className="w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/5 mx-4 flex-grow flex">
+      <div className="w-1/2 md:w-1/2 lg:w-1/3 xl:w-1/5 mx-4 flex">
         <div
-          className="cursor-pointer rounded-lg border-secondary-light
-          dark:text-trim-light dark:border-secondary-dark border-2 flex-grow
-          mb-4"
+          className="cursor-pointer rounded-lg 
+          border-[1.5px] dark:border-side-dark border-secondary-light
+          dark:hover:border-secondary-dark
+          dark:text-trim-dark text-secondary-light
+          dark:bg-back-dark hover:bg-primary-light 
+          flex-grow mb-4"
           onClick={handleCardClick}
         >
           <div className="mt-6 text-center flex items-center justify-center">
@@ -59,18 +87,31 @@ const PortfolioCard: React.FC<PortfolioCardProps> = ({
           className="fixed inset-0 z-50 flex items-center justify-center bg-secondary-light bg-opacity-50 dark:bg-side-dark dark:bg-opacity-50"
           onClick={closeModal}
         >
-          <div className="bg-back-light p-8 rounded-lg w-3/4 h-3/4 overflow-y-auto dark:bg-back-dark dark:text-trim-light relative">
-            <h2 className="text-2xl font-bold mb-4 text-secondary-light dark:text-trim-light">
+          <div className="prose dark:prose-invert max-w-none bg-back-light p-8 rounded-lg w-3/4 h-3/4 overflow-y-auto dark:bg-back-dark relative">
+            <h1 className="text-3xl font-bold mb-4 text-secondary-light dark:text-trim-light">
               {frontmatter.title}
-            </h2>
+            </h1>
             <button
               className="absolute top-4 right-4 text-secondary-light dark:text-trim-light hover:text-secondary-dark dark:hover:text-secondary-dark modal-close-button"
               onClick={closeModal}
             >
               <X size={24} />
             </button>
-            <ReactMarkdown>{markdownWithoutFrontmatter}</ReactMarkdown>
+            <ReactMarkdown rehypePlugins={reactMarkdownRehypePlugins as any}>
+              {markdownWithoutFrontmatter}
+            </ReactMarkdown>
           </div>
+          <style>{`
+            .modal-link {
+              color: ${useDarkMode ? colors["trim-dark"] : colors["secondary-light"]};
+            }
+            .modal-link:link {
+              text-decoration: underline;
+            }
+            .modal-link:hover {
+              color: ${useDarkMode ? colors["secondary-dark"] : colors["primary-light"]};
+            }
+          `}</style>
         </div>
       )}
     </>
