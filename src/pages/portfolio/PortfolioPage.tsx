@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { GetServerSideProps } from "next";
 
-import { getAllPortfolioItems } from "@/contentRetrieval/portfolioItems/portfolioItems";
+import { getAllPortfolioItems } from "@/contentRetrieval/portfolioItems";
 import { PortfolioCardProps } from "@/interfaces";
 
 import Layout from "../../components/layout";
