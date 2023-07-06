@@ -7,13 +7,13 @@ import _ from "lodash";
 
 import Layout from "@/components/layout";
 import PostSearchListEntry from "@/components/postSearchListEntry";
-import { Frontmatter } from "@/interfaces";
-import { getFilteredPostFrontmatters, getAllTags } from "@/utils/contentRetrieval";
+import { PostFrontmatter } from "@/interfaces";
+import { getFilteredPostFrontmatters, getAllTags } from "@/contentRetrieval/posts";
 import ButtonBasic from "@/components/buttonBasic";
 import ButtonTogglable from "@/components/buttonTogglable";
 
 interface Props {
-  frontmatterArray: { id: string; frontmatter: Frontmatter }[];
+  frontmatterArray: { id: string; frontmatter: PostFrontmatter }[];
   allTags: string[];
 }
 
@@ -126,15 +126,15 @@ const getServerSideProps: GetServerSideProps = async (context) => {
   const searchText = context.query.searchText ? (context.query.searchText as string) : "";
   const selectedTags =
     context.query.selectedTags === "" || context.query.selectedTags === undefined
-      ? await getAllTags()
+      ? getAllTags()
       : [...(context.query.selectedTags as string).split(",")];
   return {
     props: {
-      frontmatterArray: await getFilteredPostFrontmatters({
+      frontmatterArray: getFilteredPostFrontmatters({
         searchText: searchText,
         tags: selectedTags,
       }),
-      allTags: await getAllTags(),
+      allTags: getAllTags(),
     },
   };
 };

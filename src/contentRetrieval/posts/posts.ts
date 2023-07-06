@@ -8,10 +8,17 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import readingTime from "reading-time";
 import rehypePrism from "rehype-prism-plus";
 import rehypeRewrite from "rehype-rewrite";
-import rehypeCodeTitles from "rehype-code-titles";
 import rehypeKatex from "rehype-katex";
+import matter from "gray-matter";
 
-import { POSTS_PATH } from "./constants";
+import { PostFrontmatter, PostSearchFilter } from "@/interfaces";
+
+import { POSTS_PATH } from "../../constants";
+import { intersection } from "../../utils/general";
+
+/*----------------------
+------FULL_CONTENT------
+----------------------*/
 
 const fullPostResult = async (mdxFilepath: string) => {
   const { code, frontmatter } = await bundleMDX({
@@ -22,12 +29,6 @@ const fullPostResult = async (mdxFilepath: string) => {
         ...(options.rehypePlugins ?? []),
         rehypeKatex,
         rehypeSlug,
-        [
-          rehypeCodeTitles,
-          {
-            titleSeparator: "_",
-          },
-        ],
         rehypePrism,
         [
           rehypeAutolinkHeadings,
@@ -95,21 +96,6 @@ const fullPostResult = async (mdxFilepath: string) => {
   };
 };
 
-const getAllPosts = async () => {
-  const postsArr = [];
-
-  for (const mdxFilename of fs.readdirSync(POSTS_PATH)) {
-    const { code, frontmatter } = await fullPostResult(`${POSTS_PATH}/${mdxFilename}`);
-
-    postsArr.push({
-      id: mdxFilename.split(".mdx")[0],
-      code: code,
-      frontmatter: frontmatter,
-    });
-  }
-  return postsArr;
-};
-
 const getPostById = async (postId: string) => {
   return await fullPostResult(`${POSTS_PATH}/${postId}.mdx`);
 };
@@ -129,4 +115,57 @@ const getRandomPostId = () => {
   return postFileNameArr[Math.floor(Math.random() * postFileNameArr.length)].split(".mdx")[0];
 };
 
-export { getAllPosts, getPostById, getAllPostIds, getRandomPostId };
+/*---------------------
+------FRONTMATTER------
+---------------------*/
+
+const getAllPostFrontmatters = (): { id: string; frontmatter: PostFrontmatter }[] => {
+  const frontmatterArray: { id: string; frontmatter: PostFrontmatter }[] = [];
+  for (const mdxFilename of fs.readdirSync(POSTS_PATH)) {
+    const frontmatter = matter(fs.readFileSync(`${POSTS_PATH}/${mdxFilename}`, "utf8")).data;
+
+    frontmatterArray.push({
+      id: mdxFilename.split(".mdx")[0],
+      frontmatter: frontmatter as PostFrontmatter,
+    });
+  }
+
+  return frontmatterArray;
+};
+
+const getFilteredPostFrontmatters = (
+  filters: PostSearchFilter
+): {
+  id: string;
+  frontmatter: PostFrontmatter;
+}[] => {
+  return getAllPostFrontmatters().filter((result) => {
+    const fm = result.frontmatter;
+
+    if (
+      intersection<string>(fm.tags, filters.tags).length > 0 &&
+      fm.title.includes(filters.searchText)
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+};
+
+const getAllTags = (): string[] => {
+  return getAllPostFrontmatters()
+    .map((fm) => fm.frontmatter.tags)
+    .reduce((prevArr, curArr) => {
+      return [...new Set(prevArr.concat(curArr))];
+    }, []);
+};
+
+export {
+  getPostById,
+  getAllPostIds,
+  getRandomPostId,
+  getAllPostFrontmatters,
+  getFilteredPostFrontmatters,
+  getAllTags,
+};

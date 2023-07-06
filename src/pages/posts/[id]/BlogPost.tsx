@@ -5,7 +5,7 @@ import { GetStaticPropsContext } from "next";
 import Head from "next/head";
 import "rc-slider/assets/index.css"; // needed for rc-slider as used in the content-component PiEstimateVisualizer
 
-import { getPostById, getAllPostIds } from "../../../utils/contentRetrieval";
+import { getPostById, getAllPostIds } from "../../../contentRetrieval/posts";
 import Layout from "../../../components/layout";
 import BlogHeader from "../../../components/blogHeader";
 import BlogTOC from "../../../components/blogTOC";

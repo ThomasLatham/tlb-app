@@ -7,7 +7,7 @@ interface HeadingWithNestedHeadings extends Heading {
   items: Heading[];
 }
 
-interface Frontmatter {
+interface PostFrontmatter {
   title: string;
   datePublished: string;
   lastUpdated?: string;
@@ -16,9 +16,30 @@ interface Frontmatter {
   tags: string[];
 }
 
+interface PortfolioItemFrontmatter {
+  id: string;
+  title: string;
+  role: string;
+  description: string;
+  cardImage: string;
+}
+
+interface PortfolioCardProps {
+  markdownContent: string;
+  frontmatter: PortfolioItemFrontmatter;
+  cardImageBase64: string;
+}
+
 interface PostSearchFilter {
   searchText: string;
   tags: string[];
 }
 
-export type { Heading, HeadingWithNestedHeadings, Frontmatter, PostSearchFilter };
+export type {
+  Heading,
+  HeadingWithNestedHeadings,
+  PostFrontmatter,
+  PortfolioItemFrontmatter,
+  PortfolioCardProps,
+  PostSearchFilter,
+};
