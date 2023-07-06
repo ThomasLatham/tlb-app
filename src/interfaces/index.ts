@@ -17,7 +17,9 @@ interface PostFrontmatter {
 }
 
 interface PortfolioItemFrontmatter {
+  id: string;
   title: string;
+  role: string;
   description: string;
   cardImage: string;
 }

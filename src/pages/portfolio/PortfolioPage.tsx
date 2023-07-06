@@ -17,7 +17,7 @@ const PortfolioPage: React.FC<Props> = ({ portfolioItemsArray }) => {
       <Head key="portfolio">
         <title>{"Tom's Projects"}</title>
       </Head>
-      <div className="flex flex-wrap mt-5 mx-16 justify-center">
+      <div className="flex flex-wrap mt-5 justify-center">
         {portfolioItemsArray.map((portfolioItem, index) => (
           <PortfolioCard
             key={index}

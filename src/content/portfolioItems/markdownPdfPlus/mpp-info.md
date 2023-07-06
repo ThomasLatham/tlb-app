@@ -1,7 +1,9 @@
 ---
-title: "Markdown PDF Plus | Creator"
+id: "markdown-pdf-plus"
+title: "Markdown PDF Plus"
+role: "Creator"
 description:
-  "A VS Code extension for exporting Markdown to PDF or HTML, enabling usage of both stylesheets and
+  "VS Code extension for exporting Markdown to PDF or HTML, enabling usage of both stylesheets and
   images."
 cardImage: "mpp-image.png"
 ---

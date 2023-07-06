@@ -1,50 +1,53 @@
 ---
-title: "AVA: Automated Validation Application | Creator"
-description: ""
+id: "ava"
+title: "AVA: Automated Validation Application"
+role: "Creator"
+description:
+  "Automation tool for ETL QA, enabling comprehensive data comparison and integration with Jira for
+  issue tracking."
 cardImage: "ava-image.png"
 ---
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus sollicitudin cursus faucibus. Duis
-tempor ligula elit, et hendrerit ex tristique eu. Nullam tempor sem id aliquam condimentum.
-Suspendisse tristique dui quis dui vehicula placerat. Integer ex nunc, pulvinar sed velit ac, rutrum
-aliquet augue. Nullam lacus tortor, pulvinar ut magna a, maximus pretium nisl. Quisque sed sem
-purus. In imperdiet erat in dolor rutrum sollicitudin. Quisque dolor diam, varius et iaculis rutrum,
-ornare eu quam. Curabitur euismod pretium tempus. Vivamus lacinia sem id facilisis sollicitudin.
-Proin molestie bibendum ipsum quis aliquet. Praesent rhoncus, ex non porta dictum, erat nisi sodales
-ante, quis vulputate nisi nulla euismod dolor. Quisque ornare risus vel sapien placerat, nec
-vulputate diam aliquam. Vivamus sed justo at nisl auctor pulvinar.
+## Project Description
 
-Vivamus porttitor rutrum lectus, quis consectetur ligula. Nunc lorem metus, maximus sit amet
-placerat sit amet, fermentum in eros. Integer at purus pulvinar, vehicula est id, vehicula mauris.
-Praesent tincidunt sapien at magna luctus, et suscipit magna euismod. Nulla ullamcorper sem tempus
-leo ultrices, et laoreet lectus aliquet. Sed venenatis, est nec scelerisque rhoncus, erat nunc
-pellentesque sapien, non tristique sapien eros in dui. Vivamus blandit risus sed nisl finibus
-sollicitudin. Donec faucibus sed nunc at fringilla. In sapien sem, lacinia vitae est at, posuere
-finibus mi. Sed ut nunc nec turpis cursus feugiat eget non purus. Nam laoreet velit massa, a
-consequat elit molestie semper.
+AVA (Automated Validation Application) is an automation tool designed for performing Quality
+Assurance (QA) on ETL (Extract, Transform, Load) projects. It allows parallel usage by multiple team
+members and offers data validation, comparison, and reporting capabilities. AVA integrates with Jira
+for automated issue tracking and enables partitioning of large datasets for parallel processing.
 
-Nullam venenatis ligula eros, a fringilla massa dictum vitae. In ornare lorem tortor, a pharetra
-nisi dictum et. Aenean vestibulum, tellus in rhoncus elementum, nunc felis porttitor enim, ut
-vestibulum leo est eu tellus. Suspendisse pretium, velit ultricies rhoncus maximus, mi ligula
-tincidunt turpis, eu mollis massa erat ut urna. Sed suscipit condimentum nisi, quis hendrerit libero
-dignissim vitae. Nam quis magna ac tellus molestie suscipit. In hac habitasse platea dictumst. Sed
-egestas nec orci vel maximus. Quisque et convallis lorem. Vestibulum suscipit, mi ac auctor
-eleifend, quam sapien volutpat elit, a posuere purus massa eu mauris. Morbi hendrerit in libero id
-aliquet.
+## Features
 
-In scelerisque purus vitae tortor convallis, ac placerat lectus tincidunt. Phasellus lobortis nisi
-at purus cursus, nec faucibus sapien maximus. Etiam imperdiet quam viverra libero aliquam malesuada.
-Mauris consectetur ligula elit, quis molestie quam interdum et. Pellentesque vestibulum lectus quis
-laoreet laoreet. Etiam ultrices condimentum pharetra. Cras vel nunc a eros tempor elementum. Cras
-sit amet pulvinar justo, vitae luctus erat. Suspendisse suscipit egestas dapibus. Integer ultrices
-consectetur massa ac imperdiet. Donec quis luctus tellus. Mauris viverra eu augue et sagittis.
+- Local execution for parallel usage by multiple team members
+- Data extraction from various sources based on user input
+- Integration with multiple legacy and modern databases
+- Comprehensive data validation (row-wise, column-wise, schema)
+- Detailed reports with pass/fail status and precise differences in datasets
+- Automatic uploading of reports to Jira and issue tracking integration
+- Partitioning tool for large dataset processing
+- Extensive documentation on setup and usage using reStructuredText (markup syntax)
+- Utilized Sphinx and extensive docstrings for easy maintenance by future developers
 
-Praesent auctor nisi dolor, quis pulvinar sem blandit nec. Nulla sed elementum turpis, vitae
-accumsan enim. Curabitur non mattis massa. Cras pharetra feugiat nunc et fringilla. Sed in sem vitae
-nunc ultrices ornare nec id justo. Vestibulum vel risus non tellus semper iaculis. Mauris vestibulum
-feugiat odio, in tincidunt dolor tincidunt mollis. Cras porta ultricies ligula, vitae condimentum ex
-molestie ac. Etiam vehicula enim turpis, et venenatis felis aliquet vel. Nunc mollis augue vitae
-massa tempus malesuada. Curabitur blandit et nunc sed interdum. Proin ornare nisl sollicitudin risus
-ullamcorper varius vel vitae erat. Ut a velit blandit, pulvinar ante vitae, dapibus dui. Duis tempus
-elit sed sem porttitor, ac tempor quam pellentesque. Ut pretium purus et tortor fermentum vulputate.
-Sed quis tortor nulla.
+## Technologies Used
+
+- Python 3.6
+- Databases: Multiple legacy and modern database engines
+- Pandas package for data organization
+- DataComPy package for data comparison
+- Jira REST APIs for issue tracking
+- Zephyr Scale APIs for issue tracking
+- Microsoft Excel for user input
+- BitBucket and Git for version control
+
+## My Role
+
+As the creator of AVA, I envisioned, developed, and maintained the application. I incorporated input
+from my team members who also used the app.
+
+## Results
+
+- Virtually replaced the old manual workflow
+- Improved team efficiency by saving hundreds of hours each month
+- Enabled the QA team to reduce in size, resulting in cost savings for the client and the company
+- Still utilized by the QA team as their primary analysis tool
+- Flexible design enabled quick development of additional features, such as the partitioning tool,
+  to meet tight client deadlines
