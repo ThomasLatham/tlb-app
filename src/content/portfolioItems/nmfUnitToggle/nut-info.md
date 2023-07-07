@@ -3,7 +3,7 @@ id: "nmf-earth-unit-toggle"
 title: "NMF.earth"
 role: "Contributor"
 description:
-  "Implemented units toggle and in this open-source application, enhancing user experience and
+  "Implemented units toggle in this open-source application, enhancing user experience and
   global accessibility."
 cardImage: "nut-image.png"
 ---
