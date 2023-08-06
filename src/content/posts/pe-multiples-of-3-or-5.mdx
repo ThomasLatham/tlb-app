@@ -9,12 +9,10 @@ tags: ["math", "programming"]
 ---
 
 [//]: # "package imports"
-
-import { MapInteractionCSS } from "react-map-interaction";
-
 [//]: # "server imports"
 
 import KaTexComponent from "../components/kaTexComponent";
+import Chalkboard from "../components/chalkboard";
 
 [//]: # "global imports from mdx-bundler"
 
@@ -28,13 +26,12 @@ read on.
 
 # Introduction
 
-Last night, I decided to start a new hobby: Project Euler. More precisely, I'm setting out to solve
+A few weeks ago, I decided to start a new hobby: Project Euler. That is, I'm setting out to solve
 Project Euler problems and write about my attempts at doing so here. I had been missing mathematics
-for some time, and I was in search for something I could program and also write about (and also
-maybe distract me from the rest of my life at the moment). This first problem, though only rated 5%
-difficulty by Project Euler, certainly gave me what I was looking for, and I hope you the reader
-will enjoy reading about my thought process and solutions. So without further ado, let's get into
-the problem!
+for some time, and I was in search for something I could program and also write about. This first
+problem, though only rated 5% difficulty by Project Euler, certainly gave me what I was looking for,
+and I hope you'll enjoy reading about my thought process and solutions. So without further ado,
+let's get into the problem!
 
 # Problem Statement
 
@@ -47,16 +44,70 @@ sum of these multiples is 23. Find the sum of all the multiples of 3 or 5 below 
 
 ## A Note on My Chalkboard
 
+While tackling this problem, I took advantage of my laptop's touch screen and an awesome stylus pen
+my Mom got me to map out my thoughts by hand in Microsoft Whiteboard. Liking the look and feel of
+old-school chalkboards, I decided to make the background of my whiteboard black, and my pen color
+white. Although the screen and stylus don't have quite the same sound and feel as real chalk on a
+real chalkboard, it's much easier for me to share my notes electronically this way. If you're
+interested in viewing them, I've made them available as a zoom-able, drag-able PNG at the bottom of
+this post, and if you don't want to scroll to get there, you can follow [this link](#chalkboard) or
+the one in the table of contents as well.
+
+## First Steps: Notation
+
 The first thing I did, partly because I really like notation and mostly because it helps me start
-thinking about problems mathematically, was to try to formalize the problem
+thinking about problems mathematically, was to try to formalize the problem in semi-mathematical
+notation. You can take a look at [my notes](#chalkboard) to see this written by hand, but I've also
+provided the same below with KateX (and more correct notation).
+
+Here I'll define the set of numbers to sum from the problem's example. This could probably and maybe
+more properly be done as a sequence, but I like
+[set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation).
+
+<KaTexComponent
+  texExpression="A = \{a | a \in \natnums \land a < 10 \land (a\mod 3 \equiv 0 \lor a\mod 5 \equiv 0) \}"
+  options={{ displayMode: true }}
+/>
+
+We're defining a set $A$ with elements $a$, where each $a$ is in the
+[set of natural numbers](https://en.wikipedia.org/wiki/Natural_number) and is less than 10. Further,
+when dividing an $a$ by 3 or 5, the remainder must be 0 (see
+[Congruence](https://mathworld.wolfram.com/Congruence.html)). This last property is equivalent to
+saying that each $a$ is a multiple of 3 or 5, but looking at things this way makes it easier to
+solve this problem programmatically.
+
+Then, the following represents the sum of the elements of $A$ (unordered, but that
+[doesn't make a difference in this situation](https://math.stackexchange.com/a/1158041)):
+$\displaystyle\sum_{a \in A}a$.
+
+Following the same process for the sum that the problem actually wants us to find, I'll start once
+again by defining a set:
+
+<KaTexComponent
+  texExpression="B = \{b | b \in \natnums \land b < 1000 \land (b\mod 3 \equiv 0 \lor b\mod 5 \equiv 0) \}"
+  options={{ displayMode: true }}
+/>
+
+The only differences this time are the name of the set ($B$), the names of its elements ($b$) and
+importantly the exclusive maximum value of 1000.
+
+Then, the sum of the elements in $B$, the answer we're after, can be written:
+$\displaystyle\sum_{b \in B}b$.
+
+Now, let's get to seeing how we can solve this problem with some code.
+
+## A Simple solution
+
+## A More Elegant Solution
 
 # Chalkboard
 
-<div className="w-24 border-2 border-trim-dark">
-  <MapInteractionCSS>
-    <img
-      src="https://raw.githubusercontent.com/ThomasLatham/project-euler/main/src/multiplesOf3Or5/chalkboard.png"
-      alt="multiples of 3 or 5 chalkboard"
-    />
-  </MapInteractionCSS>
-</div>
+Drag and zoom in these notes if you want to see a certain portion of them more clearly!
+
+<Chalkboard
+  imgSrc="https://raw.githubusercontent.com/ThomasLatham/project-euler/main/src/multiplesOf3Or5/chalkboard.png"
+  altText="multiples of 3 or 5 chalkboard"
+  initialScale={3}
+  initialPositionX={-130}
+  initialPositionY={-90}
+/>
