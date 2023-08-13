@@ -1,6 +1,6 @@
 ---
 title: "Project Euler | Problem #1 | Multiples of 3 or 5"
-datePublished: "2023-07-23"
+datePublished: "2023-08-13"
 author: Tom Latham
 description:
   My solutions and thought processes for a simple solution and also one that is a bit more
@@ -96,9 +96,100 @@ $\displaystyle\sum_{b \in B}b$.
 
 Now, let's get to seeing how we can solve this problem with some code.
 
-## A Simple solution
+## A Simple Solution
+
+To me, the most obvious solution was to step through all the natural numbers less than 1000,
+checking whether each is divisible by 3 or 5, and, if that condition was met, add the number to a
+running sum. You can see my exact implementation
+[on my GitHub](https://github.com/ThomasLatham/project-euler/blob/main/src/multiplesOf3Or5/multiplesOf3Or5.ts),
+and I'll also paste the function below:
+
+```TypeScript
+/**
+ * Uses brute force to solve the problem.
+ *
+ * @param maxAddend The maximum addend to be added to the sum.
+ * @returns The sum of all numbers less than `maxAddend` which are divisible by 3 or 5.
+ */
+const simpleSolution = (maxAddend: number): number => {
+  let sum: number = 0;
+  for (let i = 1; i < maxAddend; i++) {
+    if (i % 3 == 0 || i % 5 == 0) {
+      sum += i;
+    }
+  }
+  return sum;
+};
+```
+
+We can see that this function, as it's just a single loop, runs in $O(n)$. This is good, but it
+would be nice to see if we can apply some mathematical concepts and methods to make a more elegant
+solution.
 
 ## A More Elegant Solution
+
+As my notes show, one of my first steps in searching for a cleaner solution to this problem was to
+list out the sequence of natural numbers divisible by 3 or 5, and then to write out the sequence of
+differences between each consecutive term in the first sequence, with the intent of finding a
+pattern in the second sequence. For the natural numbers divisible by 3 or 5, we have:
+
+<KaTexComponent
+  texExpression="\{0, 3, 5, 6, 9, 10, 12, 15, 18, 20, 21, 24, 25, 27, 30, ...\}."
+  options={{ displayMode: true }}
+/>
+
+For the sequence of differences between each term, we have:
+
+<KaTexComponent
+  texExpression="\{3, 2, 1, 3, 1, 2, 3, 3, 2, 1, 2, 1, 2, 3, ...\}."
+  options={{ displayMode: true }}
+/>
+
+We can see with some analysis that this sequence of differences repeats itself! The sequence's
+repeating pattern is $\{3, 2, 1, 3, 1, 2, 3\}$, and the pattern always starts again when we reach a
+number in the first sequence which is divisible by both 3 and 5 (e.g., 0, 15, 30). There are
+probably some number theory principles (relatively prime numbers, modular arithmetic) I could apply
+here to formalize why this pattern is happening and to prove that it does indeed hold as the first
+sequence approaches infinity, but for this problem I'm just going to assume the latter.
+
+With this assumption in mind, we can devise a new algorithm for computing the sum of the multiples
+of 3 and 5 below 1000. This time we'll still keep track of the the running sum, but we'll also
+define the pattern in an array and keep track of the value of the current addend (that is, the
+number to add to the running sum). Then we'll iteratively perform the following two steps: Add the
+current addend to the running sum, then increment the current addend by the next number in the
+pattern. This way, we'll never have to check whether an addend is a multiple of 3 or 5, and we have
+fewer iterations to loop through until we reach the answer. My implementation is below:
+
+```TypeScript
+/**
+ * Solves the problem by taking advantage of the fact that, in the sequence of
+ * natural numbers divisible by 3 or 5, there is a pattern to determine how
+ * much greater the n+1st element is than the nth.
+ *
+ * @param maxAddend The maximum addend to be added to the sum.
+ * @returns The sum of all numbers less than `maxAddend` which are divisible by 3 or 5.
+ */
+const sequenceDifferencePatternSolution = (maxAddend: number): number => {
+  const pattern: number[] = [3, 2, 1, 3, 1, 2, 3];
+  let curAddend: number = 0;
+  let sum: number = 0;
+  let patternIndex = 0;
+
+  while (curAddend < maxAddend) {
+    sum += curAddend;
+    curAddend += pattern[patternIndex++ % 7];
+  }
+
+  return sum;
+};
+```
+
+# Conclusion
+
+So we've seen two different ways to solve this first problem from Project Euler. There are certainly
+different and more efficient ways to do so, perhaps in $O(1)$ time complexity, but this was a great
+way for me to get started with the Project and get back into math. Thanks for reading! If you have
+any comments or questions, feel free to reach me at tom.latham.blog@gmail.com.
 
 # Chalkboard
 
