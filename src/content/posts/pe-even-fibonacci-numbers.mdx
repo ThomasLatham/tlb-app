@@ -131,6 +131,8 @@ Verifying against the first few terms listed above, we can see how this was seem
   options={{ displayMode: true }}
 />
 
+## Proving It
+
 What is a neat pattern, though, without proof? Before implementing a TypeScript function based on
 this finding, I wanted to prove that it was true for the whole Fibonacci sequence, and not just for
 the first few terms. Recalling the multitude of times I used it in my undergrad to prove some
@@ -174,15 +176,100 @@ we'll assume:
 Now, we need to _show_ for that Fibonacci number which is $3$ "ahead" of $\mathcal{F}(k)$ (which we
 can write as $\mathcal{F}(k+3)$), that our three points still hold. That is, we need to show that:
 
-- $\mathcal{F}(k+ 3) \equiv 0 \pmod 2$,
+- $\mathcal{F}(k + 3) \equiv 0 \pmod 2$,
 - $\mathcal{F}(k + 3 + 1) \equiv 1 \pmod 2$ and
 - $\mathcal{F}(k + 3 + 2) \equiv 1 \pmod 2$.
 
-Before showing that, it will be useful to note the following theorem:
+Before showing that, it will be useful to note the following theorem (see Theorem 5.7.3
+[here](<https://math.libretexts.org/Bookshelves/Combinatorics_and_Discrete_Mathematics/A_Spiral_Workbook_for_Discrete_Mathematics_(Kwong)/05%3A_Basic_Number_Theory/5.07%3A_Modular_Arithmetic>)):
 
-If $a \equiv b \pmod n$ and $c \equiv d \pmod n$, then $a + c \equiv b + d \pmod n$.
+If $a \equiv b \pmod n$ and $c \equiv d \pmod n$, then $a + c \equiv b + d \pmod
+n$.
+
+Using this theorem, we can show that for some $m_1$ and $m_2$, if $m_1 \equiv 1
+\pmod 2$ and
+$m_2 \equiv 1 \pmod 2$, then:
+
+<KaTexComponent
+  texExpression="
+    \begin{aligned}
+      &m_1 + m_2 \equiv 1 + 1 \pmod 2 \\
+      \implies &m_1 + m_2 \equiv 2 \pmod 2 \\
+      \implies &m_1 + m_2 \equiv 0 \pmod 2.
+    \end{aligned}
+  "
+  options={{ displayMode: true }}
+/>
+
+With this theorem in mind, let's prove $\mathcal{F}(k+ 3) \equiv 0 \pmod 2$:
+
+<KaTexComponent
+  texExpression="
+    \begin{aligned}
+      &\mathcal{F}(k + 3) = \mathcal{F}(k + 3 - 1) + \mathcal{F}(k + 3 - 2)& [\text{definition }\mathcal{F}] \\
+      \implies &\mathcal{F}(k + 3) = \mathcal{F}(k + 2) + \mathcal{F}(k + 1) \\
+      \implies &\mathcal{F}(k + 3) \equiv 1 + 1 \pmod 2&  [\text{inductive assumption, Theorem 5.7.3}] \\
+      \implies &\mathcal{F}(k + 3) \equiv 0 \pmod 2. 
+    \end{aligned}"
+  options={{ displayMode: true }}
+/>
+
+In a similar way, we'll prove the next point, $\mathcal{F}(k + 3 + 1) \equiv 1
+\pmod 2$:
+
+<KaTexComponent
+  texExpression="
+    \begin{aligned}
+      &\mathcal{F}(k + 3 + 1) = \mathcal{F}(k + 3 + 1 - 1) + \mathcal{F}(k + 3 + 1 - 2)& [\text{definition }\mathcal{F}] \\
+      \implies &\mathcal{F}(k + 3 + 1) = \mathcal{F}(k + 3) + \mathcal{F}(k + 2) \\
+      \implies &\mathcal{F}(k + 3 + 1) \equiv 0 + 1 \pmod 2&  [\text{previous point, inductive assumption, Theorem 5.7.3}] \\
+      \implies &\mathcal{F}(k + 3 + 1) \equiv 1 \pmod 2. 
+    \end{aligned}"
+  options={{ displayMode: true }}
+/>
+
+We can see in the third step that we're using the result of our previous point, that
+$\mathcal{F}(k+ 3) \equiv 0 \pmod 2$, in order to show the truth of this point.
+
+Lastly, we'll prove the third point, that $\mathcal{F}(k + 3 + 2) \equiv 1 \pmod
+2$:
+
+<KaTexComponent
+  texExpression="
+    \begin{aligned}
+      &\mathcal{F}(k + 3 + 2) = \mathcal{F}(k + 3 + 2 - 1) + \mathcal{F}(k + 3 + 2 - 2)& [\text{definition }\mathcal{F}] \\
+      \implies &\mathcal{F}(k + 3 + 2) = \mathcal{F}(k + 3 + 1) + \mathcal{F}(k + 3) \\
+      \implies &\mathcal{F}(k + 3 + 2) \equiv 1 + 0 \pmod 2&  [\text{previous points, Theorem 5.7.3}] \\
+      \implies &\mathcal{F}(k + 3 + 2) \equiv 1 \pmod 2. 
+    \end{aligned}"
+  options={{ displayMode: true }}
+/>
+
+We can see again in the third step that we're using the results of our previous points in order to
+show the truth of the current point.
+
+Now we've done what's required for mathematical induction:
+
+- a.) We've demonstrated that the pattern holds for the first three elements of the sequence. That
+  is, the first three elements follow the pattern even-odd-odd.
+- b.) We've shown that if the pattern holds for any three elements in the sequence, starting with an
+  even element, then the pattern will also hold for the three immediately after them. That is, if
+  $\mathcal{F}(n)$, $\mathcal{F}(n + 1)$ and $\mathcal{F}(n + 2)$ follow the pattern even-odd-odd,
+  then $\mathcal{F}(n + 3)$, $\mathcal{F}(n + 4)$ and $\mathcal{F}(n + 5)$ will follow the pattern
+  even-odd-odd.
+
+In this way, we've proven that the entire Fibonacci sequence follows the even-odd-odd pattern.
+Looking at just the even terms, this means that $\mathcal{F}(3n)$ is even.
+
+## Applying It
+
+Shmowzow.
 
 # Cool Pattern \#2
+
+## Proving It
+
+## Applying It
 
 # Putting It All Together
 
