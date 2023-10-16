@@ -44,17 +44,17 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
         <title>{frontmatter.title}</title>
       </Head>
       <div className="flex">
-        <div className="hidden md:block md:grow-[1] md:m">
+        <div className="hidden md:block md:m md:w-[20%]">
           <div className="self-start sticky top-32 flex-col pl-2 md:ml-8">
             <p className="text-left pb-4 text-xl dark:text-trim-dark text-secondary-light">
               {"Contents"}
             </p>
-            <div>
+            <div className="max-h-96 overflow-y-scroll">
               <BlogTOC />
             </div>
           </div>
         </div>
-        <article className="prose dark:prose-invert text-left pt-10 md:px-20 px-2 max-w-none grow-[12]">
+        <article className="prose dark:prose-invert text-left pt-10 md:px-20 px-2 max-w-[80%]">
           <header>
             <BlogHeader
               title={frontmatter.title as string}
@@ -64,9 +64,9 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
               tags={frontmatter.tags as string[]}
             />
           </header>
-          <main className="mt-10">
+          <div className="mt-10">
             <PostComponent />
-          </main>
+          </div>
         </article>
       </div>
       <style>{`

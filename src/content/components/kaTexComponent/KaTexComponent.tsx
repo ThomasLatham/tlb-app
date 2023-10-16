@@ -19,7 +19,7 @@ const KaTeXComponent: React.FC<Props> = ({ texExpression, options, className }) 
     <div>
       <div className={className} ref={containerRef} />
       <style>{`
-      @media (pointer:none), (pointer:coarse) {
+      @media (pointer:none), (pointer:coarse), (pointer:fine) {
         .katex-display > .katex {
           display: inline-block;
           white-space: nowrap;
