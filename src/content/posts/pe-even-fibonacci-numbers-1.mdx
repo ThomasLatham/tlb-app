@@ -1,6 +1,6 @@
 ---
-title: "Project Euler | Problem #2 | Even Fibonacci Numbers"
-datePublished: "2023-10-13"
+title: "Project Euler | Problem #2 | Even Fibonacci Numbers | Post #1"
+datePublished: "2023-10-16"
 author: Tom Latham
 description:
   Summing the even Fibonacci numbers, making use of some modular arithmetic and Number Theory, and
@@ -12,30 +12,29 @@ tags: ["math", "programming"]
 
 import KaTexComponent from "../components/kaTexComponent";
 
+**Warning:** This post contains spoilers about
+[Problem #2: Even Fibonacci Numbers](https://projecteuler.net/problem=2), from
+[Project Euler](https://projecteuler.net/)! If you would not like to know my solution, please do not
+read on.
+
 # Introduction
 
-This Project Euler problem, the second in the series, is rated at just 5% difficulty, but it still
-took me quite a bit of time (and rhythmic, forceful meetings between my head and the wall) to come
-up with and prove a solution with which I was satisfied. After taking the route which to me seemed
-the most straight forward, I had a strong feeling that finer-tuned solutions were out there, so I
-set out to see if I could find one.
+This is the first post in a series I'm making for Project Euler problem \#2. I started out by
+writing just a single long post for the problem, but in revisiting my notes to prepare the writeup,
+better solutions kept cropping up, building on my previous findings. With each solution having its
+own proof, the content grew too large in my opinion for a single post, so I'm rather going to
+release one post for each new solution.
 
-The first stop in my quest for a more elegant algorithm was the exploration of a neat pattern I
-noticed in the Fibonacci sequence, whose existence I ended up proving by induction after some trial
-and error. I thought this would give me what I was after, but I soon realized that even when
-applying this now-proven pattern, the computation for the problem's answer still took exactly as
-many steps as my first method. I was about ready to give up there, feeling that my hard work on the
-proof I had just finished was mostly for naught, but then I noticed a separate pattern in the
-sequence of _even_ Fibonacci numbers. With this pattern I knew, if I could prove it did indeed hold
-for the whole sequence, that it would allow me to implement a faster algorithm, even if just by a
-constant factor.
+My journey with this problem started out with the solution which to me seemed the most straight
+forward, and while that method proved good enough to produce a correct answer, I had a strong
+feeling that the algorithm could be further optimized. I therefore set out to find a more efficient
+approach, and noticing a neat pattern in the Fibonacci sequence (a pattern that has since become the
+focus of this post), I devised a way to prove it inductively.
 
-With renewed enthusiasm, I set up a way to prove the new pattern and eventually got it all worked
-out. The cool thing about that though (at least I thought so), was that I ended up using — and maybe
-even needing — the proof of the first pattern in order to prove the second one. It just goes to show
-that even when your initial plans don't land you exactly where you were expecting, sometimes simply
-exploring something, whether it's a pattern, or a new hobby or even a fork in some trail you haven't
-yet taken, sometimes that can turn out to be exactly what you needed after all.
+We'll see though that even when applying the proven pattern, the computation for the problem's
+answer still took exactly as many steps as my first method. Still, exploring patterns can be a lot
+of fun, and sometimes what you find at a seemingly dead end can be the key to what you were looking
+for all along.
 
 # Problem Statement
 
@@ -116,14 +115,15 @@ As a function, $\mathcal{F}$,
   options={{ displayMode: true }}
 />
 
-# Cool Pattern \#1
+# A Cool Pattern: Even-Odd-Odd
 
 The previous function certainly solves the problem, and indeed it was the one I used to find the
 correct answer that I entered into the Project Euler website for validation. After doing so,
 however, I wanted to find a more efficient solution, so I started analyzing the Fibonacci sequence
 to try to discover any patterns that might prove useful in that endeavor. One that popped out at me
-was that it seemed that every third Fibonacci number was even, with the two before being odd.
-Verifying against the first few terms listed above, we can see how this was seeming to be the case:
+was that it seemed that every third Fibonacci number was even, with the two following terms being
+odd. Verifying against the first few terms listed above, we can see how this was seeming to be the
+case:
 
 <KaTexComponent
   texExpression="\textit{0 (even), 1 (odd), 1 (odd), 2 (even), 3
@@ -131,7 +131,7 @@ Verifying against the first few terms listed above, we can see how this was seem
   options={{ displayMode: true }}
 />
 
-## Proving It
+## Proof by Induction
 
 What is a neat pattern, though, without proof? Before implementing a TypeScript function based on
 this finding, I wanted to prove that it was true for the whole Fibonacci sequence, and not just for
@@ -214,6 +214,9 @@ With this theorem in mind, let's prove $\mathcal{F}(k+ 3) \equiv 0 \pmod 2$:
   options={{ displayMode: true }}
 />
 
+We can see in the third step that we're using two of the points we just assumed to be true, that
+both $\mathcal{F}(k + 1)$ and $\mathcal{F}(k + 2)$ are congruent to $1 \pmod 2$[^full-assumption].
+
 In a similar way, we'll prove the next point, $\mathcal{F}(k + 3 + 1) \equiv 1
 \pmod 2$:
 
@@ -228,8 +231,10 @@ In a similar way, we'll prove the next point, $\mathcal{F}(k + 3 + 1) \equiv 1
   options={{ displayMode: true }}
 />
 
-We can see in the third step that we're using the result of our previous point, that
-$\mathcal{F}(k+ 3) \equiv 0 \pmod 2$, in order to show the truth of this point.
+We can see in the third step that we're not only using our inductive assumption but also the result
+of our previous point, that $\mathcal{F}(k+ 3) \equiv 0
+\pmod 2$, in order to show the truth of this
+point.
 
 Lastly, we'll prove the third point, that $\mathcal{F}(k + 3 + 2) \equiv 1 \pmod
 2$:
@@ -261,16 +266,75 @@ Now we've done what's required for mathematical induction:
 In this way, we've proven that the entire Fibonacci sequence follows the even-odd-odd pattern.
 Looking at just the even terms, this means that $\mathcal{F}(3n)$ is even.
 
-## Applying It
+## A New Algorithm
 
-Shmowzow.
+Once I had finished the proof that every third Fibonacci number is even, I set out to implement an
+algorithm using that fact — hopefully a more efficient one than my first approach. You can see that
+implementation
+[here](https://github.com/ThomasLatham/project-euler/blob/main/src/evenFibonacciNumbers/evenFibonacciNumbers.ts)
+on my Github, as well as below:
 
-# Cool Pattern \#2
+```TypeScript
+/**
+ * Sums the every third Fibonacci number, up to and including the given `maxAddend`.
+ *
+ * @param maxAddend The maximum addend to be added to the sum.
+ * @returns The sum of every third Fiboannci number less than or equal to the `maxAddend`.
+ */
+const sumEveryThirdFibonacciNumber = (maxAddend: number): number => {
+  let prev: number = 1;
+  let cur: number = 1;
+  let sum: number = 0;
+  let curIndex = 2;
 
-## Proving It
+  while (cur <= maxAddend) {
+    sum += curIndex++ % 3 == 0 ? cur : 0;
+    const temp = cur;
+    cur += prev;
+    prev = temp;
+  }
 
-## Applying It
+  return sum;
+};
+```
 
-# Putting It All Together
+Things look pretty similar to my first function, except instead of checking whether the current
+Fibonacci number is even, we're checking if the remainder of its index when divided by $3$ is equal
+to $0$. I thought it was neat, and I even wrote
+[a little test](https://github.com/ThomasLatham/project-euler/blob/062fada2b0c473a1c58bdba598528f129293df9b/src/evenFibonacciNumbers/evenFibonacciNumbers.spec.ts#L35-L41)
+to demonstrate that both functions return the same value given the same input (further validating
+what we just proved), but importantly the new function is no more efficient than its predecessor.
+It's arguably worse, in fact, because it uses more memory in order to keep track of the index of the
+current Fibonacci number, stored in the `curIndex` variable.
 
-# Conclusion
+# Reaching the Next Iteration
+
+When I first realized the futility of my efforts, I was fairly disheartened and actually began
+drafting this post along the lines of "I tried my best and proved something interesting, but I
+didn't end up finding a better solution than what I originally came up with." A while later,
+however, as I was playing around with the sequence of the _sums of even Fibonacci numbers_, the
+number $4$ seemed to play a significant role, but exactly how I didn't quite yet see.
+
+While not immediately useful to me in the sequence of sums, that curiosity around the number $4$ did
+lead me to noticing a separate pattern in just the plain sequence of even Fibonacci numbers. With
+this pattern I knew, if I could prove it did indeed hold for the whole sequence, that it would allow
+me to implement a faster algorithm, even if just by a constant factor. With renewed enthusiasm, I
+set up a way to prove the new pattern, and interestingly enough that method relied on the result
+we've just proved in this post.
+
+It just goes to show that even when your initial plans don't land you exactly where you were
+expecting, sometimes simply exploring something, whether it's a pattern, or a new hobby or even a
+fork in some trail you haven't yet taken, sometimes that can turn out to be exactly what you needed
+after all.
+
+If you're curious about the next solution I've just mentioned, check out
+[the second part of this series](/posts/pe-even-fibonacci-numbers-2)!
+
+[^full-assumption]:
+    When I first set out to prove this pattern inductively, I limited what I was trying to prove to
+    only the criteria that every third term was even, rather than also including that the two
+    successive terms were odd. Even though the even terms are all I really cared about with respect
+    to solving the Project Euler problem, this approach ended up fatal for the proof. Without
+    including the odd terms in the proof's original statement, we don't get to include those points
+    in the assumption step, and without those points in the assumption step, we can't demonstrate
+    that $\mathcal{F}(k+3)$ is even.
