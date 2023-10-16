@@ -54,7 +54,7 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
             </div>
           </div>
         </div>
-        <article className="prose dark:prose-invert text-left pt-10 md:px-20 px-2 max-w-[80%]">
+        <article className="prose dark:prose-invert text-left pt-10 md:px-10 px-2 max-w-none md:max-w-[80%]">
           <header>
             <BlogHeader
               title={frontmatter.title as string}
