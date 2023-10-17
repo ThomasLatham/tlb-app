@@ -101,15 +101,19 @@ filling in the $z$s with the actual differences,
   options={{ displayMode: true }}
 />
 
-something really interesting became apparent. If I ignored the first line, then all the successive
-lines followed the pattern
+something really interesting became apparent. The $z$ value for each line (except the first) was
+equal to the value we multiplied by $4$ in the line before it. That is to say, it seemed that $4$
+times the current even Fibonacci number plus the previous Fibonacci number gave the next one.
+Symbolically, this pattern can be written as:
 
 <KaTexComponent
   texExpression="\mathcal{F_E}(n)(4) + \mathcal{F_E}(n - 1) = \mathcal{F_E}(n + 1)."
   options={{ displayMode: true }}
 />
 
-which can be rewritten to define $\mathcal{F_E}$ as
+Shifting the index's perspective around, this is equivalent to conjecturing that the current
+Fibonacci number is equal to $4$ times the previous term plus ($1$ times, for clarity) the term
+before that, which itself can be written as:
 
 <KaTexComponent
   texExpression="\mathcal{F_E}(n) = 4\mathcal{F_E}(n - 1) + \mathcal{F_E}(n - 2)."
@@ -215,18 +219,69 @@ let's dive in:
 />
 
 We wanted to make the left-hand side (LHS) of the equality look like the right-hand side (RHS), so
-after writing the LHS in terms of $\mathcal{F}$, we worked the subtracted terms down towards $0$ to
-get our desired $\mathcal{F(3n)}$, using the definition of $\mathcal{F}$ we recalled from the first
-post.
+after using the fact that $\mathcal{F_E} = \mathcal{F(3n)}$ to write the LHS in terms of
+$\mathcal{F}$, we iteratively used the definition of $\mathcal{F}$ (recalled from the last post) to
+work the subtrahends down towards $0$, until we finally arrived at our desired $\mathcal{F(3n)}$.
 
 Anyway, for that pattern which before we only thought might be true, we can now conclude that it
 really does hold for all the even Fibonacci numbers. That is, we know the $n^{\text{th}}$ even
 Fibonacci number is equal to $4$ times the $(n-1)^{\text{st}}$ plus ($1$ times) the
-$(n-2)^{\text{nd}}$, and in knowing this we can finally implement a speedier algorithm.
+$(n-2)^{\text{nd}}$, and in knowing this we can finally implement a speedier algorithm than the one
+with which we started.
 
 _\*I know that programmatic methods can still succeed without proof of their underlying concepts
 (and that as inanimate and abstract objects they are in fact entirely unaware of whether such proof
-exists), but what kind of math blog would this be if there was no proof in the proverbial
-pudding?\*_
+exists), but what kind of math blog would this be if we didn't prove something now and again?\*_
 
 ## A Faster Function, Finally
+
+With this pattern proved, we can fashion for ourselves a new, faster function for finding the sum of
+even Fibonaccis[^alliteration-bug]. This time, we won't bother iterating over _all_ of the Fibonacci
+numbers, but rather we'll just iterate over the even ones (since that's what the formula we just
+proved allows us to do), adding the current $\mathcal{F_E}$ to a running sum as we go. We'll exit
+the loop when the current term exceeds the maximum-addend value we pass to the function, and then
+finally we'll return the running sum. In TypeScript, this can look like the following (which can
+also be seen
+[here](https://github.com/ThomasLatham/project-euler/blob/e16b76bfdf4675fec14a6f854a67331ea3236035/src/evenFibonacciNumbers/evenFibonacciNumbers.ts#L52-L64)
+in my solution repository):
+
+```TypeScript
+/**
+ * Sums the even Fibonacci numbers, up to and including the given `maxAddend`.
+ *
+ * Makes use of the fact that F_e(n) = 4F_e(n - 1) + F_e(n - 2), starting with 0 and 2.
+ *
+ * @param maxAddend The maximum addend to be added to the sum.
+ * @returns The sum of all even Fiboannci numbers less than or equal to the `maxAddend`.
+ */
+const sumEvenFibonacciNumbersV2 = (maxAddend: number): number => {
+  let prev: number = 0;
+  let cur: number = 2;
+  let sum: number = 0;
+
+  while (cur <= maxAddend) {
+    sum += cur;
+    const next = cur * 4 + prev;
+    prev = cur;
+    cur = next;
+  }
+  return sum;
+};
+```
+
+Because the loop above only ever sees the even Fibonacci numbers, and because only every third
+Fibonacci number is even, we can conclude that the `sumEvenFibonacciNumbersV2` is faster than its
+predecessor by a constant factor of 3. That might not matter in terms of big-O analysis, but I was
+still proud to have improved upon my initial algorithm in this way.
+
+# Conclusion
+
+In this post we found a neat pattern in the sequence of even Fibonacci numbers, and we proved that
+it held for the entire sequence using the fact that only every third Fibonacci number is even. Then,
+with the finding proven, we optimized our algorithm for finding the sum of the even Fibonaccis.
+
+In the next post in this series, we'll explore a similar pattern in the sequence of the sums of even
+Fibonacci numbers. While doing so doesn't offer any advantage towards efficiency, the proof involved
+is pretty fun.
+
+[^alliteration-bug]: Sometimes the alliteration bug bites, and there's really nothing you can do.
