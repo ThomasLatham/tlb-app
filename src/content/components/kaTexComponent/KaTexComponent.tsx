@@ -24,7 +24,9 @@ const KaTeXComponent: React.FC<Props> = ({ texExpression, options, className }) 
           display: inline-block;
           white-space: nowrap;
           max-width: 100%;
-          overflow-x: scroll;
+          width: 100%;
+          overflow-y: clip;
+          overflow-x: auto;
           text-align: initial;
         }
         .katex {

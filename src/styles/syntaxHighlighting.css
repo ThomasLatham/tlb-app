@@ -8,6 +8,7 @@
 /* Code block styles */
 pre {
   overflow-x: auto;
+  max-width: none;
 }
 
 /**
@@ -17,7 +18,7 @@ pre {
  */
 .code-highlight {
   float: left; /* 1 */
-  min-width: 100%; /* 2 */
+  min-width: min-content; /* 2 */
 }
 
 .code-line {

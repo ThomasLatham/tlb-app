@@ -15,7 +15,7 @@ const Layout: React.FC<Props> = ({ children }) => {
   const useDarkMode = useAppSelector(userPreferences.selectors.getUseDarkMode);
   useThemePreference(useDarkMode);
   return (
-    <div className="overflow-visible">
+    <div className="overflow-clip">
       <Head>
         <link
           rel="stylesheet"

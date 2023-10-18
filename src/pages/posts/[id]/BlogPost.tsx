@@ -49,7 +49,7 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
             <p className="text-left pb-4 text-xl dark:text-trim-dark text-secondary-light">
               {"Contents"}
             </p>
-            <div className="max-h-96 overflow-y-scroll">
+            <div className="max-h-96 overflow-y-auto">
               <BlogTOC />
             </div>
           </div>
