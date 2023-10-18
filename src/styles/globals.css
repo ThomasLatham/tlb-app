@@ -17,4 +17,22 @@ body * {
     @apply h-full;
     @apply dark:bg-back-dark bg-back-light;
   }
+  ::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply dark:bg-[#F2F2F2] bg-[#ffffff];
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply dark:bg-[#878787] bg-[#BDBDBD];
+    border-radius: 2px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #6e6e6e;
+  }
 }
