@@ -65,10 +65,29 @@ components embedded into that MDX and also the Markdown files for portfolio item
 
 ### `src/contentRetrieval`
 
-If `src/content` is the database of the app, then this directory is the API. Retrieving portfolio
-items is fairly straightforward, since our use-case is only ever getting all of them, but post
-retrieval is a bit more involved, since sometimes we only want the frontmatter or a filtered subset
-of the posts.
+If `src/content` is the database of the app, then this directory is like the API (in a way, since
+everything that consumes the data returned from here still gets rendered on the server anyway).
+Retrieving portfolio items is fairly straightforward, since our use-case is only ever getting all of
+them, but post retrieval is a bit more involved, since sometimes we only want the frontmatter or a
+filtered subset of the posts.
+
+If I ever move away from using GitHub as my CMS and instead set up a separate back end to serve data
+from a database, then this directory will probably hold all the functions for hitting that API for
+reusability purposes.
+
+### `src/ducks`
+
+The code for managing application state via the [Redux ducks
+pattern](https://github.com/erikras/ducks-modular-redux). Right now the only application state we're
+managing is the `userPreferences` slice with the `useDarkMode` state and `toggleUseDarkMode`
+
+reducer.
+
+### `src/interfaces`
+
+Any TypeScript interfaces that get reused.
+
+### `src/pages`
 
 ## Use This Code as a Template for Your Own Blog
 
