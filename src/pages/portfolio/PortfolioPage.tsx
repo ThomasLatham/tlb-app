@@ -31,7 +31,7 @@ const PortfolioPage: React.FC<Props> = ({ portfolioItemsArray }) => {
   );
 };
 
-const getServerSideProps: GetServerSideProps = async () => {
+const getStaticProps: GetServerSideProps = async () => {
   return {
     props: {
       portfolioItemsArray: getAllPortfolioItems(),
@@ -39,5 +39,5 @@ const getServerSideProps: GetServerSideProps = async () => {
   };
 };
 
-export { getServerSideProps };
+export { getStaticProps };
 export default PortfolioPage;
