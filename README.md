@@ -165,3 +165,8 @@ There's some fine-tuning you can do though, if you want:
 ```
 Change the argument of `document.querySelectorAll()` to get the desired TOC depth you're after. For example, if you only one top-level headings to be included in the TOC, then the argument to that function would just be `"h1"`. If you wanted a depth of three, though, then you could pass `"h1, h2, h3"` as the argument.
 
+### Portfolio
+
+### Color Palette
+
+## Deploying
