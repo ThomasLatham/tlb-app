@@ -91,7 +91,7 @@ const fullPostResult = async (mdxFilepath: string) => {
     frontmatter: {
       ...frontmatter,
       wordCount: sourceText.split(/\s+/gu).length,
-      readingTime: readingTime(sourceText),
+      readingTime: readingTime(sourceText).minutes,
     },
   };
 };
@@ -122,7 +122,13 @@ const getRandomPostId = () => {
 const getAllPostFrontmatters = (): { id: string; frontmatter: PostFrontmatter }[] => {
   const frontmatterArray: { id: string; frontmatter: PostFrontmatter }[] = [];
   for (const mdxFilename of fs.readdirSync(POSTS_PATH)) {
-    const frontmatter = matter(fs.readFileSync(`${POSTS_PATH}/${mdxFilename}`, "utf8")).data;
+    const sourceText = fs.readFileSync(`${POSTS_PATH}/${mdxFilename}`, "utf8");
+
+    const frontmatter = {
+      ...matter(sourceText).data,
+      wordCount: sourceText.split(/\s+/gu).length,
+      readingTime: readingTime(sourceText).minutes,
+    };
 
     frontmatterArray.push({
       id: mdxFilename.split(".mdx")[0],

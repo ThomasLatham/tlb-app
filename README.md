@@ -1,9 +1,8 @@
 # Tom Latham Blog
-<!-- omit in toc -->
+
 ## Table of Contents
 + [Project Structure](#project-structure)
 - [Use This Code as a Template for Your Own Blog](#use-this-code-as-a-template-for-your-own-blog)
-+ [Installation and Setup Instructions](#installation-and-setup-instructions)
 
 ---
 
@@ -61,20 +60,108 @@ Any TypeScript interfaces that get reused.
 
 ### `src/pages`
 
+This directory implements the Next.js [Pages
+Router](https://nextjs.org/docs/pages/building-your-application/routing/pages-and-layouts).
+Eventually I want to migrate to the [App Router](https://nextjs.org/docs/app).
+
+### `src/redux`
+
+Here you'll find the Redux store and root reducer.
+
+### `src/styles`
+
+Here we have global styling for the whole application (e.g., smooth scrolling and Webkit stuff) and
+also the syntax-highlighting rules for code snippets in blog posts.
+
+### `src/types`
+
+This directory is for custom types, in case some dependency isn't typed or we only want a type
+declaration for a partial bundle of a dependency, as seen
+[here](https://dev.to/dheerajmurali/building-a-responsive-chart-in-react-with-plotly-js-4on8).
+
+### `src/utils`
+
+We have here shared tools for formatting and general usage, as well as custom React hooks.
+
+### Noteworthy Root-Directory Files
+
+Most of the configuration files are just a matter of reading the documentation provided for them to
+see what they're doing for the application. In `next.config.js` we have some stuff going on to make
+SVGs render as React components. Also, in `tailwind.config.js` is the palette definition for the
+application, which may be of particular use if you're going to use this codebase as a template for
+your own blog.
+
 ## Use This Code as a Template for Your Own Blog
 
-## Installation and Setup Instructions
+### Step 1: Clone the Repo and Get Dependencies
 
-Clone down this repository. You will need `node` and `yarn` installed globally on your machine.
+First, open a terminal (e.g., Git Bash) in some directory where you want the code to live locally.
+Then enter the command
 
-Installation:
+```bash
+git clone https://github.com/ThomasLatham/tlb-app.git
+```
 
-`yarn`
+Then, make sure you have `node` and `yarn` installed globally on your machine. You can check this by
+entering `node -v` and `yarn -v` in the terminal. To install dependencies for the application, run
+`yarn`.
 
-To Start Server:
+Now you can run the application locally in development mode with the command `yarn dev`, after which
+you can visit `localhost:3000` to see the website.
 
-`yarn dev`
+### Step 2: Personalize Your Blog
 
-To Visit App:
+#### Logo and Icon
 
-`localhost:3000`
+In the `public/myImages` directory, replace `logo.svg` with a logo of your own. I used
+[UXWing](https://uxwing.com) to find an attribution-free SVG, and then I used a mix of
+[GIMP](https://www.gimp.org/) and [Inkscape](https://inkscape.org/) to edit and add onto the SVG to
+my liking. I used [favicon.io](https://favicon.io/) to generate the icons in the `public/myImages/favicon`
+directory, using just the honeycomb symbol portion of my logo.
+
+#### Blog Posts
+
+Start by cleaning out the files in the `src/content/posts` directory. Once cleanup is done, to
+create a blog post, make a new MDX file in that same directory (e.g., `my-first-post.mdx`). The
+filename (without the `.mdx` extension) will be used as the slug for the post URL, so I
+recommend-using-kebab-case-for-that.
+
+Inside that file you just
+created, at the very top you'll want to have some frontmatter in the following format:
+
+```Markdown
+---
+title: My First Post!
+datePublished: "2024-01-03"
+author: Finn Mertins
+description: A short description for your first blog post.
+tags: ["Tag1", "Tag2"]
+---
+```
+
+Below that you can add any Markdown you want for post's content. You don't really have to do
+anything else besides this to make a new post because the application automatically does the rest
+for you, including creating a listing in the post-search page and making the post page itself.
+There's some fine-tuning you can do though, if you want:
+- To change the way code snippets are displayed, you'll want to check out and play with the
+  `src/styles/syntaxHighlighting.css` file. Some code-snippet styling is also done in
+  `tailwind.config.js` in the root directory, but that's just keeping Tailwind from wrapping every
+  snippet in quotes.
+- To change the depth of the table of contents, you'll want to take a look at the `useHeadingsData()`
+  function in `src/utils/hooks/hooks.ts`. It looks like:
+  ```TypeScript
+  const useHeadingsData = () => {
+  const [nestedHeadings, setNestedHeadings] = useState<HeadingWithNestedHeadings[]>([]);
+
+  useEffect(() => {
+    const headingElements: HTMLElement[] = Array.from(document.querySelectorAll("h1, h2"));
+
+    const newNestedHeadings = getNestedHeadings(headingElements);
+    setNestedHeadings(newNestedHeadings);
+  }, []);
+
+  return { nestedHeadings };
+};
+```
+Change the argument of `document.querySelectorAll()` to get the desired TOC depth you're after. For example, if you only one top-level headings to be included in the TOC, then the argument to that function would just be `"h1"`. If you wanted a depth of three, though, then you could pass `"h1, h2, h3"` as the argument.
+

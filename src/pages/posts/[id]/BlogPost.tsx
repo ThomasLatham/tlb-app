@@ -5,6 +5,8 @@ import { GetStaticPropsContext } from "next";
 import Head from "next/head";
 import "rc-slider/assets/index.css"; // needed for rc-slider as used in the content-component PiEstimateVisualizer
 
+import { PostFrontmatter } from "@/interfaces";
+
 import { getPostById, getAllPostIds } from "../../../contentRetrieval/posts";
 import Layout from "../../../components/layout";
 import BlogHeader from "../../../components/blogHeader";
@@ -20,9 +22,7 @@ const colors = tailwindConfig.theme.colors;
 
 interface Props {
   code: string;
-  frontmatter: {
-    [key: string]: string | string[];
-  };
+  frontmatter: PostFrontmatter;
 }
 
 const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
@@ -56,13 +56,7 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
         </div>
         <article className="prose dark:prose-invert text-left pt-10 md:px-10 px-2 max-w-none md:max-w-[80%]">
           <header>
-            <BlogHeader
-              title={frontmatter.title as string}
-              datePublished={frontmatter.datePublished as string}
-              lastUpdated={frontmatter?.lastUpdated as string}
-              author={frontmatter.author as string}
-              tags={frontmatter.tags as string[]}
-            />
+            <BlogHeader postFrontmatter={frontmatter} />
           </header>
           <div className="mt-10">
             <PostComponent />

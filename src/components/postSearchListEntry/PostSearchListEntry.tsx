@@ -30,6 +30,7 @@ const PostSearchListEntry: React.FC<Props> = ({ postFM }) => {
         </div>
         <p className="mt-2 mb-0">{`✍️ By ${postFM.author}`}</p>
         <p className="my-0">{`🗓️ ${publishedString}`}</p>
+        <p className="my-0">{`🕑 ${postFM.readingTime.toFixed(0)} minutes`}</p>
         <p className="my-0">{`#️⃣ ${postFM.tags.join(", ")}`}</p>
       </div>
     </div>

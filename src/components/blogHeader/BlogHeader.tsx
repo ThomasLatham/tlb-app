@@ -1,32 +1,33 @@
 import React from "react";
-import { DateTime } from "luxon";
 
 import { formatDateString } from "@/utils/format";
+import { PostFrontmatter } from "@/interfaces";
 
 interface Props {
-  title: string;
-  datePublished: string;
-  lastUpdated?: string;
-  author: string;
-  tags: string[];
+  postFrontmatter: PostFrontmatter;
 }
 
-const BlogHeader: React.FC<Props> = ({ title, datePublished, lastUpdated, author, tags }) => {
-  const publishedString = `Published ${formatDateString(datePublished)}`;
+const BlogHeader: React.FC<Props> = ({ postFrontmatter }) => {
+  const publishedString = `Published ${formatDateString(postFrontmatter.datePublished)}`;
 
-  const updatedString = lastUpdated ? `Last updated ${formatDateString(lastUpdated)}` : "";
+  const updatedString = postFrontmatter.lastUpdated
+    ? `Last updated ${formatDateString(postFrontmatter.lastUpdated)}`
+    : "";
 
   return (
     <div className="flex flex-col">
       <div className="text-left">
-        <p className="text-5xl my-0">{title}</p>
+        <p className="text-5xl my-0">{postFrontmatter.title}</p>
       </div>
       <div className="text-left">
-        <p className="mt-2 mb-0">{`✍️ Written by ${author}`}</p>
+        <p className="mt-2 mb-0">{`✍️ Written by ${postFrontmatter.author}`}</p>
         <p className="my-0">
-          {`🗓️ ${publishedString}  ${lastUpdated ? " — " + updatedString : ""}`}
+          {`🗓️ ${publishedString} ${postFrontmatter.lastUpdated ? " — " + updatedString : ""}`}
         </p>
-        <p className="my-0">{`#️⃣ Tags: ${tags.join(", ")}`}</p>
+        <p className="my-0">{`🕑 Reading time: ${postFrontmatter.readingTime.toFixed(
+          0
+        )} minutes`}</p>
+        <p className="my-0">{`#️⃣ Tags: ${postFrontmatter.tags.join(", ")}`}</p>
       </div>
     </div>
   );

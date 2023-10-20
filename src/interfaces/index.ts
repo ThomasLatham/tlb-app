@@ -14,6 +14,8 @@ interface PostFrontmatter {
   author: string;
   description: string;
   tags: string[];
+  wordCount: number;
+  readingTime: number;
 }
 
 interface PortfolioItemFrontmatter {
