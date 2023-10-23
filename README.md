@@ -8,7 +8,7 @@
    2. [The `src` Directory](#the-src-directory)
    3. [Other Directories and Files](#other-directories-and-files)
 3. [Use This Code as a Template for Your Own Blog](#use-this-code-as-a-template-for-your-own-blog)
-   1. [Step 1: Clone the Repo, Set Up Your Own Repo, Get Dependencies](#step-1-clone-the-repo-set-up-your-own-repo-get-dependencies)
+   1. [Step 1: Clone the Repo and Get Dependencies](#step-1-clone-the-repo-and-get-dependencies)
    2. [Step 2: Personalize Your Blog's Content](#step-2-personalize-your-blogs-content)
    3. [Step 3: Deploy Your Blog](#step-3-deploy-your-blog)
 
@@ -114,9 +114,9 @@ if you're going to use this codebase as a template for your own blog.
 
 ## Use This Code as a Template for Your Own Blog
 
-### Step 1: Clone the Repo, Set Up Your Own Repo, Get Dependencies
+### Step 1: Clone the Repo and Get Dependencies
 
-#### Clone the Code
+#### Clone the Repo
 
 First, open a terminal (e.g., Git Bash) in some directory where you want the code to live locally.
 Then pick a name for the directory that will store the codebase (e.g., `my-blog-app`) and enter the
@@ -133,17 +133,6 @@ chose.)
 From there, go into the `package.json` file and change the value of the `name` property to something of your
 choosing (e.g., `"my-blog-app"`).
 
-#### Set Up Your Own GitHub Repository
-
-[Create a repo in GitHub](https://docs.github.com/en/get-started/quickstart/create-a-repo) to house
-your blog's code remotely. After that, enter the following commands in the terminal from before to
-point your local repo at your new remote one:
-```bash
-git remote rename origin upstream
-git remote add origin <URL of the repo you just created>
-git push origin master
-```
-
 #### Get Dependencies and Run Locally
 
 Make sure you have `node` and `yarn` installed globally on your machine. You can check this by
@@ -154,6 +143,27 @@ Now you can run the application locally in development mode with the command `ya
 you can visit `localhost:3000` to see the website.
 
 ### Step 2: Personalize Your Blog's Content
+
+#### License (Important!)
+
+If you plan to open-source your blog's code and/or release the blog to the public, then please
+follow these steps to ensure licensing is done correctly:
+1. Open `LICENSE.md` in the project's root directory.
+2. Remove everything from the top of the file down to (but not including) the `# License Texts`
+   heading.
+3. Remove the `## GPLv3` subheading (and its content) under the `## MIT License` subheading.
+4. At the top of the file add the following section:
+   ```Markdown
+   # Third-Party Software
+
+   ## Thomas Latham
+
+   Copyright (c) 2023 Thomas Latham
+
+   License: MIT
+   ```
+5. If you want to open-source your code, then [choose a license](https://choosealicense.com/) and
+   modify the `LICENSE.md` file to reflect your choice.
 
 #### Logo and Icon
 
@@ -263,6 +273,16 @@ then you would set the value of `theme.colors["primary-light"]` to `#ffffff`. To
 out [Tailwind's Theme Configuration documentation](https://tailwindcss.com/docs/theme).
 
 ### Step 3: Deploy Your Blog
+
+#### Set Up Your Own GitHub Repository
+
+[Create a repo in GitHub](https://docs.github.com/en/get-started/quickstart/create-a-repo) to house
+your blog's code remotely. After that, enter the following commands in the terminal from before to
+point your local repo at your new remote one:
+
+```bash
+git remote set-url origin <URL of the repo you just created>
+```
 
 #### Push Your Changes to Remote
 
