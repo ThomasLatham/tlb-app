@@ -277,18 +277,15 @@ out [Tailwind's Theme Configuration documentation](https://tailwindcss.com/docs/
 #### Set Up Your Own GitHub Repository
 
 [Create a repo in GitHub](https://docs.github.com/en/get-started/quickstart/create-a-repo) to house
-your blog's code remotely. After that, enter the following commands in the terminal from before to
-point your local repo at your new remote one:
+your blog's code remotely. After that, execute the following commands to point your local repo at
+your new remote one:
 
 ```bash
 git remote set-url origin <URL of the repo you just created>
 ```
 
-#### Push Your Changes to Remote
-
-With your GitHub repository set up and your blog's content tailored to your liking, you're almost ready
-deploy your blog. To make sure your deployment reflects all the changes you just made, push those
-changes to remote with the following commands:
+Then, to make sure your deployment reflects all the changes you just made, push those changes to
+remote with the following commands:
 
 ```bash
 git add .
@@ -298,7 +295,10 @@ git push
 
 #### Deploy to Vercel
 
-I could describe this process in detail, but I'd basically just be rewriting what the awesome folks
-at Vercel have already prepared in their [Deploying Your Next.js
-App](https://nextjs.org/learn/basics/deploying-nextjs-app/deploy) documentation. After you follow
-the steps outlined there, your blog should be live and bussin'.
+With your GitHub repository set up and up to date with your tailored blog content, you're ready to
+deploy with Vercel. I could describe this process in detail, but I'd basically just be rewriting
+what the awesome folks at Vercel have already prepared in their [Deploying Your Next.js
+App](https://nextjs.org/learn/basics/deploying-nextjs-app/deploy) documentation. Of course there are
+other deployment options, but Vercel makes the process very simple (and it's the option I chose).
+After you follow the steps outlined in that guide, your blog should be live. Congratulations on
+making a blog!
