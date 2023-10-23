@@ -20,7 +20,9 @@ under GPLv3.
 
 # Other Files
 
-All other files are licensed under the MIT License.
+All other files are licensed under the MIT License using the following copyright notice:
+
+Copyright (c) 2023 Thomas Latham
 
 # License Texts
 

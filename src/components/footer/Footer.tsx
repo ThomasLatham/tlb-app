@@ -15,7 +15,7 @@ const Footer: React.FC = () => {
     <footer>
       <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
         <span className="text-sm sm:text-center dark:text-trim-dark text-secondary-light">
-          © 2023 Tom Latham. All Rights Reserved.
+          © 2023 Thomas Latham. All Rights Reserved.
         </span>
         <ul className="flex flex-wrap items-center text-sm font-medium dark:text-trim-dark text-secondary-light mt-1 md:mt-0">
           {NAV_OPTIONS.map((option, idx) => {
