@@ -63,9 +63,7 @@ If I ever move away from using GitHub as my CMS and instead set up a separate ba
 
 #### `src/ducks`
 
-The code for managing application state via the [Redux ducks pattern](https://github.com/erikras/ducks-modular-redux). Right now the only application state we're managing is the `userPreferences` slice with the `useDarkMode` state and `toggleUseDarkMode`
-
-reducer.
+The code for managing application state via the [Redux ducks pattern](https://github.com/erikras/ducks-modular-redux). Right now the only application state we're managing is the `userPreferences` slice with the `useDarkMode` state and `toggleUseDarkMode` reducer.
 
 #### `src/interfaces`
 
