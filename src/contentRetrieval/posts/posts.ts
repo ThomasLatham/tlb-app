@@ -92,7 +92,7 @@ const fullPostResult = async (mdxFilepath: string) => {
       ...frontmatter,
       wordCount: sourceText.split(/\s+/gu).length,
       readingTime: readingTime(sourceText).minutes,
-    },
+    } as PostFrontmatter,
   };
 };
 

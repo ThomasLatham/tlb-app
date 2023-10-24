@@ -1,3 +1,5 @@
+"use client";
+
 import React, { Fragment, useEffect, useState } from "react";
 import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";

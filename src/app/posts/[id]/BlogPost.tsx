@@ -1,13 +1,12 @@
+"use client";
+
 import React, { Fragment } from "react";
 import { getMDXComponent } from "mdx-bundler/client";
 import dynamic from "next/dynamic";
-import { GetStaticPropsContext } from "next";
-import Head from "next/head";
 import "rc-slider/assets/index.css"; // needed for rc-slider as used in the content-component PiEstimateVisualizer
 
 import { PostFrontmatter } from "@/interfaces";
 
-import { getPostById, getAllPostIds } from "../../../contentRetrieval/posts";
 import BlogHeader from "../../../components/blogHeader";
 import BlogTOC from "../../../components/blogTOC";
 import { userPreferences } from "../../../ducks";
@@ -39,9 +38,6 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
   );
   return (
     <Fragment>
-      <Head key={frontmatter.title as string}>
-        <title>{frontmatter.title}</title>
-      </Head>
       <div className="flex">
         <div className="hidden md:block md:m md:w-[20%]">
           <div className="self-start sticky top-32 flex-col pl-2 md:ml-8">
@@ -85,15 +81,4 @@ const BlogPost: React.FC<Props> = ({ code, frontmatter }) => {
   );
 };
 
-const getStaticProps = async ({ params }: GetStaticPropsContext) => {
-  const post = await getPostById(params?.id as string);
-  return {
-    props: {
-      code: post.code,
-      frontmatter: post.frontmatter,
-    },
-  };
-};
-
-export { getStaticPaths, getStaticProps };
 export default BlogPost;
