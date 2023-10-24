@@ -102,11 +102,7 @@ const getPostById = async (postId: string) => {
 
 const getAllPostIds = () => {
   return fs.readdirSync(POSTS_PATH).map((mdxFilename) => {
-    return {
-      params: {
-        id: mdxFilename.split(".mdx")[0],
-      },
-    };
+    return { id: mdxFilename.split(".mdx")[0] };
   });
 };
 
