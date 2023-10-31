@@ -1,17 +1,21 @@
-name: send-new-post-notification-emails
-run-name: ${{ github.actor }} is sending new-post notification emails.
-on: push
-  branches:
-    - main
-  paths:
-    - src/content/posts
+name: Send New-Post Notification Emails Workflow
+on:
+  push:
+    branches:
+      - main
+
 jobs:
-  check-bats-version:
+  notify-subscribers:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v3
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Run JavaScript Script
+        uses: actions/github-script@v6
         with:
-          node-version: '14'
-      - run: npm install -g bats
-      - run: bats -v
+          script: |
+            const script =
+            require('../../mailing/githubActions/sendEmailsIfThereIsANewPost/sendEmailsIfThereIsANewPost.js')
+            await script({github, context, core})
