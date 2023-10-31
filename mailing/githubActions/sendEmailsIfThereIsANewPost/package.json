@@ -1,6 +1,7 @@
 {
   "type": "module",
   "dependencies": {
+    "gray-matter": "^4.0.3",
     "node": "^21.1.0",
     "node-mailjet": "^6.0.4"
   }
