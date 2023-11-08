@@ -16,6 +16,7 @@ import { PullRequestEvent } from "@octokit/webhooks-types";
  * production via the PR), or the empty string otherwise.
  */
 const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
+  console.log("in getNewPostId()");
   let newPostId = "";
 
   if (
@@ -30,6 +31,8 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
 };
 
 const getNewPostIdFromDiff = (diff: string): string => {
+  console.log("in getNewPostIdFromDiff()");
+  console.log(diff);
   const lines = diff.split("\n");
   let newPostId = "";
   const postIdPattern =
