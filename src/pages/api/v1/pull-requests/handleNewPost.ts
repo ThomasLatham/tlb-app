@@ -17,6 +17,7 @@ import { PullRequestEvent } from "@octokit/webhooks-types";
  */
 const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
   console.log("in getNewPostId()");
+  console.log(payload);
   console.log(await (await fetch(payload.pull_request.diff_url)).text());
   let newPostId = "";
 
