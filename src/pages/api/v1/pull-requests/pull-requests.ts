@@ -10,7 +10,7 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
     if (req.method === "POST") {
       res.status(202).send({ message: "Accepted" });
       if (await getNewPostId(req.body as PullRequestEvent)) {
-        console.log("placeholder");
+        console.log("placeholder. adding more for PR");
       }
     } else {
       res.status(400);
