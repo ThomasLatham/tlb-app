@@ -13,7 +13,7 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
     if (req.method === "POST") {
       res.status(202).send({ message: "Accepted" });
 
-      const newPostId = await getNewPostId(req.body.payload as PullRequestEvent);
+      const newPostId = await getNewPostId(req.body.payload);
       if (newPostId.length) {
         console.log(newPostId);
       }

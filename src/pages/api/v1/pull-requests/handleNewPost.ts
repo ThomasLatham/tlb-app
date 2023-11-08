@@ -15,8 +15,12 @@ import { PullRequestEvent } from "@octokit/webhooks-types";
  * @returns A `Promise` of either the name of a new post's directory (if a new post was sent to
  * production via the PR), or the empty string otherwise.
  */
-const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
+const getNewPostId = async (payload: any): Promise<string> => {
   console.log("in getNewPostId()");
+  console.log(Object.values(payload)[0]);
+  console.log(Object.keys(payload)[0]);
+  console.log(Object.keys(payload)[1]);
+  console.log(Object.keys(payload)[2]);
   console.log("action: " + payload.action);
   console.log("merged: " + payload.pull_request?.merged);
   console.log("base: " + payload.pull_request?.base.ref);
