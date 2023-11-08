@@ -1,3 +1,3 @@
-import handlePullRequest from "./pull-requests";
+import handlePullRequest from "./handlePullRequest";
 
 export default handlePullRequest;

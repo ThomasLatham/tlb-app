@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import type { PullRequestEvent } from "@octokit/webhooks-types";
 
+import { getNewPostId } from "./handleNewPost";
+
 type ResponseData = {
   message: string;
 };
@@ -9,7 +11,9 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
   if (req.headers["X-Hub-Signature-256"] === process.env.GITHUB_WEBHOOK_PUSH_EVENTS) {
     if (req.method === "POST") {
       res.status(202).send({ message: "Accepted" });
-      if (await getNewPostId(req.body as PullRequestEvent)) {
+
+      const newPostId = await getNewPostId(req.body as PullRequestEvent);
+      if (newPostId.length) {
         console.log("placeholder. adding more for PR");
       }
     } else {
@@ -18,18 +22,6 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
   } else {
     res.status(401);
   }
-};
-
-const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
-  if (
-    payload.action === "closed" &&
-    payload.pull_request.merged === true &&
-    (payload.pull_request.base.ref === "main" || payload.pull_request.base.ref === "test")
-  ) {
-    console.log(await fetch(payload.pull_request.diff_url));
-  }
-
-  return "hi";
 };
 
 export default handlePullRequest;
