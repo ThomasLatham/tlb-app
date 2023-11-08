@@ -17,14 +17,6 @@ import { PullRequestEvent } from "@octokit/webhooks-types";
  */
 const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
   console.log("in getNewPostId()");
-  console.log(payload);
-  console.log(Object.values(payload)[0]);
-  console.log(Object.keys(payload)[0]);
-  console.log(Object.keys(payload)[1]);
-  console.log(Object.keys(payload)[2]);
-  console.log("action: " + payload.action);
-  console.log("merged: " + payload.pull_request?.merged);
-  console.log("base: " + payload.pull_request?.base.ref);
   let newPostId = "";
 
   if (
@@ -33,10 +25,20 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
     (payload.pull_request.base.ref === "main" || payload.pull_request.base.ref === "test")
   ) {
     console.log("in getNewPostId()'s if-block");
-    newPostId = getNewPostIdFromDiff(await (await fetch(payload.pull_request.diff_url)).text());
+    newPostId = getNewPostIdFromDiff(await fetchDiffFromGitHub(payload.pull_request.diff_url));
   }
 
   return new Promise(() => newPostId);
+};
+
+const fetchDiffFromGitHub = async (url: string): Promise<string> => {
+  console.log("in fetchDiffFromGitHub()");
+  const response = await fetch(url);
+  if (response.ok) {
+    return await response.text();
+  } else {
+    throw new Error(`Failed to fetch diff content from GitHub. Status: ${response.status}`);
+  }
 };
 
 const getNewPostIdFromDiff = (diff: string): string => {
