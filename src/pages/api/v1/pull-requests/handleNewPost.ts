@@ -17,6 +17,7 @@ import { PullRequestEvent } from "@octokit/webhooks-types";
  */
 const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
   console.log("in getNewPostId()");
+  console.log(await (await fetch(payload.pull_request.diff_url)).text());
   let newPostId = "";
 
   if (
@@ -24,6 +25,7 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
     payload.pull_request.merged === true &&
     (payload.pull_request.base.ref === "main" || payload.pull_request.base.ref === "test")
   ) {
+    console.log("in getNewPostId()'s if-block");
     newPostId = getNewPostIdFromDiff(await (await fetch(payload.pull_request.diff_url)).text());
   }
 
