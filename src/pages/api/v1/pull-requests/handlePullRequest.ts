@@ -14,7 +14,7 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
 
       const newPostId = await getNewPostId(req.body as PullRequestEvent);
       if (newPostId.length) {
-        console.log("placeholder. adding more for PR");
+        console.log(newPostId);
       }
     } else {
       res.status(400);
