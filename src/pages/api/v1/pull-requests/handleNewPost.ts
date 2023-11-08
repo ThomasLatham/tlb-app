@@ -17,8 +17,9 @@ import { PullRequestEvent } from "@octokit/webhooks-types";
  */
 const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
   console.log("in getNewPostId()");
-  console.log(payload);
-  console.log(await (await fetch(payload.pull_request.diff_url)).text());
+  console.log("action: " + payload.action);
+  console.log("merged: " + payload.pull_request?.merged);
+  console.log("base: " + payload.pull_request?.base.ref);
   let newPostId = "";
 
   if (
