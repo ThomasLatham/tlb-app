@@ -8,10 +8,8 @@ type ResponseData = {
 };
 
 const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
-  console.log("in handlePullRequest()");
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (validateGitHubWebhook(req, res, process.env.GITHUB_WEBHOOK_PULL_REQUESTS!)) {
-    console.log("in handlePullRequest()");
     if (req.method === "POST") {
       res.status(202).send({ message: "Accepted" });
 
@@ -67,7 +65,6 @@ const validateGitHubWebhook = (req: NextApiRequest, res: NextApiResponse, secret
  * production via the PR), or the empty string otherwise.
  */
 const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
-  console.log("in getNewPostId()");
   let newPostId = "";
 
   if (
@@ -75,7 +72,6 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
     payload.pull_request.merged === true &&
     (payload.pull_request.base.ref === "main" || payload.pull_request.base.ref === "test")
   ) {
-    console.log("in getNewPostId()'s if-block");
     newPostId = getNewPostIdFromDiff(await fetchDiffFromGitHub(payload.pull_request.diff_url));
   }
 
@@ -83,8 +79,8 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
 };
 
 const fetchDiffFromGitHub = async (url: string): Promise<string> => {
-  console.log("in fetchDiffFromGitHub()");
   try {
+    console.log("here");
     const octokit = new Octokit({
       auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
     });
