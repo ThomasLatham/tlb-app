@@ -1,5 +1,55 @@
-import { PullRequestEvent } from "@octokit/webhooks-types";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { PullRequestEvent } from "@octokit/webhooks-types";
 import { Octokit } from "@octokit/rest";
+import * as crypto from "crypto";
+
+type ResponseData = {
+  message: string;
+};
+
+const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
+  console.log("in handlePullRequest()");
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  if (validateGitHubWebhook(req, res, process.env.GITHUB_WEBHOOK_PULL_REQUESTS!)) {
+    console.log("in handlePullRequest()");
+    if (req.method === "POST") {
+      res.status(202).send({ message: "Accepted" });
+
+      const newPostId = await getNewPostId(req.body as PullRequestEvent);
+      if (newPostId.length) {
+        console.log(newPostId);
+      }
+    } else {
+      res.status(400);
+    }
+  } else {
+    res.status(401);
+  }
+};
+
+const validateGitHubWebhook = (req: NextApiRequest, res: NextApiResponse, secret: string) => {
+  const signature = req.headers["x-hub-signature-256"] as string;
+  const payload = JSON.stringify(req.body);
+
+  if (!signature) {
+    res.status(400).end("No X-Hub-Signature-256 found in the headers");
+    return false;
+  }
+
+  const expectedSignature = `sha256=${crypto
+    .createHmac("sha256", secret)
+    .update(payload)
+    .digest("hex")}`;
+
+  if (crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(expectedSignature))) {
+    // Valid signature
+    return true;
+  } else {
+    // Invalid signature
+    res.status(401).end("Invalid X-Hub-Signature-256");
+    return false;
+  }
+};
 
 /**
  * If, in the PR detailed by the given `PullRequestEvent` (`payload`):
@@ -75,4 +125,4 @@ const getNewPostIdFromDiff = (diff: string): string => {
   return newPostId;
 };
 
-export { getNewPostId };
+export default handlePullRequest;
