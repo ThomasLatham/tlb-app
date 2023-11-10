@@ -35,6 +35,8 @@ const fetchDiffFromGitHub = async (url: string): Promise<string> => {
   console.log("in fetchDiffFromGitHub()");
   try {
     console.log(url);
+    url = url.replace("github.com", "patch-diff.githubusercontent.com/raw");
+    console.log(url);
     const response = await fetch(url);
     if (response.ok) {
       console.log("in fetchDiffFromGitHub()'s if-block");
