@@ -35,8 +35,10 @@ const fetchDiffFromGitHub = async (url: string): Promise<string> => {
   console.log("in fetchDiffFromGitHub()");
   const response = await fetch(url);
   if (response.ok) {
+    console.log("in fetchDiffFromGitHub()'s if-block");
     return await response.text();
   } else {
+    console.log("in fetchDiffFromGitHub()'s else-block: " + response.status);
     throw new Error(`Failed to fetch diff content from GitHub. Status: ${response.status}`);
   }
 };
