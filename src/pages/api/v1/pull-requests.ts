@@ -20,10 +20,10 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
         console.log(newPostId);
       }
     } else {
-      res.status(400);
+      res.status(400).end("No new posts found");
     }
   } else {
-    res.status(401);
+    res.status(401).end("Unauthorized");
   }
 };
 
