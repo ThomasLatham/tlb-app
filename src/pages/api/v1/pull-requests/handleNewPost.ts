@@ -41,7 +41,7 @@ const fetchDiffFromGitHub = async (url: string): Promise<string> => {
     const response = await octokit.request("GET " + url);
     if (response.status < 300) {
       console.log("in fetchDiffFromGitHub()'s if-block");
-      return await response.data;
+      return response.data;
     } else {
       console.log("in fetchDiffFromGitHub()'s else-block: " + response.status);
       throw new Error(`Failed to fetch diff content from GitHub. Status: ${response.status}`);
