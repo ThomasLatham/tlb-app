@@ -34,6 +34,7 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
 const fetchDiffFromGitHub = async (url: string): Promise<string> => {
   console.log("in fetchDiffFromGitHub()");
   try {
+    console.log(url);
     const response = await fetch(url);
     if (response.ok) {
       console.log("in fetchDiffFromGitHub()'s if-block");
