@@ -83,6 +83,7 @@ const fetchDiffFromGitHub = async (url: string): Promise<string> => {
     const octokit = new Octokit({
       auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
     });
+    console.log("auth: " + process.env.GITHUB_PERSONAL_ACCESS_TOKEN);
     console.log("here");
     const response = await octokit.request("GET " + url);
     console.log("response: " + response);
