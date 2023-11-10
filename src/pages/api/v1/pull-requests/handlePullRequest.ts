@@ -12,12 +12,12 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
   if (req.headers["X-Hub-Signature-256"] === process.env.GITHUB_WEBHOOK_PULL_REQUESTS) {
     console.log("in handlePullRequest()");
     if (req.method === "POST") {
-      res.status(202).send({ message: "Accepted" });
-
       const newPostId = await getNewPostId(req.body as PullRequestEvent);
       if (newPostId.length) {
         console.log(newPostId);
       }
+
+      res.status(202).send({ message: "Accepted" });
     } else {
       res.status(400);
     }
