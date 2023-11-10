@@ -72,19 +72,22 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
     payload.pull_request.merged === true &&
     (payload.pull_request.base.ref === "main" || payload.pull_request.base.ref === "test")
   ) {
+    console.log(payload.pull_request.diff_url);
     newPostId = getNewPostIdFromDiff(await fetchDiffFromGitHub(payload.pull_request.diff_url));
   }
 
-  return new Promise(() => newPostId);
+  return newPostId;
 };
 
 const fetchDiffFromGitHub = async (url: string): Promise<string> => {
   try {
-    console.log("here");
     const octokit = new Octokit({
       auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
     });
+    console.log("here");
     const response = await octokit.request("GET " + url);
+    console.log(response);
+
     if (response.status < 300) {
       console.log("in fetchDiffFromGitHub()'s if-block");
       return response.data;
