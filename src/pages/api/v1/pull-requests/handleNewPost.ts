@@ -34,10 +34,11 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
 const fetchDiffFromGitHub = async (url: string): Promise<string> => {
   console.log("in fetchDiffFromGitHub()");
   try {
-    console.log(url);
-    url = url.replace("github.com", "patch-diff.githubusercontent.com/raw");
-    console.log(url);
+    // console.log(url);
+    // url = url.replace("github.com", "patch-diff.githubusercontent.com/raw");
+    // console.log(url);
     const response = await fetch(url, {
+      method: "GET",
       headers: {
         Accept: "application/vnd.github.v3.diff",
       },
