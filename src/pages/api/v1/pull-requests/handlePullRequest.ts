@@ -9,7 +9,7 @@ type ResponseData = {
 
 const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<ResponseData>) => {
   console.log("in handlePullRequest()");
-  if (req.headers["X-Hub-Signature-256"] === process.env.GITHUB_WEBHOOK_PUSH_EVENTS) {
+  if (req.headers["X-Hub-Signature-256"] === process.env.GITHUB_WEBHOOK_PULL_REQUESTS) {
     if (req.method === "POST") {
       res.status(202).send({ message: "Accepted" });
 
