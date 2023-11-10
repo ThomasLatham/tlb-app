@@ -10,6 +10,7 @@
     "eslint:fix": "eslint --ext .js,.jsx,.ts,.tsx,.mdx ./src --fix"
   },
   "dependencies": {
+    "@octokit/rest": "^20.0.2",
     "@reduxjs/toolkit": "^1.9.3",
     "@svgr/webpack": "^7.0.0",
     "@tailwindcss/typography": "^0.5.9",

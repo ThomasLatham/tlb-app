@@ -1,4 +1,5 @@
 import { PullRequestEvent } from "@octokit/webhooks-types";
+import { Octokit } from "@octokit/rest";
 
 /**
  * If, in the PR detailed by the given `PullRequestEvent` (`payload`):
@@ -34,18 +35,13 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
 const fetchDiffFromGitHub = async (url: string): Promise<string> => {
   console.log("in fetchDiffFromGitHub()");
   try {
-    // console.log(url);
-    // url = url.replace("github.com", "patch-diff.githubusercontent.com/raw");
-    // console.log(url);
-    const response = await fetch(url, {
-      method: "GET",
-      headers: {
-        Accept: "application/vnd.github.v3.diff",
-      },
+    const octokit = new Octokit({
+      auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
     });
-    if (response.ok) {
+    const response = await octokit.request("GET " + url);
+    if (response.status < 300) {
       console.log("in fetchDiffFromGitHub()'s if-block");
-      return await response.text();
+      return await response.data;
     } else {
       console.log("in fetchDiffFromGitHub()'s else-block: " + response.status);
       throw new Error(`Failed to fetch diff content from GitHub. Status: ${response.status}`);
