@@ -78,29 +78,23 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
 };
 
 const fetchDiffFromGitHub = async (url: string): Promise<string> => {
-  const octokit = new Octokit({
-    auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
-  });
-  console.log("github access token: " + process.env.GITHUB_PERSONAL_ACCESS_TOKEN);
-  const response = await octokit.request("GET " + url);
-  console.log("response: " + response);
   try {
+    const octokit = new Octokit({
+      auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
+    });
+    const response = await octokit.request("GET " + url);
+
     if (response.status < 300) {
-      console.log("in fetchDiffFromGitHub()'s if-block");
       return response.data;
     } else {
-      console.log("in fetchDiffFromGitHub()'s else-block: " + response.status);
       throw new Error(`Failed to fetch diff content from GitHub. Status: ${response.status}`);
     }
   } catch (error) {
-    console.log("Error in fetching from diff url: " + error);
     return "";
   }
 };
 
 const getNewPostIdFromDiff = (diff: string): string => {
-  console.log("in getNewPostIdFromDiff()");
-  console.log(diff);
   const lines = diff.split("\n");
   let newPostId = "";
   const postIdPattern =
