@@ -79,15 +79,12 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
 };
 
 const fetchDiffFromGitHub = async (url: string): Promise<string> => {
+  const octokit = new Octokit({
+    auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
+  });
+  const response = await octokit.request("GET " + url);
+  console.log("response: " + response);
   try {
-    const octokit = new Octokit({
-      auth: process.env.GITHUB_PERSONAL_ACCESS_TOKEN,
-    });
-    console.log("auth: " + process.env.GITHUB_PERSONAL_ACCESS_TOKEN);
-    console.log("here");
-    const response = await octokit.request("GET " + url);
-    console.log("response: " + response);
-
     if (response.status < 300) {
       console.log("in fetchDiffFromGitHub()'s if-block");
       return response.data;
