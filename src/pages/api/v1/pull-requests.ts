@@ -2,6 +2,11 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { PullRequestEvent } from "@octokit/webhooks-types";
 import { Octokit } from "@octokit/rest";
 import * as crypto from "crypto";
+import matter from "gray-matter";
+import * as fs from "fs";
+import readingTime from "reading-time";
+
+import { POSTS_PATH } from "@/constants";
 
 type ResponseData = {
   message: string;
@@ -13,7 +18,13 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
     if (req.method === "POST") {
       const newPostId = await getNewPostId(req.body as PullRequestEvent);
       if (newPostId.length) {
-        console.log(newPostId);
+        const sourceText = fs.readFileSync(`${POSTS_PATH}/${newPostId}/${newPostId}.mdx`, "utf8");
+        const frontmatter = {
+          ...matter(sourceText).data,
+          wordCount: sourceText.split(/\s+/gu).length,
+          readingTime: readingTime(sourceText).minutes,
+        };
+        console.log(frontmatter);
       }
       res.status(202).send({ message: "Accepted" });
     } else {
