@@ -132,6 +132,7 @@ const getFrontmatterFromPostId = (postId: string): PostFrontmatter => {
 };
 
 const executeNewPostNotificationFlow = async (newPostId: string) => {
+  console.log("in executeNewPostNotificationFlow()");
   const frontmatter = getFrontmatterFromPostId(newPostId);
   const mailjet = new Client({
     apiKey: process.env.MAILJET_API_KEY,
@@ -144,6 +145,7 @@ const getSubscribersFromPostTags = async (
   tags: string[],
   mailjet: Client
 ): Promise<ContactProperties.ContactData[]> => {
+  console.log("in getSubscribersFromPostTags()");
   const queryData: ContactProperties.GetContactDataQueryParams = {
     ContactsList: 10354543,
   };
@@ -151,6 +153,8 @@ const getSubscribersFromPostTags = async (
   const result: LibraryResponse<ContactProperties.GetContactDataResponse> = await mailjet
     .get("contactdata", { version: "v3" })
     .request({}, queryData);
+
+  console.log(result);
 
   return result.body.Data.filter((contact: ContactProperties.ContactData) => {
     console.log(contact);
