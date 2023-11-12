@@ -5,8 +5,10 @@ import * as crypto from "crypto";
 import matter from "gray-matter";
 import * as fs from "fs";
 import readingTime from "reading-time";
+import { Client, ContactProperties, LibraryResponse } from "node-mailjet";
 
 import { POSTS_PATH } from "@/constants";
+import { PostFrontmatter } from "@/interfaces";
 
 type ResponseData = {
   message: string;
@@ -18,13 +20,7 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
     if (req.method === "POST") {
       const newPostId = await getNewPostId(req.body as PullRequestEvent);
       if (newPostId.length) {
-        const sourceText = fs.readFileSync(`${POSTS_PATH}/${newPostId}/${newPostId}.mdx`, "utf8");
-        const frontmatter = {
-          ...matter(sourceText).data,
-          wordCount: sourceText.split(/\s+/gu).length,
-          readingTime: readingTime(sourceText).minutes,
-        };
-        console.log(frontmatter);
+        await executeNewPostNotificationFlow(newPostId);
       }
       res.status(202).send({ message: "Accepted" });
     } else {
@@ -124,6 +120,42 @@ const getNewPostIdFromDiff = (diff: string): string => {
   }
 
   return newPostId;
+};
+
+const getFrontmatterFromPostId = (postId: string): PostFrontmatter => {
+  const sourceText = fs.readFileSync(`${POSTS_PATH}/${postId}/${postId}.mdx`, "utf8");
+  return {
+    ...matter(sourceText).data,
+    wordCount: sourceText.split(/\s+/gu).length,
+    readingTime: readingTime(sourceText).minutes,
+  } as PostFrontmatter;
+};
+
+const executeNewPostNotificationFlow = async (newPostId: string) => {
+  const frontmatter = getFrontmatterFromPostId(newPostId);
+  const mailjet = new Client({
+    apiKey: process.env.MAILJET_API_KEY,
+    apiSecret: process.env.MAILJET_SECRET_KEY,
+  });
+  const subscribers = getSubscribersFromPostTags(frontmatter.tags, mailjet);
+};
+
+const getSubscribersFromPostTags = async (
+  tags: string[],
+  mailjet: Client
+): Promise<ContactProperties.ContactData[]> => {
+  const queryData: ContactProperties.GetContactDataQueryParams = {
+    ContactsList: 10354543,
+  };
+
+  const result: LibraryResponse<ContactProperties.GetContactDataResponse> = await mailjet
+    .get("contactdata", { version: "v3" })
+    .request({}, queryData);
+
+  return result.body.Data.filter((contact: ContactProperties.ContactData) => {
+    console.log(contact);
+    return true;
+  });
 };
 
 export default handlePullRequest;
