@@ -153,6 +153,8 @@ const getSubscribersFromPostTags = async (
     .get("contactdata", { version: "v3" })
     .request({}, queryData);
 
+  console.log(result);
+
   return result.body.Data.filter((contact: ContactProperties.ContactData) => {
     const contactSubscribedTags = contact.Data.filter(
       (contactProperty: ContactProperties.ContactProperty) =>
