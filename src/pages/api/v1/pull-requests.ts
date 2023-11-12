@@ -132,20 +132,19 @@ const getFrontmatterFromPostId = (postId: string): PostFrontmatter => {
 };
 
 const executeNewPostNotificationFlow = async (newPostId: string) => {
-  console.log("in executeNewPostNotificationFlow()");
   const frontmatter = getFrontmatterFromPostId(newPostId);
   const mailjet = new Client({
     apiKey: process.env.MAILJET_API_KEY,
     apiSecret: process.env.MAILJET_SECRET_KEY,
   });
-  const subscribers = getSubscribersFromPostTags(frontmatter.tags, mailjet);
+  const subscribers = await getSubscribersFromPostTags(frontmatter.tags, mailjet);
+  console.log(subscribers);
 };
 
 const getSubscribersFromPostTags = async (
   tags: string[],
   mailjet: Client
 ): Promise<ContactProperties.ContactData[]> => {
-  console.log("in getSubscribersFromPostTags()");
   const queryData: ContactProperties.GetContactDataQueryParams = {
     ContactsList: 10354543,
   };
@@ -154,11 +153,18 @@ const getSubscribersFromPostTags = async (
     .get("contactdata", { version: "v3" })
     .request({}, queryData);
 
-  console.log(result);
-
   return result.body.Data.filter((contact: ContactProperties.ContactData) => {
-    console.log(contact);
-    return true;
+    const contactSubscribedTags = contact.Data.filter(
+      (contactProperty: ContactProperties.ContactProperty) =>
+        contactProperty.Name === "tags_subscribed_to"
+    )[0].Value.split(" ,");
+
+    for (const tag of tags) {
+      if (contactSubscribedTags.includes(tag)) {
+        return true;
+      }
+    }
+    return false;
   });
 };
 
