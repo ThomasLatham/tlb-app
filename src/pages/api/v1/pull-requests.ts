@@ -138,7 +138,7 @@ const executeNewPostNotificationFlow = async (newPostId: string) => {
     apiSecret: process.env.MAILJET_SECRET_KEY,
   });
   const subscribers = await getSubscribersFromPostTags(frontmatter.tags, mailjet);
-  console.log(subscribers);
+  console.log("subscriber IDs :" + subscribers.map((subscriber) => subscriber.ContactID));
 };
 
 const getSubscribersFromPostTags = async (
@@ -153,21 +153,36 @@ const getSubscribersFromPostTags = async (
     .get("contactdata", { version: "v3" })
     .request({}, queryData);
 
-  console.log(result);
-
   return result.body.Data.filter((contact: ContactProperties.ContactData) => {
     const contactSubscribedTags = contact.Data.filter(
       (contactProperty: ContactProperties.ContactProperty) =>
         contactProperty.Name === "tags_subscribed_to"
-    )[0].Value.split(" ,");
+    )[0].Value.split(", ");
 
-    for (const tag of tags) {
-      if (contactSubscribedTags.includes(tag)) {
-        return true;
-      }
-    }
-    return false;
+    return hasCommonElement(tags, contactSubscribedTags);
   });
+};
+
+/**
+ * Check if there is any common element between two arrays of strings.
+ *
+ * @param {string[]} array1 - The first array of strings.
+ * @param {string[]} array2 - The second array of strings.
+ * @returns {boolean} Returns true if there is any common element, false otherwise.
+ */
+const hasCommonElement = (array1: string[], array2: string[]): boolean => {
+  // Use the Set data structure for efficient membership testing
+  const set1 = new Set(array1);
+
+  // Check if any element in array2 is in set1
+  for (const element of array2) {
+    if (set1.has(element)) {
+      return true; // Found a common element
+    }
+  }
+
+  // No common element found
+  return false;
 };
 
 export default handlePullRequest;
