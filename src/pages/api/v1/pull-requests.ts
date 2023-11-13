@@ -142,7 +142,7 @@ const executeNewPostNotificationFlow = async (newPostId: string) => {
 };
 
 const getSubscribersFromPostTags = async (
-  tags: string[],
+  tagsFromPost: string[],
   mailjet: Client
 ): Promise<ContactProperties.ContactData[]> => {
   const queryData: ContactProperties.GetContactDataQueryParams = {
@@ -159,7 +159,7 @@ const getSubscribersFromPostTags = async (
         contactProperty.Name === "tags_subscribed_to"
     )[0].Value.split(", ");
 
-    return hasCommonElement(tags, contactSubscribedTags);
+    return hasCommonElement(tagsFromPost, contactSubscribedTags);
   });
 };
 
