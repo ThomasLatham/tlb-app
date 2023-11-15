@@ -178,7 +178,7 @@ const getAllTags = (): string[] => {
 const getPostIdsArray = () => {
   return fs
     .readdirSync(POSTS_PATH, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
+    .filter((dirent) => dirent.isDirectory() && dirent.name !== "components")
     .map((postDirectory) => postDirectory.name);
 };
 
