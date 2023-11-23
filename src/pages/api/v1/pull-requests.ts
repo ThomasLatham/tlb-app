@@ -216,21 +216,29 @@ const getFilterExpressionFromPostTags = (postTags: string[]) => {
 };
 
 /**
- * Update the New-Post-Notification Campaign's:
- * - subject
- * - content
- * - segmentation
+ * Update the New-Post-Notification Campaign's segmentation to reflect the new post's tags.
  *
- * @param frontmatter
- * @param contactFilterId
- * @param mailjet
+ * @param contactFilterId The ID of the segment we want to apply to the New-Post-Notification
+ * Campaign.
+ * @param mailjet The Mailjet client.
  */
-const updateNewPostNotificationCampaign = async (
-  frontmatter: PostFrontmatter,
-  contactFilterId: number,
-  mailjet: Client
-) => {
-  // TODO: implement function
+const applyTagFilterToCampaign = async (contactFilterId: number, mailjet: Client) => {
+  const newPostNotificationCampaignId = 11615515;
+
+  const request = mailjet
+    .put("campaigndraft", { version: "v3" })
+    .id(newPostNotificationCampaignId)
+    .request({
+      SegmentationID: "" + contactFilterId,
+    });
+  request
+    .then((result) => {
+      console.log("Segmentation applied successfully.");
+      console.log(result.body);
+    })
+    .catch((err) => {
+      console.log(err.statusCode);
+    });
 };
 
 const getNewPostNotificationEmailContent = (frontmatter: PostFrontmatter) => {
