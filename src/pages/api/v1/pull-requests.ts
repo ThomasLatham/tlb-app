@@ -5,7 +5,7 @@ import * as crypto from "crypto";
 import matter from "gray-matter";
 import * as fs from "fs";
 import readingTime from "reading-time";
-import { Client, LibraryResponse, Segmentation } from "node-mailjet";
+import { Client, ContactProperties, LibraryResponse } from "node-mailjet";
 
 import { POSTS_PATH } from "@/constants";
 import { PostFrontmatter } from "@/interfaces";
@@ -22,7 +22,7 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
     if (req.method === "POST") {
       const newPostId = await getNewPostId(req.body as PullRequestEvent);
       if (newPostId.length) {
-        await sendNewPostNotificationEmails(newPostId);
+        await executeNewPostNotificationFlow(newPostId);
       }
       res.status(202).send({ message: "Accepted" });
     } else {
@@ -137,116 +137,107 @@ const getFrontmatterFromPostId = (postId: string): PostFrontmatter => {
 
 /* ** SEND-EMAILS FLOW ** */
 
-const sendNewPostNotificationEmails = async (newPostId: string) => {
+const executeNewPostNotificationFlow = async (newPostId: string) => {
   const frontmatter = getFrontmatterFromPostId(newPostId);
   const mailjet = new Client({
     apiKey: process.env.MAILJET_API_KEY,
     apiSecret: process.env.MAILJET_SECRET_KEY,
   });
+  // new flow now that we can't use segmentation:
+  // - going to use the Send API (v3) rather than campaigns
+  // - get all the subscribers, then filter here (NextJS) for those subscribed to
 };
 
-/**
- * This function retrieves the ID of a Mailjet contact filter that `OR`s together the given post
- * tags. In the case that such a filter already exists in the account for which the `mailjet` client
- * is authenticated, then this function just retrieves that filter's ID. Otherwise, the function
- * creates a new filter with the given tags `OR`ed together.
- *
- * @param postTags An array of post tags for which to retrieve a contact filter.
- * @param mailjet The Mailjet client.
- * @returns The ID of a Mailjet contact filter `OR`ing together the given post tags.
- */
-const getContactFilterIdFromPostTags = async (
-  postTags: string[],
+const getSubscribersFromPostTags = async (
+  tagsFromPost: string[],
   mailjet: Client
-): Promise<number> => {
-  const desiredFilterExpression = getFilterExpressionFromPostTags(postTags);
+): Promise<ContactProperties.ContactData[]> => {
+  const queryData: ContactProperties.GetContactDataQueryParams = {
+    ContactsList: 10354543,
+  };
 
-  const getFiltersRequest: Promise<LibraryResponse<Segmentation.GetContactFilterResponse>> = mailjet
-    .get("contactfilter", { version: "v3" })
-    .request();
+  const result: LibraryResponse<ContactProperties.GetContactDataResponse> = await mailjet
+    .get("contactdata", { version: "v3" })
+    .request({}, queryData);
 
-  return getFiltersRequest
-    .then((result) => {
-      const preExistingFilters = result.body.Data.filter((contactFilter) => {
-        return contactFilter.Expression === desiredFilterExpression;
-      });
+  return result.body.Data.filter((contact: ContactProperties.ContactData) => {
+    const contactSubscribedTags = contact.Data.filter(
+      (contactProperty: ContactProperties.ContactProperty) =>
+        contactProperty.Name === "tags_subscribed_to"
+    )[0].Value.split(", ");
 
-      if (preExistingFilters.length) {
-        return preExistingFilters[0].ID;
-      }
-
-      const createFilterRequest: Promise<LibraryResponse<Segmentation.PostContactFilterResponse>> =
-        mailjet.post("contactfilter", { version: "v3" }).request({
-          Description:
-            "Will send only to contacts subscribed to at least one of the following tags: " +
-            postTags.join(", "),
-          Expression: desiredFilterExpression,
-          Name: "Contact Subscribed to One or More of The Following Tags: " + postTags.join(", "),
-        });
-
-      return createFilterRequest
-        .then((result) => {
-          return result.body.Data[0].ID;
-        })
-        .catch((err) => {
-          console.log(err.statusCode);
-          return 0;
-        });
-    })
-    .catch((err) => {
-      console.log(err.statusCode);
-      return 0;
-    });
-};
-
-/**
- * @param postTags The array of post tags used to create the Mailjet contact-filter expression.
- * @returns A filter expression for Mailjet contact segmentation, using Mailjet syntax.
- */
-const getFilterExpressionFromPostTags = (postTags: string[]) => {
-  return postTags.reduce((prev, cur, curIdx, arr) => {
     return (
-      prev +
-      " OR " +
-      `Contains(tags_subscribed_to,"${cur}")` +
-      (curIdx === arr.length - 1 ? ")" : "")
+      contactSubscribedTags.includes("all") || hasCommonElement(tagsFromPost, contactSubscribedTags)
     );
-    // eslint-disable-next-line quotes
-  }, '(Contains(tags_subscribed_to, "all")' + (postTags.length ? "" : ")"));
+  });
 };
 
 /**
- * Update the New-Post-Notification Campaign's segmentation to reflect the new post's tags.
+ * Check if there is any common element between two arrays of strings.
  *
- * @param contactFilterId The ID of the segment we want to apply to the New-Post-Notification
- * Campaign.
- * @param mailjet The Mailjet client.
+ * @param {string[]} array1 - The first array of strings.
+ * @param {string[]} array2 - The second array of strings.
+ * @returns {boolean} Returns true if there is any common element, false otherwise.
  */
-const applyTagFilterToCampaign = async (contactFilterId: number, mailjet: Client) => {
-  const newPostNotificationCampaignId = 11615515;
+const hasCommonElement = (array1: string[], array2: string[]): boolean => {
+  // Use the Set data structure for efficient membership testing
+  const set1 = new Set(array1);
 
-  const request = mailjet
-    .put("campaigndraft", { version: "v3" })
-    .id(newPostNotificationCampaignId)
-    .request({
-      SegmentationID: "" + contactFilterId,
-    });
+  // Check if any element in array2 is in set1
+  for (const element of array2) {
+    if (set1.has(element)) {
+      return true; // Found a common element
+    }
+  }
+
+  // No common element found
+  return false;
+};
+
+const sendNewPostNotificationEmails = async (
+  subscribers: ContactProperties.ContactData[],
+  newPostFrontmatter: PostFrontmatter,
+  newPostId: string,
+  mailjet: Client
+) => {
+  const request = mailjet.post("send").request({
+    Messages: subscribers.map((subscriber) => {
+      return {
+        FromEmail: "contact@tomlatham.blog",
+        FromName: "Tom Latham",
+        Recipients: [
+          {
+            Email: getContactPropertyValue(subscriber, "email_address"),
+            Name: getContactPropertyValue(subscriber, "first_name"),
+          },
+        ],
+        Subject: "There's a new post on the Tom Latham Blog!",
+        TemplateID: 5346495,
+        "Mj-TemplateLanguage": true,
+        Vars: {
+          newPostFrontmatter: {
+            ...newPostFrontmatter,
+          },
+          newPostId: newPostId,
+        },
+      };
+    }),
+  });
   request
     .then((result) => {
-      console.log("Segmentation applied successfully.");
       console.log(result.body);
     })
-    .catch((err) => {
-      console.log(err.statusCode);
+    .catch((error) => {
+      console.log(error.statusCode);
     });
 };
 
-const getNewPostNotificationEmailContent = (frontmatter: PostFrontmatter) => {
-  // TODO: implement function
-};
-
-const sendNewPostNotificationCampaign = async (campaignId: number, mailjet: Client) => {
-  // TODO: implement function
+const getContactPropertyValue = (
+  contactData: ContactProperties.ContactData,
+  propertyName: string
+) => {
+  return contactData.Data.filter((contactProperty) => contactProperty.Name === propertyName)[0]
+    .Value;
 };
 
 export default handlePullRequest;
