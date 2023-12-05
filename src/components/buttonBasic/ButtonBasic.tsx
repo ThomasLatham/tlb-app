@@ -3,6 +3,7 @@ import React from "react";
 interface Props {
   text: string;
   onClick: () => void;
+  children?: string;
 }
 
 const ButtonBasic: React.FC<Props> = ({ text, onClick }) => {

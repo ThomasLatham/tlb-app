@@ -32,6 +32,7 @@ import { PostFrontmatter } from "../../src/interfaces";
  */
 const executeNewPostNotificationFlow = async (newPostId: string) => {
   const frontmatter = getFrontmatterFromPostId(newPostId);
+  console.log(frontmatter);
 };
 
 const getFrontmatterFromPostId = (postId: string): PostFrontmatter => {
