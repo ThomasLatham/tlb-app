@@ -1,12 +1,16 @@
 import React, { Fragment } from "react";
 import Head from "next/head";
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 import ButtonBasic from "@/components/buttonBasic";
 
 import Layout from "../../components/layout";
 
-const SubscribePage: React.FC = () => {
+interface Props {
+  email: any;
+}
+
+const SubscribePage: React.FC<Props> = ({ email }) => {
   const { data: session, status } = useSession();
   console.log(session);
   console.log(status);
@@ -23,7 +27,7 @@ const SubscribePage: React.FC = () => {
         max-w-full"
       >
         <p className="mt-6 text-[30px] underline">Subscription Settings</p>
-        {status !== "authenticated" ? (
+        {status === "unauthenticated" ? (
           <Fragment>
             <p className="sm:pl-5 sm:mt-6 mt-6 text-justify">
               Please sign in to subscribe and to tailor your subscription settings.
@@ -33,12 +37,22 @@ const SubscribePage: React.FC = () => {
                 <ButtonBasic onClick={() => signIn("google")} text="Sign in with Google" />
               </span>
               <span>
-                <ButtonBasic onClick={() => signIn("email")} text="Sign in with Email" />
+                <ButtonBasic onClick={() => signIn("email", { email })} text="Sign in with Email" />
               </span>
             </div>
           </Fragment>
         ) : (
-          <div></div>
+          <Fragment>
+            {status === "loading" ? (
+              <p className="sm:pl-5 sm:mt-6 mt-6 text-justify">Loading...</p>
+            ) : (
+              <div className="mt-6">
+                <span>
+                  <ButtonBasic onClick={() => signOut()} text="Sign Out" />
+                </span>
+              </div>
+            )}
+          </Fragment>
         )}
       </div>
     </Layout>
