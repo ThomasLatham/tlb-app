@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 
 interface Props {
-  text: string;
   onClick: () => void;
   isToggledInitially: boolean;
+  children?: string;
 }
 
-const ButtonTogglable: React.FC<Props> = ({ text, onClick, isToggledInitially }) => {
+const ButtonTogglable: React.FC<Props> = ({ onClick, isToggledInitially, children }) => {
   const [isToggled, setIsToggled] = useState<boolean>(isToggledInitially);
 
   const onClickInternal = () => {
@@ -29,7 +29,7 @@ const ButtonTogglable: React.FC<Props> = ({ text, onClick, isToggledInitially })
         active:outline-2
         outline font-medium outline-[1.5px] mt-2 rounded-lg w-full sm:w-auto px-5 py-2.5 text-sm text-center`}
     >
-      {text}
+      {children}
     </button>
   );
 };

@@ -1,12 +1,11 @@
-import React from "react";
+import React, { Component } from "react";
 
 interface Props {
-  text: string;
   onClick: () => void;
   children?: string;
 }
 
-const ButtonBasic: React.FC<Props> = ({ text, onClick }) => {
+const ButtonBasic: React.FC<Props> = ({ onClick, children }) => {
   return (
     <button
       onClick={onClick}
@@ -18,7 +17,7 @@ const ButtonBasic: React.FC<Props> = ({ text, onClick }) => {
         active:outline-2 outline
         font-medium outline-[1.5px] mt-2 rounded-lg w-full sm:w-auto px-5 py-2.5 text-sm text-center"
     >
-      {text}
+      {children}
     </button>
   );
 };

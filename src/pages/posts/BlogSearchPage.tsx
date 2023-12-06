@@ -76,7 +76,7 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
             ></input>
           </div>
           <div>
-            <ButtonBasic onClick={getFilteredPosts} text={"Search"} />
+            <ButtonBasic onClick={getFilteredPosts}>Search</ButtonBasic>
           </div>
         </div>
         <div className="flex flex-wrap mt-2 mb-4">
@@ -85,9 +85,8 @@ const BlogSearchPage: React.FC<Props> = ({ frontmatterArray, allTags }) => {
               <div className="mx-2" key={idx}>
                 <ButtonTogglable
                   onClick={() => toggleTag(tag)}
-                  text={`#${tag}`}
                   isToggledInitially={selectedTags.includes(tag)}
-                />
+                >{`#${tag}`}</ButtonTogglable>
               </div>
             );
           })}
