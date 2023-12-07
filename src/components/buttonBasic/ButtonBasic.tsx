@@ -1,14 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
 
 interface Props {
-  onClick: () => void;
+  onClick?: () => void;
   children?: string;
+  type?: "button" | "submit" | "reset";
 }
 
-const ButtonBasic: React.FC<Props> = ({ onClick, children }) => {
+const ButtonBasic: React.FC<Props> = ({ onClick, children, type }) => {
+  type = type ?? "button";
+
   return (
     <button
       onClick={onClick}
+      type={type}
       className="
         transition-colors duration-200
         dark:bg-primary-dark dark:outline-side-dark dark:text-trim-dark
