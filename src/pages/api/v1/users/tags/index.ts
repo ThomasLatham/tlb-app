@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 
 import prisma from "@/utils/database";
 
-import { authOptions } from "../../auth/[...nextauth]";
+import { authOptions } from "../../../auth/[...nextauth]";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
@@ -13,20 +13,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
-  if (req.method === "GET") {
-    if (!req.query?.email) {
+  if (req.method === "PUT") {
+    if (!(req.body?.email && req.body?.tags)) {
       // eslint-disable-next-line quotes
-      res.status(400).json({ message: 'Request must include "email" query paramater.' });
+      res.status(400).json({ message: 'Request body must include "email" and "tags".' });
       return;
     }
 
-    if (session.user?.email !== req.query?.email) {
+    if (session.user?.email !== req.body.email) {
       res.status(401).json({ message: "Unauthorized." });
       return;
     }
 
-    const user = prisma.user.findUnique({
+    const user = prisma.user.update({
       where: { email: req.query.email as string },
+      data: { tags: req.body.tags },
       include: {
         tags: true,
       },

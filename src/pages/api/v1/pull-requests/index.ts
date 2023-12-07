@@ -141,5 +141,3 @@ const executeNewPostNotificationFlow = async (newPostId: string) => {
 };
 
 export default handlePullRequest;
-
-// comment for PR

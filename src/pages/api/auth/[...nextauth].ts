@@ -6,7 +6,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 
 import prisma from "@/utils/database";
 
-export const authOptions = {
+const authOptions = {
   adapter: PrismaAdapter(prisma),
   // Configure one or more authentication providers
   providers: [
@@ -28,4 +28,5 @@ export const authOptions = {
   ],
 };
 
+export { authOptions };
 export default NextAuth(authOptions);
