@@ -1,15 +1,30 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import { signIn, signOut, useSession } from "next-auth/react";
+import { Prisma, User } from "@prisma/client";
 
 import ButtonBasic from "@/components/buttonBasic";
 
 import Layout from "../../components/layout";
 
+type UserWithTags = Prisma.UserGetPayload<{
+  include: { tags: true };
+}>;
+
 const SubscribePage: React.FC = () => {
   const { data: session, status } = useSession();
 
   const [signInEmail, setSignInEmail] = useState<string>();
+  const [userData, setUserData] = useState<UserWithTags>();
+
+  useEffect(() => {
+    if (status === "authenticated" && session.user?.email)
+      fetch("/api/")
+        .then((res) => res.json())
+        .then((data) => {
+          setUserData(data);
+        });
+  }, []);
 
   return (
     <Layout>
