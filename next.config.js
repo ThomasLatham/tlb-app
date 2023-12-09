@@ -26,6 +26,8 @@ const nextConfig = {
 
     return config;
   },
+  // Makes it so we can put files in the pages directory without having them exported as pages
+  pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
 };
 
 module.exports = nextConfig;

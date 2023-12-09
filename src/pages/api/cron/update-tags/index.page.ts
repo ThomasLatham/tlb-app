@@ -15,14 +15,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   // add all the new tags to the database
   for (const tagFromPost of tagsFromPosts) {
     if (!tagsFromDatabase.includes(tagFromPost)) {
-      prisma.tag.create({ data: { tagName: tagFromPost } });
+      await prisma.tag.create({ data: { tagName: tagFromPost } });
     }
   }
 
   // remove any tags that are no longer present
   for (const tagFromDatabase of tagsFromDatabase) {
     if (!tagsFromPosts.includes(tagFromDatabase)) {
-      prisma.tag.delete({ where: { tagName: tagFromDatabase } });
+      await prisma.tag.delete({ where: { tagName: tagFromDatabase } });
     }
   }
 

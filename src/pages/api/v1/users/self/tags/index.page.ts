@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 
 import prisma from "@/utils/database";
 
-import { authOptions } from "../../../auth/[...nextauth]";
+import { authOptions } from "../../../../auth/[...nextauth]";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === "PUT") {
     if (!(req.body?.email && req.body?.tags)) {
       // eslint-disable-next-line quotes
-      res.status(400).json({ message: 'Request body must include "email" and "tags".' });
+      res.status(400).json({ message: 'Request body must include "tags".' });
       return;
     }
 
