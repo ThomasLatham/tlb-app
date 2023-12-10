@@ -4,9 +4,11 @@ interface Props {
   onClick: () => void;
   isToggledInitially: boolean;
   children?: string;
+  type?: "button" | "submit" | "reset";
 }
 
-const ButtonTogglable: React.FC<Props> = ({ onClick, isToggledInitially, children }) => {
+const ButtonTogglable: React.FC<Props> = ({ onClick, isToggledInitially, children, type }) => {
+  type = type ?? "button";
   const [isToggled, setIsToggled] = useState<boolean>(isToggledInitially);
 
   const onClickInternal = () => {
@@ -17,6 +19,7 @@ const ButtonTogglable: React.FC<Props> = ({ onClick, isToggledInitially, childre
   return (
     <button
       onClick={onClickInternal}
+      type={type}
       className={`
         transition-colors duration-200
         ${

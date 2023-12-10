@@ -1,14 +1,11 @@
 import { signIn } from "next-auth/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 import ButtonBasic from "@/components/buttonBasic";
 
-interface SignInFormProps {
-  signInEmail: string;
-  setSignInEmail: React.Dispatch<React.SetStateAction<string>>;
-}
+const SignInForm: React.FC = () => {
+  const [signInEmail, setSignInEmail] = useState<string>("");
 
-const SignInForm: React.FC<SignInFormProps> = ({ signInEmail, setSignInEmail }) => {
   return (
     <Fragment>
       <p className="mt-6 text-justify">
