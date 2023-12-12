@@ -1,5 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { PHASE_DEVELOPMENT_SERVER } = require("next/constants");
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = (phase, { defaultConfig }) => ({
+  ...defaultConfig,
   reactStrictMode: true,
   webpack(config) {
     // Grab the existing rule that handles SVG imports
@@ -27,7 +31,11 @@ const nextConfig = {
     return config;
   },
   // Makes it so we can put files in the pages directory without having them exported as pages
-  pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"],
-};
-
-module.exports = nextConfig;
+  pageExtensions: ["page.tsx", "page.ts", "page.jsx", "page.js"]
+    .map((extension) => {
+      const isDevServer = phase === PHASE_DEVELOPMENT_SERVER;
+      const prefixes = isDevServer ? ["dev", "prod"] : ["prod"];
+      return prefixes.map((prefix) => `${prefix}.${extension}`);
+    })
+    .flat(),
+});

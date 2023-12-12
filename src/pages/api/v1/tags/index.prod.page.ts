@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 
 import prisma from "@/utils/database";
 
-import { authOptions } from "../../../auth/[...nextauth].page";
+import { authOptions } from "../../auth/[...nextauth].prod.page";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
@@ -17,17 +17,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(400).json({ message: "Improper request method." });
   }
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user?.email as string },
-    include: {
-      tags: true,
-    },
-  });
+  const tags = await prisma.tag.findMany();
 
-  if (!user) {
-    res.status(404).json({ message: "No users found with that email." });
+  if (!tags.length) {
+    res.status(404).json({ message: "No tags found." });
   }
-  res.status(200).send({ user: user });
+  res.status(200).send({ tags: tags });
 };
 
 export default handler;

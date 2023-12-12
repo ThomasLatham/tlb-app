@@ -134,7 +134,7 @@ const getFrontmatterFromPostId = (postId: string): PostFrontmatter => {
   } as PostFrontmatter;
 };
 
-/* ** SEND-EMAILS FLOW ** */
+/* ** QUEUE-EMAILS FLOW ** */
 
 const executeNewPostNotificationFlow = async (newPostId: string) => {
   const frontmatter = getFrontmatterFromPostId(newPostId);

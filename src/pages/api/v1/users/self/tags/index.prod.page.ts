@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth/next";
 
 import prisma from "@/utils/database";
 
-import { authOptions } from "../../../../auth/[...nextauth].page";
+import { authOptions } from "../../../../auth/[...nextauth].prod.page";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);

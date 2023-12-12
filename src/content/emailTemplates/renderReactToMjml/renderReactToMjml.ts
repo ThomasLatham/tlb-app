@@ -3,6 +3,8 @@ import mjml2html from "mjml";
 import { MJMLParseResults } from "mjml-core";
 import React from "react";
 
-export const renderReactToMjml = (email: React.ReactElement): MJMLParseResults => {
+const renderReactToMjml = (email: React.ReactElement): MJMLParseResults => {
   return mjml2html(renderToMjml(email));
 };
+
+export { renderReactToMjml };
