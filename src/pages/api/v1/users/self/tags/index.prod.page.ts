@@ -1,11 +1,66 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
+import jwt from "jsonwebtoken";
 
 import prisma from "@/utils/database";
+import { getBasePath } from "@/utils/general";
 
 import { authOptions } from "../../../../auth/[...nextauth].prod.page";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  if (req.method === "GET") {
+    if (!req.query.token || req.query.token instanceof Array) {
+      res.status(400).json({ message: "Request must include JWT." });
+      return;
+    }
+
+    if (!process.env.JWT_SECRET) {
+      res.status(500).json({ message: "Sorry, something went wrong on our end." });
+      return;
+    }
+
+    let decoded: string | jwt.JwtPayload;
+
+    try {
+      decoded = jwt.verify(req.query.token, process.env.JWT_SECRET);
+    } catch (err: any) {
+      res.status(401).json({ message: "Invalid token: " + err.message });
+      return;
+    }
+
+    if (typeof decoded === "string" || !decoded.userId) {
+      res.status(400).json({ message: "Invalid token." });
+      return;
+    }
+
+    try {
+      const user = await prisma.user.update({
+        where: { id: decoded.userId },
+        data: {
+          tags: {
+            set: [],
+          },
+        },
+        include: {
+          tags: true,
+        },
+      });
+      if (!user) {
+        res.status(404).json({ message: "Failed to update tag subscription for user." });
+        return;
+      }
+    } catch (err) {
+      res.status(500).json({ message: "Something went wrong." });
+      return;
+    }
+
+    res.writeHead(307, {
+      location: getBasePath() + "/unsubscribe-confirmation/" + req.query.token,
+    });
+    res.end();
+    return;
+  }
+
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {
@@ -38,6 +93,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     if (!user) {
       res.status(404).json({ message: "Failed to update tag subscription for user." });
+      return;
     }
 
     res.status(200).send({ user: user });

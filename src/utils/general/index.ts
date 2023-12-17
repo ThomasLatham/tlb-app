@@ -1,3 +1,3 @@
-import { intersection } from "./general";
+import { getBasePath, intersection } from "./general";
 
-export { intersection };
+export { intersection, getBasePath };
