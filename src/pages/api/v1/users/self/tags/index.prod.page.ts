@@ -34,21 +34,21 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     try {
-      const user = await prisma.user.update({
-        where: { id: decoded.userId },
-        data: {
-          tags: {
-            set: [],
-          },
-        },
-        include: {
-          tags: true,
-        },
-      });
-      if (!user) {
-        res.status(404).json({ message: "Failed to update tag subscription for user." });
-        return;
-      }
+      // const user = await prisma.user.update({
+      //   where: { id: decoded.userId },
+      //   data: {
+      //     tags: {
+      //       set: [],
+      //     },
+      //   },
+      //   include: {
+      //     tags: true,
+      //   },
+      // });
+      // if (!user) {
+      //   res.status(404).json({ message: "Failed to update tag subscription for user." });
+      //   return;
+      // }
     } catch (err) {
       res.status(500).json({ message: "Something went wrong." });
       return;
