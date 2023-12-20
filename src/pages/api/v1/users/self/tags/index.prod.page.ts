@@ -8,6 +8,8 @@ import { getBasePath } from "@/utils/general";
 import { authOptions } from "../../../../auth/[...nextauth].prod.page";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
+  // endpoint for unsubscribing from emails
+  // GET request because just a link in an email
   if (req.method === "GET") {
     if (!req.query.token || req.query.token instanceof Array) {
       res.status(400).json({ message: "Request must include JWT." });
@@ -61,6 +63,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     return;
   }
 
+  // otherwise it's an update endpoint
   const session = await getServerSession(req, res, authOptions);
 
   if (!session) {

@@ -5,6 +5,7 @@ import {
   getAllPostFrontmatters,
   getFilteredPostFrontmatters,
   getAllTags,
+  getFrontmatterByPostId,
 } from "./posts";
 
 export {
@@ -12,6 +13,7 @@ export {
   getAllPostIds,
   getRandomPostId,
   getAllPostFrontmatters,
+  getFrontmatterByPostId,
   getFilteredPostFrontmatters,
   getAllTags,
 };

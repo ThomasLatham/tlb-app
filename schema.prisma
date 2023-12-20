@@ -36,15 +36,16 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String? // needs to be "name" for auth.js model
-  email         String?   @unique
-  createdAt     DateTime  @default(now())
-  emailVerified DateTime?
-  image         String?
-  tags          Tag[]
-  accounts      Account[]
-  sessions      Session[]
+  id                      String                   @id @default(cuid())
+  name                    String? // needs to be "name" for auth.js model
+  email                   String?                  @unique
+  createdAt               DateTime                 @default(now())
+  emailVerified           DateTime?
+  image                   String?
+  tags                    Tag[]
+  accounts                Account[]
+  sessions                Session[]
+  queuedPostNotifications QueuedPostNotification[]
 }
 
 model VerificationToken {
@@ -59,4 +60,12 @@ model Tag {
   id      Int    @id @default(autoincrement())
   tagName String @unique
   users   User[]
+}
+
+model QueuedPostNotification {
+  userId String
+  postId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, postId])
 }

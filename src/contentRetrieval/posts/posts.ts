@@ -139,6 +139,15 @@ const getAllPostFrontmatters = (): { id: string; frontmatter: PostFrontmatter }[
   return frontmatterArray;
 };
 
+const getFrontmatterByPostId = (postId: string): PostFrontmatter => {
+  const sourceText = fs.readFileSync(`${POSTS_PATH}/${postId}/${postId}.mdx`, "utf8");
+  return {
+    ...matter(sourceText).data,
+    wordCount: sourceText.split(/\s+/gu).length,
+    readingTime: readingTime(sourceText).minutes,
+  } as PostFrontmatter;
+};
+
 const getFilteredPostFrontmatters = (
   filters: PostSearchFilter
 ): {
@@ -187,6 +196,7 @@ export {
   getAllPostIds,
   getRandomPostId,
   getAllPostFrontmatters,
+  getFrontmatterByPostId,
   getFilteredPostFrontmatters,
   getAllTags,
 };

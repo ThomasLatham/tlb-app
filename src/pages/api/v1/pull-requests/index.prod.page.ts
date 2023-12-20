@@ -2,12 +2,9 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import type { PullRequestEvent } from "@octokit/webhooks-types";
 import { Octokit } from "@octokit/rest";
 import * as crypto from "crypto";
-import matter from "gray-matter";
-import * as fs from "fs";
-import readingTime from "reading-time";
 
-import { POSTS_PATH } from "@/constants";
-import { PostFrontmatter } from "@/interfaces";
+import prisma from "@/utils/database";
+import { getFrontmatterByPostId } from "@/contentRetrieval/posts";
 
 type ResponseData = {
   message: string;
@@ -19,16 +16,24 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   if (validateGitHubWebhook(req, res, process.env.GITHUB_WEBHOOK_PULL_REQUESTS!)) {
     if (req.method === "POST") {
-      const newPostId = await getNewPostId(req.body as PullRequestEvent);
-      if (newPostId.length) {
-        await executeNewPostNotificationFlow(newPostId);
+      try {
+        const newPostId = await getNewPostId(req.body as PullRequestEvent);
+        if (newPostId.length) {
+          await queuePostNotifications(newPostId);
+        }
+        res.status(202).send({ message: "Accepted" });
+        return;
+      } catch (error) {
+        res.status(500).end("Something went wrong. Error: " + error);
+        return;
       }
-      res.status(202).send({ message: "Accepted" });
     } else {
       res.status(400).end("No new posts found");
+      return;
     }
   } else {
     res.status(401).end("Unauthorized");
+    return;
   }
 };
 
@@ -125,19 +130,27 @@ const getNewPostIdFromDiff = (diff: string): string => {
   return newPostId;
 };
 
-const getFrontmatterFromPostId = (postId: string): PostFrontmatter => {
-  const sourceText = fs.readFileSync(`${POSTS_PATH}/${postId}/${postId}.mdx`, "utf8");
-  return {
-    ...matter(sourceText).data,
-    wordCount: sourceText.split(/\s+/gu).length,
-    readingTime: readingTime(sourceText).minutes,
-  } as PostFrontmatter;
-};
-
 /* ** QUEUE-EMAILS FLOW ** */
 
-const executeNewPostNotificationFlow = async (newPostId: string) => {
-  const frontmatter = getFrontmatterFromPostId(newPostId);
+const queuePostNotifications = async (newPostId: string) => {
+  const postTags = getFrontmatterByPostId(newPostId).tags;
+  const idsOfUsersSubscribedToPostTags = await prisma.user.findMany({
+    select: { id: true },
+    where: {
+      OR: postTags.map((postTag) => {
+        return { tags: { some: { tagName: postTag } } };
+      }),
+    },
+  });
+
+  await prisma.queuedPostNotification.createMany({
+    data: idsOfUsersSubscribedToPostTags.map((userIdObj) => {
+      return {
+        userId: userIdObj.id,
+        postId: newPostId,
+      };
+    }),
+  });
 };
 
 export default handlePullRequest;
