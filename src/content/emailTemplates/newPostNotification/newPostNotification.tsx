@@ -16,7 +16,7 @@ import jwt from "jsonwebtoken";
 
 import { PostFrontmatter } from "@/interfaces";
 import { formatDateString } from "@/utils/format";
-import { getBasePath } from "@/utils/general";
+import { getBasePath, getToken } from "@/utils/general";
 
 import { renderReactToMjml } from "../renderReactToMjml";
 import tailwindConfig from "../../../../tailwind.config";
@@ -29,22 +29,7 @@ const getNewPostNotificationHtml = (
   postFrontmatter: PostFrontmatter,
   postId: string
 ) => {
-  let token;
-  if (process.env.JWT_SECRET) {
-    token = jwt.sign(
-      {
-        userId: recipientUserId,
-      },
-      process.env.JWT_SECRET,
-      { expiresIn: "30 days" }
-    );
-  } else {
-    throw "Error: Missing environment variable: JWT_SECRET.";
-  }
-
-  if (!token) {
-    throw "Error: Empty token.";
-  }
+  const token = getToken(recipientUserId);
 
   return renderReactToMjml(
     <Mjml>
@@ -114,7 +99,7 @@ const getNewPostNotificationHtml = (
               backgroundColor={colors["primary-dark"]}
               border={"1.5px solid " + colors["side-dark"]}
               color={colors["trim-dark"]}
-              href={"https://tomlatham.blog/posts/" + postId}
+              href={getBasePath() + "/posts/" + postId}
             >
               Click here to check it out!
             </MjmlButton>

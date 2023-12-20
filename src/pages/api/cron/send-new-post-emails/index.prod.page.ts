@@ -3,9 +3,10 @@ import Mailjet from "node-mailjet";
 import _ from "lodash";
 
 import prisma from "@/utils/database";
-import { getAllTags, getFrontmatterByPostId } from "@/contentRetrieval/posts";
+import { getFrontmatterByPostId } from "@/contentRetrieval/posts";
 import { PostFrontmatter } from "@/interfaces";
 import getNewPostNotificationHtml from "@/content/emailTemplates/newPostNotification/newPostNotification";
+import { getBasePath, getToken } from "@/utils/general";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const authHeader = req.headers["authorization"];
@@ -47,9 +48,6 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  // send out the 200 emails with mailjet send api and using the generated html
-  // - need to grab user details first
-  // - also need to create a text version of the email
   // - need to delete records from DB after sending email
   for (const chunkOf100Items of _.chunk(top200FromQueue, 100)) {
     const request = mailjet.post("send").request({
@@ -63,18 +61,36 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             };
           });
 
+        const frontmatter = uniqueFrontmatters.filter((fm) => fm.postId === queueItem.postId)[0]
+          .frontmatter;
+
         return {
           FromEmail: "contact@tomlatham.blog",
           FromName: "Tom Latham",
           Recipients: userDetail,
           Subject: "There's a new post on my blog!",
-          "Text-part": "Dear passenger 1, welcome to Mailjet! May the delivery force be with you!",
+          "Text-part": `
+            Hi ${userDetail[0].Name},
+
+            There's a new post on my blog that you might be interested in! The post is titled
+            ${frontmatter.title}, and here's it's description:
+            ${frontmatter.description}
+            To check it out, visit ${getBasePath() + "/posts/" + queueItem.postId}.
+
+            Sincerely,
+
+            Tom Latham
+
+            If you'd like to opt out of these emails, copy/paste this URL into your browser: ${
+              getBasePath() + "/api/v1/users/self/tags?token=" + getToken(queueItem.userId)
+            }
+          `,
           "Html-part": getNewPostNotificationHtml(
             queueItem.userId,
             userDetail[0].Name,
-            uniqueFrontmatters.filter((fm) => fm.postId === queueItem.postId)[0].frontmatter,
+            frontmatter,
             queueItem.postId
-          ),
+          ).html,
         };
       }),
     });
