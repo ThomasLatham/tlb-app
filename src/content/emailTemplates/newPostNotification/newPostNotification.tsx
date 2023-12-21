@@ -12,7 +12,6 @@ import {
   MjmlText,
   MjmlStyle,
 } from "@faire/mjml-react";
-import jwt from "jsonwebtoken";
 
 import { PostFrontmatter } from "@/interfaces";
 import { formatDateString } from "@/utils/format";

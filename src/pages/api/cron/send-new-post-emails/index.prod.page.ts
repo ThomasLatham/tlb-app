@@ -48,7 +48,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     },
   });
 
-  // - need to delete records from DB after sending email
+  // send 100 emails at a time
   for (const chunkOf100Items of _.chunk(top200FromQueue, 100)) {
     const request = mailjet.post("send").request({
       Messages: chunkOf100Items.map((queueItem) => {
@@ -96,7 +96,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     request
-      .then((result) => {
+      .then(async (result) => {
+        // - need to delete records from DB after sending email
         console.log(result.body);
       })
       .catch((error) => {
