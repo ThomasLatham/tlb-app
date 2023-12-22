@@ -95,7 +95,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }),
     });
 
-    request
+    await request
       .then(async (result) => {
         // - need to delete records from DB after sending email
         console.log(result.body);
