@@ -18,6 +18,7 @@ const handlePullRequest = async (req: NextApiRequest, res: NextApiResponse<Respo
     if (req.method === "POST") {
       try {
         const newPostId = await getNewPostId(req.body as PullRequestEvent);
+        console.log("post ID: " + newPostId);
         if (newPostId.length) {
           await queuePostNotifications(newPostId);
         }
