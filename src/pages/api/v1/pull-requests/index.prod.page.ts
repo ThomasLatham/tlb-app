@@ -85,7 +85,8 @@ const getNewPostId = async (payload: PullRequestEvent): Promise<string> => {
   if (
     payload.action === "closed" &&
     payload.pull_request.merged === true &&
-    (payload.pull_request.base.ref === "main" || payload.pull_request.base.ref === "test")
+    (payload.pull_request.base.ref === "main" ||
+      payload.pull_request.base.ref === "feature/mailing-list")
   ) {
     newPostId = getNewPostIdFromDiff(await fetchDiffFromGitHub(payload.pull_request.diff_url));
   }
