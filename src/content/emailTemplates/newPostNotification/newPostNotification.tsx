@@ -64,8 +64,8 @@ const getNewPostNotificationHtml = (
             </MjmlText>
           </MjmlColumn>
         </MjmlSection>
-        <MjmlSection paddingTop={0} paddingBottom={0}>
-          <MjmlColumn cssClass="border" width={400}>
+        <MjmlSection paddingTop={0} paddingBottom={0} paddingLeft={6} paddingRight={6}>
+          <MjmlColumn cssClass="border" width={300}>
             <MjmlText
               align="center"
               color={colors["trim-dark"]}
