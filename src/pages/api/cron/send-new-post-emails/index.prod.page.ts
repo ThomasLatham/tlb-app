@@ -98,7 +98,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     await request
       .then(async (result) => {
         // - need to delete records from DB after sending email
-        console.log(result.body);
+        console.log(JSON.parse(result.body as string));
+
+        // await prisma.queuedPostNotification.deleteMany({where: {OR: result.body.Sent.}})
       })
       .catch((error) => {
         console.log(error.statusCode);
