@@ -92,9 +92,9 @@ const AboutPage: React.FC = () => {
           about that. Feel free to email me at`}{" "}
           <a
             className="dark:text-secondary-dark text-side-light hover:underline"
-            href="mailto:tom.latham.blog@gmail.com"
+            href="mailto:contact@tomlatham.blog"
           >
-            tom.latham.blog@gmail.com
+            contact@tomlatham.blog
           </a>{" "}
           with any feedback or questions, and thanks for visiting!
         </p>

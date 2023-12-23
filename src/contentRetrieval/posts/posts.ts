@@ -97,22 +97,22 @@ const fullPostResult = async (mdxFilepath: string) => {
 };
 
 const getPostById = async (postId: string) => {
-  return await fullPostResult(`${POSTS_PATH}/${postId}.mdx`);
+  return await fullPostResult(`${POSTS_PATH}/${postId}/${postId}.mdx`);
 };
 
 const getAllPostIds = () => {
-  return fs.readdirSync(POSTS_PATH).map((mdxFilename) => {
+  return getPostIdsArray().map((postId) => {
     return {
       params: {
-        id: mdxFilename.split(".mdx")[0],
+        id: postId,
       },
     };
   });
 };
 
 const getRandomPostId = () => {
-  const postFileNameArr = fs.readdirSync(POSTS_PATH);
-  return postFileNameArr[Math.floor(Math.random() * postFileNameArr.length)].split(".mdx")[0];
+  const postFileNameArr = getPostIdsArray();
+  return postFileNameArr[Math.floor(Math.random() * postFileNameArr.length)];
 };
 
 /*---------------------
@@ -121,8 +121,8 @@ const getRandomPostId = () => {
 
 const getAllPostFrontmatters = (): { id: string; frontmatter: PostFrontmatter }[] => {
   const frontmatterArray: { id: string; frontmatter: PostFrontmatter }[] = [];
-  for (const mdxFilename of fs.readdirSync(POSTS_PATH)) {
-    const sourceText = fs.readFileSync(`${POSTS_PATH}/${mdxFilename}`, "utf8");
+  for (const postId of getPostIdsArray()) {
+    const sourceText = fs.readFileSync(`${POSTS_PATH}/${postId}/${postId}.mdx`, "utf8");
 
     const frontmatter = {
       ...matter(sourceText).data,
@@ -131,12 +131,21 @@ const getAllPostFrontmatters = (): { id: string; frontmatter: PostFrontmatter }[
     };
 
     frontmatterArray.push({
-      id: mdxFilename.split(".mdx")[0],
+      id: postId,
       frontmatter: frontmatter as PostFrontmatter,
     });
   }
 
   return frontmatterArray;
+};
+
+const getFrontmatterByPostId = (postId: string): PostFrontmatter => {
+  const sourceText = fs.readFileSync(`${POSTS_PATH}/${postId}/${postId}.mdx`, "utf8");
+  return {
+    ...matter(sourceText).data,
+    wordCount: sourceText.split(/\s+/gu).length,
+    readingTime: readingTime(sourceText).minutes,
+  } as PostFrontmatter;
 };
 
 const getFilteredPostFrontmatters = (
@@ -167,11 +176,27 @@ const getAllTags = (): string[] => {
     }, []);
 };
 
+/*--------------
+------UTIL------
+---------------*/
+
+/**
+ * Returns An array of the post IDs for all posts. Note that posts are located and contained as
+ * follows: `src/content/posts/some-post-id/some-post-id.mdx`.
+ */
+const getPostIdsArray = () => {
+  return fs
+    .readdirSync(POSTS_PATH, { withFileTypes: true })
+    .filter((dirent) => dirent.isDirectory() && dirent.name !== "components")
+    .map((postDirectory) => postDirectory.name);
+};
+
 export {
   getPostById,
   getAllPostIds,
   getRandomPostId,
   getAllPostFrontmatters,
+  getFrontmatterByPostId,
   getFilteredPostFrontmatters,
   getAllTags,
 };

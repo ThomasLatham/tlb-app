@@ -1,14 +1,18 @@
 import React from "react";
 
 interface Props {
-  text: string;
-  onClick: () => void;
+  onClick?: () => void;
+  children?: string;
+  type?: "button" | "submit" | "reset";
 }
 
-const ButtonBasic: React.FC<Props> = ({ text, onClick }) => {
+const ButtonBasic: React.FC<Props> = ({ onClick, children, type }) => {
+  type = type ?? "button";
+
   return (
     <button
       onClick={onClick}
+      type={type}
       className="
         transition-colors duration-200
         dark:bg-primary-dark dark:outline-side-dark dark:text-trim-dark
@@ -17,7 +21,7 @@ const ButtonBasic: React.FC<Props> = ({ text, onClick }) => {
         active:outline-2 outline
         font-medium outline-[1.5px] mt-2 rounded-lg w-full sm:w-auto px-5 py-2.5 text-sm text-center"
     >
-      {text}
+      {children}
     </button>
   );
 };

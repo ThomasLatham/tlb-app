@@ -15,6 +15,7 @@ const NAV_OPTIONS = [
   ["Portfolio", "/portfolio"],
   ["Blog", "/posts"],
   ["About", "/about"],
+  ["Subscribe", "/subscribe"],
 ];
 
 export {
