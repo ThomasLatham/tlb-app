@@ -97,13 +97,30 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     await request
       .then(async (result) => {
-        // - need to delete records from DB after sending email
-        console.log(JSON.parse(result.body as string));
+        const addressesOfSuccessfulNotifications: string[] = (result.body as any).Sent.map(
+          (responseItem: any) => responseItem.Email
+        );
 
-        // await prisma.queuedPostNotification.deleteMany({where: {OR: result.body.Sent.}})
+        const idsOfUsersWhoReceivedEmails = await prisma.user.findMany({
+          select: { id: true },
+          where: {
+            OR: addressesOfSuccessfulNotifications.map((emailAddress: string) => {
+              return { email: emailAddress };
+            }),
+          },
+        });
+
+        await prisma.queuedPostNotification.deleteMany({
+          where: {
+            OR: idsOfUsersWhoReceivedEmails.map((idObj) => {
+              return { userId: idObj.id };
+            }),
+          },
+        });
       })
       .catch((error) => {
         console.log(error.statusCode);
+        return res.status(500).json({ success: false });
       });
   }
 
