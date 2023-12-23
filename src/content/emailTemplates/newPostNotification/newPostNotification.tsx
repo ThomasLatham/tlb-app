@@ -52,7 +52,7 @@ const getNewPostNotificationHtml = (
           >
             <MjmlImage
               width={200}
-              src="https://raw.githubusercontent.com/ThomasLatham/tlb-app/1d8abe85e4fd0a5d6538a356845816ef6b705430/public/myImages/logo.svg"
+              src="https://raw.githubusercontent.com/ThomasLatham/tlb-app/main/public/myImages/full_logo_transparent.png"
             />
           </MjmlColumn>
         </MjmlSection>
