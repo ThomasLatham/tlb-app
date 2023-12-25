@@ -1,14 +1,39 @@
 import { signIn } from "next-auth/react";
-import { Fragment, useState } from "react";
+import { FormEvent, Fragment, useEffect, useState } from "react";
 
 import ButtonBasic from "@/components/buttonBasic";
 
 const SignInForm: React.FC = () => {
   const [signInEmail, setSignInEmail] = useState<string>("");
+  const [emailSignInConfirmationMessage, setEmailSignInConfirmationMessage] = useState<string>("");
+
+  useEffect(() => {
+    if (emailSignInConfirmationMessage) {
+      setTimeout(() => {
+        setEmailSignInConfirmationMessage("");
+      }, 10000);
+    }
+  }, [emailSignInConfirmationMessage]);
+
+  const emailSignInFlow = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    signIn("email", { email: signInEmail, redirect: false }).then(
+      () => {
+        setEmailSignInConfirmationMessage(`
+      An email with a sign-in link has been sent to ${signInEmail} and will arrive within the next 5 minutes. 
+      If you experience any issues, please reach out to contact@tomlatham.blog.
+    `);
+        setSignInEmail("");
+      },
+      () => {
+        setEmailSignInConfirmationMessage("Something went wrong.");
+      }
+    );
+  };
 
   return (
     <Fragment>
-      <p className="mt-6 text-justify">
+      <p className="mt-6 text-center mx-4 md:mx-0">
         Please sign in to subscribe and/or to tailor your subscription settings.
       </p>
       <div className="flex flex-col items-center mt-5">
@@ -19,8 +44,7 @@ const SignInForm: React.FC = () => {
         <form
           className="flex flex-row items-baseline"
           onSubmit={(e) => {
-            e.preventDefault();
-            signIn("email", { email: signInEmail });
+            emailSignInFlow(e);
           }}
         >
           <span>
@@ -34,12 +58,20 @@ const SignInForm: React.FC = () => {
                       text-sm rounded-lg block w-full p-2.5 border-[1.5px]"
               placeholder="someone@example.com"
               onChange={(e) => setSignInEmail(e.target.value)}
+              value={signInEmail}
             ></input>
           </span>
           <span className="ml-4">
             <ButtonBasic type="submit">Sign in with Email</ButtonBasic>
           </span>
         </form>
+        {emailSignInConfirmationMessage.split("\n").map((line, idx) => {
+          return (
+            <p key={idx} className="text-center sm:px-4 px-20 pt-4">
+              {line}
+            </p>
+          );
+        })}
       </div>
     </Fragment>
   );
