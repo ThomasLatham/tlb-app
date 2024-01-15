@@ -1,11 +1,22 @@
 import { signIn } from "next-auth/react";
 import { FormEvent, Fragment, useEffect, useState } from "react";
+import { Triangle } from "react-loader-spinner";
 
 import ButtonBasic from "@/components/buttonBasic";
+import { userPreferences } from "@/ducks";
+import { useAppSelector } from "@/redux/hooks";
+
+import tailwindConfig from "../../../tailwind.config";
+
+const colors = tailwindConfig.theme.colors;
 
 const SignInForm: React.FC = () => {
+  const useDarkMode = useAppSelector(userPreferences.selectors.getUseDarkMode);
+
   const [signInEmail, setSignInEmail] = useState<string>("");
   const [emailSignInConfirmationMessage, setEmailSignInConfirmationMessage] = useState<string>("");
+  const [isAwaitingEmailSignInResponse, setIsAwaitingEmailSignInResponse] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (emailSignInConfirmationMessage) {
@@ -17,18 +28,21 @@ const SignInForm: React.FC = () => {
 
   const emailSignInFlow = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    signIn("email", { email: signInEmail, redirect: false }).then(
-      () => {
-        setEmailSignInConfirmationMessage(`
-      An email with a sign-in link has been sent to ${signInEmail} and will arrive within the next 5 minutes. 
-      If you experience any issues, please reach out to contact@tomlatham.blog.
-    `);
-        setSignInEmail("");
-      },
-      () => {
-        setEmailSignInConfirmationMessage("Something went wrong.");
-      }
-    );
+    setSignInEmail("");
+    setIsAwaitingEmailSignInResponse(true);
+    signIn("email", { email: signInEmail, redirect: false })
+      .then(
+        () => {
+          setEmailSignInConfirmationMessage(
+            `An email with a sign-in link has been sent to ${signInEmail} and will arrive within the next 5 minutes.
+If you experience any issues, please reach out to contact@tomlatham.blog.`
+          );
+        },
+        () => {
+          setEmailSignInConfirmationMessage("Something went wrong.");
+        }
+      )
+      .finally(() => setIsAwaitingEmailSignInResponse(false));
   };
 
   return (
@@ -65,13 +79,27 @@ const SignInForm: React.FC = () => {
             <ButtonBasic type="submit">Sign in with Email</ButtonBasic>
           </span>
         </form>
-        {emailSignInConfirmationMessage.split("\n").map((line, idx) => {
-          return (
-            <p key={idx} className="text-center sm:px-4 px-20 pt-4">
-              {line}
-            </p>
-          );
-        })}
+        {isAwaitingEmailSignInResponse ? (
+          <div className="mt-4">
+            <Triangle
+              visible={true}
+              height="80"
+              width="80"
+              color={useDarkMode ? colors["trim-dark"] : colors["secondary-light"]}
+              ariaLabel="triangle-loading"
+              wrapperStyle={{}}
+              wrapperClass=""
+            />
+          </div>
+        ) : (
+          emailSignInConfirmationMessage.split("\n").map((line, idx) => {
+            return (
+              <p key={idx} className="sm:px-4 px-20 pt-4">
+                {line}
+              </p>
+            );
+          })
+        )}
       </div>
     </Fragment>
   );
