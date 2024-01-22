@@ -29,29 +29,18 @@ const AboutPage: React.FC = () => {
             dark:border-trim-dark border-secondary-light"
           />
           <p className="sm:pl-5 sm:mt-0 mt-2 text-justify">
-            {`I'm a software developer who's been based out of Hartford, Connecticut for the last year
-            or so. For work I'm currently developing an enterprise application for my company's
-            (Infosys Limited) client, writing mostly frontend code in Angular, but also helping out
-            in our Spring Boot API as needed. Before that I held an ETL QA role for the same client,
-            where I got the opportunity to automate my team's workflow with Python.`}
-            <br />
-            <br />
-            Before getting into IT, I spent a year lifeguarding on the beach in Florida, and before
-            that I got a degree in math from Eastern Washington University. In my free time I like
-            exercising, surfing, travling, playing music and, of course, coding.
-            <br />
-            <br />I hope someday to land a timezone-independent programming job, preferably with a
-            company whose mission I really believe in, enabling me to pursue my passions and make a
-            living from anywhere in the world while also contributing to something that aligns with
-            my values.
+            {`I'm a software developer who lives in New England. Besides coding, I like 
+            dabbling in a range of hobbies. I can usually be found doing something fun outside, 
+            finding a cool diner to eat at or playing video games with my friends.`}
           </p>
         </div>
         <p className="mt-8 text-[30px] underline">About The Blog</p>
         <p className="text-justify px-4 lg:px-44 sm:mt-4">
           {`
-          I started this website as a way to practice (and demonstrate) my programming skills, and
-          that'll probably remain the primary reason for its existence. I built it with React,
-          utilizing the Next.js framework in conjunction with`}{" "}
+          I started this website as a way to expand and improve my programming skills, and
+          while that focus still motivates a lot of what I do here, 
+          the blog is also becoming a way for me to simply share my interests with the world. 
+          On the technical side, I built it with React, utilizing the Next.js framework in conjunction with`}{" "}
           <a
             className="dark:text-secondary-dark text-side-light hover:underline"
             href="https://mdxjs.com/"
