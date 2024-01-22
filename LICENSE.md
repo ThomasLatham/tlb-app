@@ -22,7 +22,7 @@ under GPLv3.
 
 All other files are licensed under the MIT License using the following copyright notice:
 
-Copyright (c) 2023 Thomas Latham
+Copyright (c) 2024 Thomas Latham
 
 # License Texts
 
