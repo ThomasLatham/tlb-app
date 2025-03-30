@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/update-tags",
+      "schedule": "0 5 * * *"
+    },
+    {
+      "path": "/api/cron/send-new-post-emails",
+      "schedule": "0 10 * * *"
+    }
+  ]
+}

@@ -1,0 +1,206 @@
+---
+title: Estimating Pi with a Random Number Generator
+datePublished: "2025-03-30"
+author: Tom Latham
+description: How to estimate the value of pi using a random number generator.
+tags: ["math", "programming"]
+---
+
+[//]: # "server imports"
+
+import PiEstimateVisualizer from "../components/piEstimateVisualizer";
+import UnitCircle from "../components/unitCircle";
+import KaTexComponent from "../components/kaTexComponent";
+
+[//]: # "global imports from mdx-bundler"
+
+import useDarkMode from "useDarkMode";
+import colors from "colors";
+import BlogPlot from "BlogPlot";
+
+# Introduction
+
+Here's a cool problem: You're given a random number generator, and you have to use it to estimate
+the value of pi.
+
+At first this may seem like a pretty tricky task, at least it seemed that way to me. I mean how are
+we supposed to suss out pi just by generating random numbers? Sure they're both mathematical
+concepts, but even if random number generation and pi are both islands in the Sea of Math, sailing
+from the former to the latter just doesn't seem like a very feasible route. We won't be embarking in
+any ordinary ship, though, nor under unfavorable conditions. No, our vessel will be crafted with the
+legendary strength of Euclidean geometry, and in our sails we will catch the fortunate winds of
+probability and statistics. With these allies on our side, we'll see that solving this problem is
+actually pretty smooth sailing.
+
+# The Geometry
+
+Forgetting about the random number generator (RNG) for a while, let's think about pi for a bit. I
+know for me at least pi makes me think of circles. So let's draw a circle. Specifically, let's draw
+the unit circle, since it tends to make calculations easier what with having a radius of 1:
+
+<UnitCircle useDarkMode={useDarkMode} colors={colors} Plot={BlogPlot} />
+
+So we've got this unit circle, and we know its radius is 1, and we also know that its area is equal
+to pi times the square of its radius. That is,
+
+<KaTexComponent
+  texExpression="A = \pi {r^2} = \pi {\lparen 1 \rparen}^2 = \pi."
+  options={{ displayMode: true }}
+/>
+
+Now, that's a nice circle on that grid there, but it could use some pizzazz. Let's circumscribe a
+square about it:
+
+<UnitCircle
+  withBigSquare={true}
+  withSquare={true}
+  useDarkMode={useDarkMode}
+  colors={colors}
+  Plot={BlogPlot}
+/>
+
+That's better. We know the area of our new square there is $A = l^2 = 2^2 = 4$, so this means that
+the ratio of the area of the circle to the area of the square is
+
+<KaTexComponent
+  texExpression="\frac {A_{circle}} {A_{square}} = \frac \pi 4,"
+  options={{ displayMode: true }}
+/>
+
+which gives us
+
+<KaTexComponent
+  texExpression="4 \lparen \frac {A_{circle}} {A_{square}} \rparen = \pi."
+  options={{ displayMode: true }}
+/>
+
+If only we could approximate $\frac {A_{circle}} {A_{square}}$ with our RNG. If we could, then we
+could also just plug that value into the formula above to get an approximation for pi.
+
+# The Probability and Statistcs
+
+Adding the square frame to our circle above was really a nice touch, but I think we can do even
+more. It could use some dots, no? Not in any particular order, though. Let's throw in some points on
+the plane _at random_, inside the square we drew. You know, like the kind of points
+$\lparen x,y \rparen$ you could pick by _randomly_ selecting their x-values and y-values (or better
+yet, having an RNG do it for you).
+
+<UnitCircle
+  withBigSquare={true}
+  withSquare={true}
+  data={[
+    {
+      x: [0.349, 0.592, -0.978, -0.54, -0.52, -0.749, -0.383, 0.511, 0.905, 0.17],
+      y: [-0.577, -0.361, 0.168, -0.722, 0.815, 0.769, 0.867, 0.329, 0.925, -0.115],
+      type: "scatter",
+      mode: "markers",
+      marker: { color: useDarkMode ? colors["trim-dark"] : colors["secondary-light"], size: 4 },
+    },
+  ]}
+  useDarkMode={useDarkMode}
+  colors={colors}
+  Plot={BlogPlot}
+/>
+
+That looks pretty neat, huh? Yeah, I think so. But importantly, this could be the thing that links
+our RNG to an estimate of pi. Let's ponder a question for a moment: If we select a point at random
+from within the bounds of the square, what is the probability that it is _also_ within the circle?
+Well, if we assume that our randomly-selected point has an equal chance of falling _anywhere_ within
+the square[^uni-distro], then the probability that it will fall inside the circle is equal to the
+fraction of the square's area that the circle takes up. That is, a randomly-selected point has a
+$\frac {A_{circle}} {A_{square}}$ chance of falling inside the circle.
+
+Now, we know that the probability a coin toss will result in heads is $\frac 1 2$, so we know that
+if we were to flip a coin 100 times, about 50 of those tosses will probably come up heads. In fact,
+the more we flip the coin, the closer $\frac {heads} {total~tosses}$ stably approaches $\frac 1 2$.
+
+Applying the same principle[^big-nums] to our random points, we know that each single point has
+probability $\frac {A_{circle}} {A_{square}}$ of falling inside the circle, so the more points we
+generate, the closer $\frac {points~inside~circle} {total~points}$ stably approaches
+$\frac {A_{circle}} {A_{square}}$.
+
+So now we have the missing link in our pi estimation: a way to estimate
+$\frac {A_{circle}} {A_{square}}$ using a random number generator.
+
+# Putting It All Together
+
+Taking a look at the point-speckled plane above, we can conclude visually that out of the 10
+randomly-generated points, 8 of them fall within the bounds of the circle (mathematically this is
+done by applying the Pythagorean theorem to each point; that is, for some point $p = (x, y)$, $p$
+lies within the circle if $\sqrt {x^2 + y^2} \le 1$). Anyway, this means that our estimate for the
+ratio of the area of the circle to that of the square is:
+
+<KaTexComponent
+  texExpression="\frac {A_{circle}} {A_{square}} \approx \frac {points~inside~circle} {total~points} = \frac {8} {10} = 0.8."
+  options={{ displayMode: true }}
+/>
+
+Plugging this value into our pi-estimation formula, we get:
+
+<KaTexComponent
+  texExpression="\pi \approx 4 \lparen \frac {points~inside~circle} {total~points} \rparen = 4 \times 0.8 = 3.6."
+  options={{ displayMode: true }}
+/>
+
+Estimating pi to be 3.6 doesn't seem so far off; let's determine the error for our estimate:
+
+<KaTexComponent
+  texExpression="error = \frac {|\pi - (estimated~value)|} {\pi} = \frac {|\pi - 3.6|} {\pi} \approx 0.146."
+  options={{ displayMode: true }}
+/>
+
+Fifteen percent error, alright. For sure we can do better with more points, but first let's make our
+life a little bit easier.
+
+## Just a Quarter
+
+For visualization purposes, it's useful to use the whole unit circle and the accompanying
+circumscribed square in demonstrating this estimation method. We don't actually need the whole of
+each of them, though. Rather than generating points in the $[-1, 1] \times [-1, 1]$ area as we have
+been, we could just generate points in the unit square, $[0, 1] \times [0, 1]$, as depicted below.
+
+<UnitCircle withSquare={true} useDarkMode={useDarkMode} colors={colors} Plot={BlogPlot} />
+
+Our estimate still works because
+
+<KaTexComponent
+  texExpression="4 \lparen \frac {area~of~unit~circle~in~first~quadrant} {area~of~unit~square} \rparen = 4 \lparen \frac {\pi \cdot 1^2 \div 4} {1^2} \rparen = \pi."
+  options={{ displayMode: true }}
+/>
+
+We just estimate $\frac {area~of~unit~circle~in~first~quadrant} {area~of~unit~square}$ and mulitiply
+it by four to get our estimated pi value, and luckily we can do the same probability trick as
+before. In fact, we could do the same with any of the four quadrants, and our estimate would still
+work.
+
+## Estimation in Action
+
+Now let's see our estimation method at work. If we were to zoom in on the unit square from the last
+figure, we'd get something like this:
+
+<PiEstimateVisualizer
+  minPoints={1}
+  maxPoints={500}
+  initialPoints={20}
+  useDarkMode={useDarkMode}
+  colors={colors}
+  Plot={BlogPlot}
+/>
+
+Go ahead and play around with the number of random points using the slider. If you want to try with
+a new set of random points, refresh the page. You should be able to see that as you increase the
+number of points, our estimate gets closer to the actual value, and the error reduces!
+
+[^uni-distro]:
+    We don't actually have to assume our random variable is uniformly distributed, at least not with
+    the RNG used in this post. JavaScript's `Math.random()` has an "approximately uniform
+    distribution" (according to the
+    [official documentation](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random)).
+    Further, the distribution of our X-variable is independent from that of our Y-variable, so their
+    [joint distribution](https://en.wikipedia.org/wiki/Joint_probability_distribution#Joint_distribution_for_independent_variables)
+    is their product. Knowing that the support of both distributions is the same interval, we can
+    conclude that their joint distribution is also uniform on the area (square) defined by the
+    Cartesian product of their respective supports.
+
+[^big-nums]:
+    This is known as the [law of large numbers](https://en.wikipedia.org/wiki/Law_of_large_numbers).

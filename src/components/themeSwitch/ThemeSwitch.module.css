@@ -1,0 +1,19 @@
+@media (hover: hover) {
+  .switch:hover {
+    color: theme("colors.trim-light");
+  }
+  .switch:hover circle {
+    fill: theme("colors.trim-light");
+  }
+  .switch:hover mask circle {
+    fill: black;
+    stroke: white;
+  }
+}
+.switch mask circle {
+  /* 
+    had to add a bunch of white to primary-dark (#facc15) because it was shaded for some reason 
+    https://www.colorhexa.com/facc15
+  */
+  stroke: #fef6d5;
+}

@@ -1,0 +1,204 @@
+---
+title: "Project Euler | Problem #1 | Multiples of 3 or 5"
+datePublished: "2025-03-30"
+author: Tom Latham
+description:
+  My solutions and thought processes for a simple solution and also one that is a bit more
+  sophisticated.
+tags: ["math", "programming"]
+---
+
+[//]: # "package imports"
+[//]: # "server imports"
+
+import KaTexComponent from "../components/kaTexComponent";
+import Chalkboard from "../components/chalkboard";
+
+[//]: # "global imports from mdx-bundler"
+
+import useDarkMode from "useDarkMode";
+import colors from "colors";
+
+**Warning:** This post contains spoilers about
+[Problem #1: Multiples of 3 or 5](https://projecteuler.net/problem=1), from
+[Project Euler](https://projecteuler.net/)! If you would not like to know my solution, please do not
+read on.
+
+# Introduction
+
+A few weeks ago, I decided to start a new hobby: Project Euler. That is, I'm setting out to solve
+Project Euler problems and write about my attempts at doing so here. I had been missing mathematics
+for some time, and I was in search for something I could program and also write about. This first
+problem, though only rated 5% difficulty by Project Euler, certainly gave me what I was looking for,
+and I hope you'll enjoy reading about my thought process and solutions. So without further ado,
+let's get into the problem!
+
+# Problem Statement
+
+**Multiples of 3 or 5:**
+
+_If we list all the natural numbers below 10 that are multiples of 3 or 5, we get 3, 5, 6 and 9. The
+sum of these multiples is 23. Find the sum of all the multiples of 3 or 5 below 1000._
+
+# Solving the Problem
+
+## A Note on My Chalkboard
+
+While tackling this problem, I took advantage of my laptop's touch screen and an awesome stylus pen
+my Mom got me to map out my thoughts by hand in Microsoft Whiteboard. Liking the look and feel of
+old-school chalkboards, I decided to make the background of my whiteboard black, and my pen color
+white. Although the screen and stylus don't have quite the same sound and feel as real chalk on a
+real chalkboard, it's much easier for me to share my notes electronically this way. If you're
+interested in viewing them, I've made them available as a zoom-able, drag-able PNG at the bottom of
+this post, and if you don't want to scroll to get there, you can follow [this link](#chalkboard) or
+the one in the table of contents as well.
+
+## First Steps: Notation
+
+The first thing I did, partly because I really like notation and mostly because it helps me start
+thinking about problems mathematically, was to try to formalize the problem in semi-mathematical
+notation. You can take a look at [my notes](#chalkboard) to see this written by hand, but I've also
+provided the same below with KateX (and more correct notation).
+
+Here I'll define the set of numbers to sum from the problem's example. This could probably and maybe
+more properly be done as a sequence, but I like
+[set-builder notation](https://en.wikipedia.org/wiki/Set-builder_notation).
+
+<KaTexComponent
+  texExpression="A = \{a | a \in \natnums \land a < 10 \land (a\mod 3 \equiv 0 \lor a\mod 5 \equiv 0) \}"
+  options={{ displayMode: true }}
+/>
+
+We're defining a set $A$ with elements $a$, where each $a$ is in the
+[set of natural numbers](https://en.wikipedia.org/wiki/Natural_number) and is less than 10. Further,
+when dividing an $a$ by 3 or 5, the remainder must be 0 (see
+[Congruence](https://mathworld.wolfram.com/Congruence.html)). This last property is equivalent to
+saying that each $a$ is a multiple of 3 or 5, but looking at things this way makes it easier to
+solve this problem programmatically.
+
+Then, the following represents the sum of the elements of $A$ (unordered, but that
+[doesn't make a difference in this situation](https://math.stackexchange.com/a/1158041)):
+$\displaystyle\sum_{a \in A}a$.
+
+Following the same process for the sum that the problem actually wants us to find, I'll start once
+again by defining a set:
+
+<KaTexComponent
+  texExpression="B = \{b | b \in \natnums \land b < 1000 \land (b\mod 3 \equiv 0 \lor b\mod 5 \equiv 0) \}"
+  options={{ displayMode: true }}
+/>
+
+The only differences this time are the name of the set ($B$), the names of its elements ($b$) and
+importantly the exclusive maximum value of 1000.
+
+Then, the sum of the elements in $B$, the answer we're after, can be written:
+$\displaystyle\sum_{b \in B}b$.
+
+Now, let's get to seeing how we can solve this problem with some code.
+
+## A Simple Solution
+
+To me, the most obvious solution was to step through all the natural numbers less than 1000,
+checking whether each is divisible by 3 or 5, and, if that condition was met, add the number to a
+running sum. You can see my exact implementation
+[on my GitHub](https://github.com/ThomasLatham/project-euler/blob/main/src/multiplesOf3Or5/multiplesOf3Or5.ts),
+and I'll also paste the function below:
+
+```TypeScript
+/**
+ * Uses brute force to solve the problem.
+ *
+ * @param maxAddend The maximum addend to be added to the sum.
+ * @returns The sum of all numbers less than `maxAddend` which are divisible by 3 or 5.
+ */
+const simpleSolution = (maxAddend: number): number => {
+  let sum: number = 0;
+  for (let i = 1; i < maxAddend; i++) {
+    if (i % 3 == 0 || i % 5 == 0) {
+      sum += i;
+    }
+  }
+  return sum;
+};
+```
+
+We can see that this function, as it's just a single loop, runs in $O(n)$. This is good, but it
+would be nice to see if we can apply some mathematical concepts and methods to make a more elegant
+solution.
+
+## A More Elegant Solution
+
+As my notes show, one of my first steps in searching for a cleaner solution to this problem was to
+list out the sequence of natural numbers divisible by 3 or 5, and then to write out the sequence of
+differences between each consecutive term in the first sequence, with the intent of finding a
+pattern in the second sequence. For the natural numbers divisible by 3 or 5, we have:
+
+<KaTexComponent
+  texExpression="\{0, 3, 5, 6, 9, 10, 12, 15, 18, 20, 21, 24, 25, 27, 30, ...\}."
+  options={{ displayMode: true }}
+/>
+
+For the sequence of differences between each term, we have:
+
+<KaTexComponent
+  texExpression="\{3, 2, 1, 3, 1, 2, 3, 3, 2, 1, 3, 1, 2, 3, ...\}."
+  options={{ displayMode: true }}
+/>
+
+We can see with some analysis that this sequence of differences repeats itself! The sequence's
+repeating pattern is $\{3, 2, 1, 3, 1, 2, 3\}$, and the pattern always starts again when we reach a
+number in the first sequence which is divisible by both 3 and 5 (e.g., 0, 15, 30). There are
+probably some number theory principles (relatively prime numbers, modular arithmetic) I could apply
+here to formalize why this pattern is happening and to prove that it does indeed hold as the first
+sequence approaches infinity, but for this problem I'm just going to assume the latter.
+
+With this assumption in mind, we can devise a new algorithm for computing the sum of the multiples
+of 3 and 5 below 1000. This time we'll still keep track of the the running sum, but we'll also
+define the pattern in an array and keep track of the value of the current addend (that is, the
+number to add to the running sum). Then we'll iteratively perform the following two steps: Add the
+current addend to the running sum, then increment the current addend by the next number in the
+pattern. This way, we'll never have to check whether an addend is a multiple of 3 or 5, and we have
+fewer iterations to loop through until we reach the answer. My implementation is below:
+
+```TypeScript
+/**
+ * Solves the problem by taking advantage of the fact that, in the sequence of
+ * natural numbers divisible by 3 or 5, there is a pattern to determine how
+ * much greater the n+1st element is than the nth.
+ *
+ * @param maxAddend The maximum addend to be added to the sum.
+ * @returns The sum of all numbers less than `maxAddend` which are divisible by 3 or 5.
+ */
+const sequenceDifferencePatternSolution = (maxAddend: number): number => {
+  const pattern: number[] = [3, 2, 1, 3, 1, 2, 3];
+  let curAddend: number = 0;
+  let sum: number = 0;
+  let patternIndex = 0;
+
+  while (curAddend < maxAddend) {
+    sum += curAddend;
+    curAddend += pattern[patternIndex++ % 7];
+  }
+
+  return sum;
+};
+```
+
+# Conclusion
+
+So we've seen two different ways to solve this first problem from Project Euler. There are certainly
+different and more efficient ways to do so, perhaps in $O(1)$ time complexity, but this was a great
+way for me to get started with the Project and get back into math. Thanks for reading! If you have
+any comments or questions, feel free to reach me at contact@tomlatham.blog.
+
+# Chalkboard
+
+Drag and zoom in these notes if you want to see a certain portion of them more clearly!
+
+<Chalkboard
+  imgSrc="https://raw.githubusercontent.com/ThomasLatham/project-euler/main/src/multiplesOf3Or5/chalkboard.png"
+  altText="multiples of 3 or 5 chalkboard"
+  initialScale={3}
+  initialPositionX={-130}
+  initialPositionY={-90}
+/>
