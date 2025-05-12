@@ -1,0 +1,81 @@
+---
+title: WILTW | Formal Methods | Week 2
+datePublished: "2025-05-11"
+author: Tom Latham
+description:
+  "What I Learned This Week about Formal Methods: The Embedding Gap in the Verification of
+  Neuro-Symbolic Programs"
+tags: ["math", "programming", "formal methods", "artificial intelligence"]
+---
+
+# Introduction
+
+Keeping in the spirit of [last week's post](../wiltw-fm-learning-path/wiltw-fm-learning-path.mdx),
+but departing somewhat significantly from the learning path there established, this week I furthered
+my knowledge in formal methods by analyzing the first section (and part of the second section) of
+the paper _Vehicle: Bridging the Embedding Gap in the Verification of Neuro-Symbolic
+Programs_[^vehicle] by Daggit et al (link to
+[CC BY 4.0](https://creativecommons.org/licenses/by/4.0/) to comply with license).
+
+# What I Learned
+
+Although I've only so far made it through the first few pages of this paper, I feel I have gained a
+solid introduction to the embedding gap. This paper introduces the concept by:
+
+## 1. Establishing a High-Level Model
+
+Establishing a high-level model for how a neuro-symbolic program (that is, a program which contains
+both machine learning elements as well as ordinary symbolic code) can be verified. Proving the
+validity of a neuro-symbolic program under this model comes down to 3 lemmas:
+
+- (a.) proving that a neural network obeys certain property,
+- (b.) proving that if a network obeys that property, then that network wrapped in/_embedded in the
+  program by_ defined functions to map the network's inputs and outputs to domain-understandable
+  data obeys another property and
+- (c.) that for all such wrapped networks, when they themselves are embedded in a defined symbolic
+  program, then the program obeys another property.
+
+## 2. Describing Challenges in Proving
+
+Describing challenges in proving these lemmas in the linked way described above. ITPs (interactive
+theorem provers, like Agda and Coq, which enable users to define theorems as types and then prove
+those theorems by giving values to those types) are good at helping proof engineers prove lemmas of
+the third variety (c.) ATPs (automated theorem provers, like Reluplex, which allow proving theorems
+in an automated way after defining them and which I admittedly understand even less than ITPs) are
+good at proving lemmas of the first variety (a.). Neither are good at lemmas of the second variety
+however.
+
+The _embedding gap_ then is the lack of tools available to prove that a network (verified for some
+property), when embedded by input/output translating functions (we call this
+network-wrapped-in-embedding-functions combo a _system_), obeys a system property, and further to
+link that result to something digestible by an ITP. There are other challenges, but this describes
+the main challenge of bridging the embedding gap.
+
+## 3. Describing a High-Level Architectural Solution (Vehicle)
+
+Describing a high-level architectural solution for bridging the embedding gap. First the user
+expresses the specification for the solution property and necessarily then also the embedding and
+unembedding functions, in terms of the domain-specific language that is semantically meaningful to
+practitioners in the domain.
+
+Then, via `vehicle-lang`, that system property is compiled down to the network property in the
+embedding space in a form that is usable for training and verification. Finally, after verification
+of the network property, the original solution spec is exported to an ITP so its proof can be
+integrated into a proof of the program property. This results in proving all the lemmas in a
+connected interlinked way!
+
+# What I'm Continuing to Learn
+
+Now that I've obtained a solid-enough foundation of the problem that Vehicle solves, as well as how
+it solves it, I've started on the second part of the paper which follows a motivating example
+through the whole Vehicle workflow. This is requiring me to gain a baseline understanding of, among
+other things (but first this), the ITP Agda, which itself requires me to understand dependently
+typed languages. It's been a learning process, but I'm making steady progress. I've been starting to
+gain an understanding of the Curry-Howard Isomorphism through this, which I touched on earlier:
+Proof-theoretical theorems _are_ type-theoretical types, and proof-theoretical proofs _are_
+type-theoretical programs.
+
+[^vehicle]:
+    Daggitt, M.L., Kokke, W., Atkey, R., Slusarz, N., Arnaboldi, L., Komendantskaya, E. (2024).
+    Vehicle: Bridging the Embedding Gap in the Verification of Neuro-Symbolic Programs. arXiv
+    preprint arXiv:2401.06379.
