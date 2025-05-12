@@ -32,7 +32,7 @@ validity of a neuro-symbolic program under this model comes down to 3 lemmas:
 - (b.) proving that if a network obeys that property, then that network wrapped in/_embedded in the
   program by_ defined functions to map the network's inputs and outputs to domain-understandable
   data obeys another property and
-- (c.) that for all such wrapped networks, when they themselves are imbedded in a defined symbolic
+- (c.) that for all such wrapped networks, when they themselves are embedded in a defined symbolic
   program, then the program obeys another property.
 
 ## 2. Describing Challenges in Proving
@@ -40,9 +40,9 @@ validity of a neuro-symbolic program under this model comes down to 3 lemmas:
 Describing challenges in proving these lemmas in the linked way described above. ITPs (interactive
 theorem provers, like Agda and Coq, which enable users to define theorems as types and then prove
 those theorems by giving values to those types) are good at helping proof engineers prove lemmas of
-third variety (c.) ATPs (automated theorem provers, like Reluplex, which allow proving theorems in
-an automated way after defining them and which I admittedly understand even less than ITPs) are good
-at proving lemmas of the first variety (a.). Neither are good at lemmas of the second variety
+the third variety (c.) ATPs (automated theorem provers, like Reluplex, which allow proving theorems
+in an automated way after defining them and which I admittedly understand even less than ITPs) are
+good at proving lemmas of the first variety (a.). Neither are good at lemmas of the second variety
 however.
 
 The _embedding gap_ then is the lack of tools available to prove that a network (verified for some
@@ -72,7 +72,7 @@ through the whole Vehicle workflow. This is requiring me to gain a baseline unde
 other things (but first this), the ITP Agda, which itself requires me to understand dependently
 typed languages. It's been a learning process, but I'm making steady progress. I've been starting to
 gain an understanding of the Curry-Howard Isomorphism through this, which I touched on earlier:
-proof-theoretical theorems _are_ type-theoretical types, and proof-theoretical proofs _are_
+Proof-theoretical theorems _are_ type-theoretical types, and proof-theoretical proofs _are_
 type-theoretical programs.
 
 [^vehicle]:
